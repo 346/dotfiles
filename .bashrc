@@ -9,3 +9,7 @@ elif [ `uname` = "Linux" ]; then
 	 . .bashrc.linux
 fi
 
+export HISTSIZE=2000
+export HISTFILESIZE=2000
+export HISTCONTROL=ignoredups
+export PS1="[\u@\h \W]\\$ "
