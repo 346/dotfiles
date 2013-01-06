@@ -9,6 +9,13 @@ set nocompatible
 " スクリプト実行中に画面を描画しない
 set lazyredraw
 
+filetype plugin indent on     " Required!
+
+" Fキーへの割り当てはプラグイン設定より前で行わないとダメっぽい　
+" なんでやろ
+noremap <F6> :shell<CR>
+noremap <F5> :w<CR>:make<CR>
+
 " {{{ プラグイン(neobundle)
 if has('vim_starting')
 set runtimepath+=~/.vim/bundle/neobundle.vim/
@@ -86,7 +93,6 @@ NeoBundle 'matchit.zip'
 " quickrun
 NeoBundle 'thinca/vim-quickrun'
 
-filetype plugin indent on     " Required!
 "
 " Brief help
 " :NeoBundleList          - list configured bundles
@@ -98,25 +104,26 @@ if neobundle#exists_not_installed_bundles()
 echomsg 'Not installed bundles : ' .
 	 \ string(neobundle#get_not_installed_bundle_names())
 echomsg 'Please execute ":NeoBundleInstall" command.'
+endif
 " }}}
 
-" phtml設定
-au BufRead,BufNewFile *.phtml            set filetype=php
+" filetype設定
+au BufRead,BufNewFile *.phtml set filetype=php
+au BufRead,BufNewFile *.ctp set filetype=php
 
 " make
-autocmd filetype php setlocal makeprg=php\ -l\ %
-autocmd filetype php setlocal errorformat=%m\ in\ %f\ on\ line\ %l
+autocmd filetype php :set makeprg=php\ -l\ %
+autocmd filetype php :set errorformat=%m\ in\ %f\ on\ line\ %l
+
+" autocmd filetype php setlocal makeprg=php\ -l\ %
+" autocmd filetype php setlocal errorformat=%m\ in\ %f\ on\ line\ %l
 autocmd FileType ruby setlocal makeprg=ruby\ -c\ %
 autocmd FileType ruby setlocal errorformat=%m\ in\ %f\ on\ line\ %l
 autocmd FileType perl,cgi :compiler perl  
-noremap <F5> :w<CR>:make<CR>
-" shell
-noremap <F6> :shell<CR>
 
 " 複数行のコメントを自動的に継続する
 set formatoptions+=or
 
-endif
 " ---------------------------------------------------------------------
 " 共通
 " ---------------------------------------------------------------------
@@ -431,3 +438,4 @@ map <kMinus> <C-W>-
 "set foldmethod=indent
 "let perl_fold=1
 "let perl_fold_blocks=1
+
