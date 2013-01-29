@@ -9,16 +9,21 @@ set nocompatible
 " スクリプト実行中に画面を描画しない
 set lazyredraw
 
+" neobundle用
 filetype plugin indent on     " Required!
 
-" Fキーへの割り当てはプラグイン設定より前で行わないとダメっぽい　
-" なんでやろ
-noremap <F6> :shell<CR>
-noremap <F5> :w<CR>:make<CR>
+" シェルに移動
+nnoremap <silent> ,h :shell<CR>
+" make
+nnoremap <silent> ,b :w<CR>:make<CR>
+" タブ移動（あんまりタブ使わないから一方向
+nnoremap <silent> ,m :tabN<CR>
+" マクロは使いこなせないのでqを無効
+noremap q <nop>
 
 " {{{ プラグイン(neobundle)
 if has('vim_starting')
-set runtimepath+=~/.vim/bundle/neobundle.vim/
+se runtimepath+=~/.vim/bundle/neobundle.vim/
 endif
 
 call neobundle#rc(expand('~/.vim/bundle/'))
@@ -49,8 +54,9 @@ NeoBundle 'Shougo/unite.vim'
 " let g:unite_enable_start_insert=1
 " バッファ一覧
 let g:unite_enable_start_insert=1
-noremap <C-T> :Unite buffer -direction=topleft -auto-resize -toggle<CR>
-noremap <F4> :UniteWithBufferDir -auto-resize -buffer-name=files file<CR>
+nnoremap <C-T> :Unite buffer file file_mru -direction=topleft -auto-resize -toggle<CR>
+nnoremap <silent> ,t :Unite file_mru -auto-resize -buffer-name=files file<CR>
+nnoremap <silent> ,/  :<C-u>Unite -buffer-name=search line -start-insert<CR>
 
 " YankRing.vim
 "set viminfo+=!		" おまじない
@@ -73,25 +79,55 @@ let g:EasyMotion_keys = 'fjdkslaureiwoqpvncm'
 " sparkup
 NeoBundle 'rstacruz/sparkup', {'rtp': 'vim/'}
 
-" phpDocumenter for Vim
+" php doc系
 "NeoBundle 'bthemad/php-doc.vim'
 NeoBundle 'php-doc-upgrade'
-inoremap <F2> <ESC>:call PhpDocSingle()<CR>i
-nnoremap <F2> :call PhpDocSingle()<CR>
-vnoremap <F2> :call PhpDocRange()<CR> 
+let g:pdv_cfg_Type = "mixed"
+let g:pdv_cfg_Package = ""
+let g:pdv_cfg_Version = ""
 let g:pdv_cfg_Author = "Takahiro Mishiro"
-"let g:pdv_cfg_Copyright="2013 Trifort Inc."
+let g:pdv_cfg_Copyright = "2013 Trifort inc."
 let g:pdv_cfg_License = ""
-
+"inoremap ,p <ESC>:call PhpDocSingle()<CR>i
+nnoremap <silent> ,p :call PhpDocSingle()<CR>
+vnoremap <silent> ,p :call PhpDocRange()<CR> 
 NeoBundle 'The-NERD-Commenter'
 let NERDSpaceDelims = 1
-nmap ,, <Plug>NERDCommenterToggle
-vmap ,, <Plug>NERDCommenterToggle
+nmap <silent> ,, <Plug>NERDCommenterToggle
+vmap <silent> ,, <Plug>NERDCommenterToggle
 " matchit
 NeoBundle 'matchit.zip'
 
 " quickrun
 NeoBundle 'thinca/vim-quickrun'
+
+
+" solarized カラースキーム
+NeoBundle 'altercation/vim-colors-solarized'
+" mustang カラースキーム
+NeoBundle 'croaker/mustang-vim'
+" wombat カラースキーム
+NeoBundle 'jeffreyiacono/vim-colors-wombat'
+" jellybeans カラースキーム
+NeoBundle 'nanotech/jellybeans.vim'
+" lucius カラースキーム
+NeoBundle 'vim-scripts/Lucius'
+" zenburn カラースキーム
+NeoBundle 'vim-scripts/Zenburn'
+" mrkn256 カラースキーム
+NeoBundle 'mrkn/mrkn256.vim'
+" railscasts カラースキーム
+NeoBundle 'jpo/vim-railscasts-theme'
+" pyte カラースキーム
+NeoBundle 'therubymug/vim-pyte'
+" molokai カラースキーム
+NeoBundle 'tomasr/molokai'
+" uniteでカラースキーム選択
+NeoBundle 'ujihisa/unite-colorscheme'
+
+
+" xdebug
+NeoBundle 'joonty/vdebug'
 
 "
 " Brief help
@@ -121,12 +157,13 @@ autocmd FileType ruby setlocal makeprg=ruby\ -c\ %
 autocmd FileType ruby setlocal errorformat=%m\ in\ %f\ on\ line\ %l
 autocmd FileType perl,cgi :compiler perl  
 
-" 複数行のコメントを自動的に継続する
-set formatoptions+=or
 
 " ---------------------------------------------------------------------
 " 共通
 " ---------------------------------------------------------------------
+" ヘルプを日本語に
+set helplang=ja,en
+
 " ハイライトをリセット
 :nnoremap <ESC><ESC> :nohlsearch<CR>
 
@@ -139,11 +176,11 @@ set noinsertmode
 " 行の端まで到達したら折り返す
 set wrap
 
-" ホワイト・スペースで折り返さない
+" スペースで折り返さない
 set nolinebreak
 
 " gq コマンド以外では自動改行しない
-set formatoptions=q
+autocmd FileType * setlocal formatoptions-=ro
 
 " 全て Backspace で削除可能にする
 set backspace=indent,eol,start
@@ -206,7 +243,6 @@ set history=50
 
 " 編集中の内容を保ったまま別の画面に切替えられるようにする
 set hid
-
 " ---------------------------------------------------------------------
 " 文字コードの自動認識
 " ---------------------------------------------------------------------
@@ -308,7 +344,6 @@ set title
 set laststatus=2
 
 " ステータス行のフォーマット
-"set statusline=%<%f%h%m%r%=%b\ 0x%B\ \ %l,%c%V\ %P
 set statusline=%<%f\ %m%r%h%w%{'['.(&fenc!=''?&fenc:&enc).']['.&ff.']'}%=%l,%c%V%8P
 
 " ---------------------------------------------------------------------
@@ -357,42 +392,44 @@ set foldmethod=marker
 
 syntax on
 
-highlight StatusLine cterm=NONE ctermbg=DARKBLUE ctermfg=WHITE
-highlight LineNr ctermfg=DARKBLUE
-highlight Constant term=NONE ctermfg=DARKRED
-highlight Comment term=NONE ctermfg=DARKGREEN
-highlight Identifier cterm=NONE ctermfg=BLUE
-highlight Statement cterm=BOLD ctermfg=BLUE
-highlight PreProc ctermfg=BLUE
-highlight Type ctermfg=BLUE
-highlight Ignore ctermfg=DARKBLUE
-highlight Error cterm=BOLD ctermbg=RED ctermfg=WHITE
-highlight Title ctermfg=WHITE
-highlight Special cterm=NONE ctermfg=DARKRED
-highlight Search cterm=NONE ctermbg=YELLOW
-highlight Todo ctermbg=YELLOW ctermfg=RED
-highlight cTodo ctermbg=YELLOW ctermfg=RED
-highlight VertSplit term=NONE cterm=NONE ctermbg=DARKBLUE ctermfg=7
-highlight Visual term=NONE cterm=NONE ctermbg=DARKBLUE ctermfg=7
-highlight BufferSelected term=NONE cterm=NONE ctermbg=BLUE ctermfg=7
-highlight Cursor ctermbg=WHITE ctermfg=BLACK
-highlight FoldColumn ctermbg=DARKBLUE ctermfg=WHITE
-highlight Folded ctermbg=DARKBLUE ctermfg=WHITE
+colorscheme mustang
+
+" highlight StatusLine cterm=NONE ctermbg=DARKBLUE ctermfg=WHITE
+" highlight LineNr ctermfg=DARKBLUE
+" highlight Constant term=NONE ctermfg=DARKRED
+" highlight Comment term=NONE ctermfg=DARKGREEN
+" highlight Identifier cterm=NONE ctermfg=BLUE
+" highlight Statement cterm=BOLD ctermfg=BLUE
+" highlight PreProc ctermfg=BLUE
+" highlight Type ctermfg=BLUE
+" highlight Ignore ctermfg=DARKBLUE
+" highlight Error cterm=BOLD ctermbg=RED ctermfg=WHITE
+" highlight Title ctermfg=WHITE
+" highlight Special cterm=NONE ctermfg=DARKRED
+" highlight Search cterm=NONE ctermbg=YELLOW
+" highlight Todo ctermbg=YELLOW ctermfg=RED
+" highlight cTodo ctermbg=YELLOW ctermfg=RED
+" highlight VertSplit term=NONE cterm=NONE ctermbg=DARKBLUE ctermfg=7
+" highlight Visual term=NONE cterm=NONE ctermbg=DARKBLUE ctermfg=7
+" highlight BufferSelected term=NONE cterm=NONE ctermbg=BLUE ctermfg=7
+" highlight Cursor ctermbg=WHITE ctermfg=BLACK
+" highlight FoldColumn ctermbg=DARKBLUE ctermfg=WHITE
+" highlight Folded ctermbg=DARKBLUE ctermfg=WHITE
 
 "highlight Underlined term=underline cterm=underline ctermfg=WHITE
-highlight Underlined term=underline cterm=underline ctermfg=BLACK
-highlight link htmlArg Identifier
-highlight link htmlValue Identifier
-highlight MatchParen ctermbg=WHITE ctermfg=BLACK
+" highlight Underlined term=underline cterm=underline ctermfg=BLACK
+" highlight link htmlArg Identifier
+" highlight link htmlValue Identifier
+" highlight MatchParen ctermbg=WHITE ctermfg=BLACK
 "highlight link htmlString SpecialKey
 "highlight link javaScript SpecialKey
 
 " 編集中はステータスバーの色を変える
-augroup InsertHook
-autocmd!
-autocmd InsertEnter * highlight StatusLine ctermfg=WHITE ctermbg=DARKRED
-autocmd InsertLeave * highlight StatusLine ctermfg=WHITE ctermbg=DARKBLUE
-augroup END
+" augroup InsertHook
+" autocmd!
+" " autocmd InsertEnter * highlight StatusLine ctermfg=WHITE ctermbg=DARKRED
+" autocmd InsertLeave * highlight StatusLine ctermfg=WHITE ctermbg=DARKBLUE
+" augroup END
 
 " ---------------------------------------------------------------------
 " キーマップ
@@ -406,36 +443,11 @@ augroup END
 nnoremap j gj
 nnoremap k gk
 
-" バッファ移動用キーマップ
-" F2: 前のバッファ
-" F3: 次のバッファ
-" F4: バッファ削除
-" map <F2> <ESC>:bp<CR>
-" map <F3> <ESC>:bn<CR>
-" map <F4> <ESC>:bw<CR>
-
 " フレームサイズを怠惰に変更する
 map <kPlus> <C-W>+
 map <kMinus> <C-W>-
 
-" ---------------------------------------------------------------------
-" メモ
-" ---------------------------------------------------------------------
-
-" コントロールコードを入力する場合
-"  Ctrl+v Ctrl+@
-"
-" fold command
-" zR : open all
-" zM : close all
-" zc : close it
-" zC : close it recursive
-" zo : open it
-" zO : optn it recursive
-
-"syntax on
-"set foldlevel=1
-"set foldmethod=indent
-"let perl_fold=1
-"let perl_fold_blocks=1
+" 直前のyankレジスタをpaste visualでpasteするとyankレジスタが更新されるため
+" もっといい方法ないかね
+vnoremap <silent> <C-p> "0p<CR>
 
