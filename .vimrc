@@ -51,9 +51,12 @@ NeoBundleFetch 'Shougo/neobundle.vim'
 NeoBundle 'Shougo/unite.vim'
 
 " 入力モードで開始する
-" let g:unite_enable_start_insert=1
-" バッファ一覧
 let g:unite_enable_start_insert=1
+" 最近開いたファイル履歴の保存数
+let g:unite_source_file_mru_limit = 500
+"file_mruの表示フォーマットを指定。空にすると表示スピードが高速化される らしい・・・
+let g:unite_source_file_mru_filename_format = ''
+
 nnoremap <C-T> :Unite buffer file file_mru -direction=topleft -auto-resize -toggle<CR>
 nnoremap <silent> ,t :Unite file_mru -auto-resize -buffer-name=files file<CR>
 nnoremap <silent> ,/  :<C-u>Unite -buffer-name=search line -start-insert<CR>
@@ -81,16 +84,18 @@ NeoBundle 'rstacruz/sparkup', {'rtp': 'vim/'}
 
 " php doc系
 "NeoBundle 'bthemad/php-doc.vim'
-NeoBundle 'php-doc-upgrade'
 let g:pdv_cfg_Type = "mixed"
 let g:pdv_cfg_Package = ""
 let g:pdv_cfg_Version = ""
 let g:pdv_cfg_Author = "Takahiro Mishiro"
 let g:pdv_cfg_Copyright = "2013 Trifort inc."
 let g:pdv_cfg_License = ""
+NeoBundle 'php-doc-upgrade'
 "inoremap ,p <ESC>:call PhpDocSingle()<CR>i
 nnoremap <silent> ,p :call PhpDocSingle()<CR>
 vnoremap <silent> ,p :call PhpDocRange()<CR> 
+
+" nerd commenter
 NeoBundle 'The-NERD-Commenter'
 let NERDSpaceDelims = 1
 nmap <silent> ,, <Plug>NERDCommenterToggle
@@ -125,6 +130,8 @@ NeoBundle 'tomasr/molokai'
 " uniteでカラースキーム選択
 NeoBundle 'ujihisa/unite-colorscheme'
 
+" svnのunite source
+NeoBundle 'kmnk/vim-unite-svn'
 
 " xdebug
 NeoBundle 'joonty/vdebug'
