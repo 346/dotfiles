@@ -127,6 +127,8 @@ NeoBundle 'jpo/vim-railscasts-theme'
 NeoBundle 'therubymug/vim-pyte'
 " molokai カラースキーム
 NeoBundle 'tomasr/molokai'
+" hybrid カラースキーム
+NeoBundle 'w0ng/vim-hybrid'
 " uniteでカラースキーム選択
 NeoBundle 'ujihisa/unite-colorscheme'
 
@@ -399,7 +401,7 @@ set foldmethod=marker
 
 syntax on
 
-colorscheme mustang
+colorscheme hybrid
 
 " highlight StatusLine cterm=NONE ctermbg=DARKBLUE ctermfg=WHITE
 " highlight LineNr ctermfg=DARKBLUE
