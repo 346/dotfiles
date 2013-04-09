@@ -3,6 +3,7 @@
 " .vimrc
 "
 " ---------------------------------------------------------------------
+" カンマで始まるキーマップはSparkでCtrl+Shift同時押しにしている
 
 " vi互換にしない
 set nocompatible
@@ -47,22 +48,34 @@ NeoBundleFetch 'Shougo/neobundle.vim'
 " Non git repos
 " NeoBundle 'http://svn.macports.org/repository/macports/contrib/mpvim/'
 
-"unite.vim
+" unite.vim
 NeoBundle 'Shougo/unite.vim'
+NeoBundle 'Shougo/vimproc', {
+  \ 'build' : {
+    \ 'windows' : 'make -f make_mingw32.mak',
+    \ 'cygwin' : 'make -f make_cygwin.mak',
+    \ 'mac' : 'make -f make_mac.mak',
+    \ 'unix' : 'make -f make_unix.mak',
+  \ },
+  \ }
 
 " 入力モードで開始する
-let g:unite_enable_start_insert=1
+let g:unite_enable_start_insert = 1
 " 最近開いたファイル履歴の保存数
-let g:unite_source_file_mru_limit = 500
+let g:unite_source_file_mru_limit = 50
 "file_mruの表示フォーマットを指定。空にすると表示スピードが高速化される らしい・・・
 let g:unite_source_file_mru_filename_format = ''
+" macだとfindコマンドはディレクトリの指定が必須なのでこうする
+let g:unite_source_file_rec_async_command = "find ."
+" file_recの除外
+call unite#custom_source('file_rec/async', 'ignore_pattern', (unite#sources#file_rec#define()[0]['ignore_pattern']) . '\|\.png$\|\.jpg$\|\.jpeg$\|\.gif$\|\.mid$\|\.ttf$\|\.mp3$\|lib\/Cake\|tmp\/smarty')
 
 nnoremap <C-T> :Unite buffer file file_mru -direction=topleft -auto-resize -toggle<CR>
-nnoremap <silent> ,t :Unite file_mru -auto-resize -buffer-name=files file<CR>
-nnoremap <silent> ,/  :<C-u>Unite -buffer-name=search line -start-insert<CR>
+nnoremap <silent> ,t :Unite -direction=topleft -auto-resize -toggle file_rec/async:!<CR>
+nnoremap <silent> ,/ :<C-u>Unite -buffer-name=search line -start-insert<CR>
 
 " YankRing.vim
-"set viminfo+=!		" おまじない
+" set viminfo+=!		" おまじない
 let g:yankring_window_use_bottom=0
 let g:yankring_history_file='.yankring_history'
 let g:yankring_history_dir=$HOME.'/.vim/'
