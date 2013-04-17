@@ -62,16 +62,19 @@ NeoBundle 'Shougo/vimproc', {
 " 入力モードで開始する
 let g:unite_enable_start_insert = 1
 " 最近開いたファイル履歴の保存数
-let g:unite_source_file_mru_limit = 50
+let g:unite_source_file_mru_limit = 100 
 "file_mruの表示フォーマットを指定。空にすると表示スピードが高速化される らしい・・・
 let g:unite_source_file_mru_filename_format = ''
 " macだとfindコマンドはディレクトリの指定が必須なのでこうする
 let g:unite_source_file_rec_async_command = "find ."
+" file_recの最大ファイル数
+let g:unite_source_file_rec_max_cache_files = 5000
 " file_recの除外
-call unite#custom_source('file_rec/async', 'ignore_pattern', (unite#sources#file_rec#define()[0]['ignore_pattern']) . '\|\.png$\|\.jpg$\|\.jpeg$\|\.gif$\|\.mid$\|\.ttf$\|\.mp3$\|lib\/Cake\|tmp\/smarty')
+" call unite#custom_source('file_rec', 'ignore_pattern', (unite#sources#file_rec#define()[0]['ignore_pattern']) . '\|\.png$\|\.jpg$\|\.jpeg$\|\.gif$\|\.mid$\|\.ttf$\|\.mp3$\|lib\/Cake\|tmp\/smarty\|\.tpl$')
+call unite#custom_source('file_rec', 'ignore_pattern', (unite#sources#file_rec#define()[0]['ignore_pattern']) . '\|\.png$\|\.jpg$\|\.jpeg$\|\.gif$\|\.mid$\|\.ttf$\|\.mp3$\|lib\/Cake\|tmp\/smarty')
 
-nnoremap <C-T> :Unite buffer file file_mru -direction=topleft -auto-resize -toggle<CR>
-nnoremap <silent> ,t :Unite -direction=topleft -auto-resize -toggle file_rec/async:!<CR>
+nnoremap <C-T> :Unite file_mru file_rec:! -direction=topleft  -auto-resize -toggle<CR>
+" nnoremap <silent> ,t :Unite -direction=topleft -auto-resize -toggle file_rec:!<CR>
 nnoremap <silent> ,/ :<C-u>Unite -buffer-name=search line -start-insert<CR>
 
 " YankRing.vim
@@ -150,6 +153,8 @@ NeoBundle 'kmnk/vim-unite-svn'
 
 " xdebug
 NeoBundle 'joonty/vdebug'
+let g:vdebug_options = {'path_maps' : {"/media/sf_www/dmm/www": "/Users/admin/Projects/dmm/www"}}
+
 
 "
 " Brief help
@@ -163,6 +168,8 @@ echomsg 'Not installed bundles : ' .
 	 \ string(neobundle#get_not_installed_bundle_names())
 echomsg 'Please execute ":NeoBundleInstall" command.'
 endif
+
+
 " }}}
 
 " filetype設定
