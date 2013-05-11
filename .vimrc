@@ -3,10 +3,19 @@
 " .vimrc
 "
 " ---------------------------------------------------------------------
-" カンマで始まるキーマップはSparkでCtrl+Shift同時押しにしている
+" カンマで始まるキーマップはMacのSparkでCtrl+Shift同時押しにしている
 
 " vi互換にしない
 set nocompatible
+
+" os判定 macしか使わないけど・・・
+let s:is_windows = has('win16') || has('win32') || has('win64')
+let s:is_cygwin = has('win32unix')
+let s:is_mac = !s:is_windows && !s:is_cygwin
+      \ && (has('mac') || has('macunix') || has('gui_macvim') ||
+      \ (!executable('xdg-open') &&
+      \ system('uname') =~? '^darwin'))
+
 " スクリプト実行中に画面を描画しない
 set lazyredraw
 
@@ -15,16 +24,27 @@ filetype plugin indent on     " Required!
 
 " シェルに移動
 nnoremap <silent> ,h :shell<CR>
+
 " make
 nnoremap <silent> ,b :w<CR>:make<CR>
+
 " タブ移動（あんまりタブ使わないから一方向
 nnoremap <silent> ,m :tabN<CR>
+
+" .vimrcを編集(これはSparkとかじゃなくてキーマップをそのまま使う
+nnoremap <silent> ,. :<C-u>edit $MYVIMRC<CR>
+
 " マクロは使いこなせないのでqを無効
 noremap q <nop>
 
+" 直前のyankレジスタをpaste visualでpasteするとyankレジスタが更新されるため、pasteを別途定義
+" もっといい方法ないかね
+vnoremap <silent> <C-p> "0p<CR>
+
 " {{{ プラグイン(neobundle)
 if has('vim_starting')
-se runtimepath+=~/.vim/bundle/neobundle.vim/
+	set runtimepath&
+	set runtimepath+=~/.vim/bundle/neobundle.vim/
 endif
 
 call neobundle#rc(expand('~/.vim/bundle/'))
@@ -62,20 +82,26 @@ NeoBundle 'Shougo/vimproc', {
 " 入力モードで開始する
 let g:unite_enable_start_insert = 1
 " 最近開いたファイル履歴の保存数
-let g:unite_source_file_mru_limit = 100 
-"file_mruの表示フォーマットを指定。空にすると表示スピードが高速化される らしい・・・
+let g:unite_source_file_mru_limit = 20 
+"file_mruの表示フォーマットを指定。空にすると表示スピードが高速化される、らしい・・・ホントか？
 let g:unite_source_file_mru_filename_format = ''
-" macだとfindコマンドはディレクトリの指定が必須なのでこうする
-let g:unite_source_file_rec_async_command = "find ."
+
+" macだとfindコマンドはディレクトリの指定が必須 gfind使えって？
+if s:is_mac
+	let g:unite_source_file_rec_async_command = "find ."
+endif
+
 " file_recの最大ファイル数
 let g:unite_source_file_rec_max_cache_files = 5000
 " file_recの除外
-" call unite#custom_source('file_rec', 'ignore_pattern', (unite#sources#file_rec#define()[0]['ignore_pattern']) . '\|\.png$\|\.jpg$\|\.jpeg$\|\.gif$\|\.mid$\|\.ttf$\|\.mp3$\|lib\/Cake\|tmp\/smarty\|\.tpl$')
-call unite#custom_source('file_rec', 'ignore_pattern', (unite#sources#file_rec#define()[0]['ignore_pattern']) . '\|\.png$\|\.jpg$\|\.jpeg$\|\.gif$\|\.mid$\|\.ttf$\|\.mp3$\|lib\/Cake\|tmp\/smarty')
+call unite#custom_source('file_rec/async', 'ignore_pattern', (unite#sources#file_rec#define()[0]['ignore_pattern']) . '\|\.png$\|\.jpg$\|\.jpeg$\|\.gif$\|\.mid$\|\.ttf$\|\.mp3$\|lib\/Cake\|tmp\/smarty\|Plugin')
 
-nnoremap <C-T> :Unite file_mru file_rec:! -direction=topleft  -auto-resize -toggle<CR>
-" nnoremap <silent> ,t :Unite -direction=topleft -auto-resize -toggle file_rec:!<CR>
+nnoremap <C-T> :Unite buffer file_mru file_rec/async:! -direction=topleft -auto-resize -toggle<CR>
 nnoremap <silent> ,/ :<C-u>Unite -buffer-name=search line -start-insert<CR>
+
+" unite-outline
+NeoBundle 'h1mesuke/unite-outline'
+nnoremap <silent> ,t :Unite outline -direction=topleft -auto-resize -toggle<CR>
 
 " YankRing.vim
 " set viminfo+=!		" おまじない
@@ -91,12 +117,12 @@ NeoBundle 'sudo.vim'
 NeoBundle 'tpope/vim-fugitive'
 
 " easy motion
-let g:EasyMotion_leader_key = '<Space><Space>'
-NeoBundle 'Lokaltog/vim-easymotion'
-let g:EasyMotion_keys = 'fjdkslaureiwoqpvncm'
+" let g:EasyMotion_leader_key = '<Space><Space>'
+" NeoBundle 'Lokaltog/vim-easymotion'
+" let g:EasyMotion_keys = 'fjdkslaureiwoqpvncm'
 
 " sparkup
-NeoBundle 'rstacruz/sparkup', {'rtp': 'vim/'}
+" NeoBundle 'rstacruz/sparkup', {'rtp': 'vim/'}
 
 " php doc系
 "NeoBundle 'bthemad/php-doc.vim'
@@ -117,43 +143,45 @@ let NERDSpaceDelims = 1
 nmap <silent> ,, <Plug>NERDCommenterToggle
 vmap <silent> ,, <Plug>NERDCommenterToggle
 " matchit
-NeoBundle 'matchit.zip'
+" NeoBundle 'matchit.zip'
 
 " quickrun
 NeoBundle 'thinca/vim-quickrun'
 
 
-" solarized カラースキーム
-NeoBundle 'altercation/vim-colors-solarized'
-" mustang カラースキーム
-NeoBundle 'croaker/mustang-vim'
-" wombat カラースキーム
-NeoBundle 'jeffreyiacono/vim-colors-wombat'
-" jellybeans カラースキーム
-NeoBundle 'nanotech/jellybeans.vim'
-" lucius カラースキーム
-NeoBundle 'vim-scripts/Lucius'
-" zenburn カラースキーム
-NeoBundle 'vim-scripts/Zenburn'
-" mrkn256 カラースキーム
-NeoBundle 'mrkn/mrkn256.vim'
-" railscasts カラースキーム
-NeoBundle 'jpo/vim-railscasts-theme'
-" pyte カラースキーム
-NeoBundle 'therubymug/vim-pyte'
-" molokai カラースキーム
-NeoBundle 'tomasr/molokai'
+"" solarized カラースキーム
+"NeoBundle 'altercation/vim-colors-solarized'
+"" mustang カラースキーム
+"NeoBundle 'croaker/mustang-vim'
+"" wombat カラースキーム
+"NeoBundle 'jeffreyiacono/vim-colors-wombat'
+"" jellybeans カラースキーム
+"NeoBundle 'nanotech/jellybeans.vim'
+"" lucius カラースキーム
+"NeoBundle 'vim-scripts/Lucius'
+"" zenburn カラースキーム
+"NeoBundle 'vim-scripts/Zenburn'
+"" mrkn256 カラースキーム
+"NeoBundle 'mrkn/mrkn256.vim'
+"" railscasts カラースキーム
+"NeoBundle 'jpo/vim-railscasts-theme'
+"" pyte カラースキーム
+"NeoBundle 'therubymug/vim-pyte'
+"" molokai カラースキーム
+"NeoBundle 'tomasr/molokai'
+"" uniteでカラースキーム選択
+"NeoBundle 'ujihisa/unite-colorscheme'
 " hybrid カラースキーム
 NeoBundle 'w0ng/vim-hybrid'
-" uniteでカラースキーム選択
-NeoBundle 'ujihisa/unite-colorscheme'
 
 " svnのunite source
-NeoBundle 'kmnk/vim-unite-svn'
+" NeoBundle 'kmnk/vim-unite-svn'
 
 " xdebug
 NeoBundle 'joonty/vdebug'
-let g:vdebug_options = {'path_maps' : {"/media/sf_www/dmm/www": "/Users/admin/Projects/dmm/www"}}
+let g:vdebug_options = {
+\	"path_maps" : {"/media/sf_www/dmm/www": "/Users/admin/Projects/dmm/www"}
+\}
 
 
 "
@@ -173,18 +201,21 @@ endif
 " }}}
 
 " filetype設定
-au BufRead,BufNewFile *.phtml set filetype=php
-au BufRead,BufNewFile *.ctp set filetype=php
+augroup MyAutoCmd
+	autocmd!
+	au BufRead,BufNewFile *.phtml set filetype=php
+	au BufRead,BufNewFile *.ctp set filetype=php
 
-" make
-autocmd filetype php :set makeprg=php\ -l\ %
-autocmd filetype php :set errorformat=%m\ in\ %f\ on\ line\ %l
+	" make
+	autocmd filetype php :set makeprg=php\ -l\ %
+	autocmd filetype php :set errorformat=%m\ in\ %f\ on\ line\ %l
 
-" autocmd filetype php setlocal makeprg=php\ -l\ %
-" autocmd filetype php setlocal errorformat=%m\ in\ %f\ on\ line\ %l
-autocmd FileType ruby setlocal makeprg=ruby\ -c\ %
-autocmd FileType ruby setlocal errorformat=%m\ in\ %f\ on\ line\ %l
-autocmd FileType perl,cgi :compiler perl  
+	" autocmd filetype php setlocal makeprg=php\ -l\ %
+	" autocmd filetype php setlocal errorformat=%m\ in\ %f\ on\ line\ %l
+	autocmd FileType ruby setlocal makeprg=ruby\ -c\ %
+	autocmd FileType ruby setlocal errorformat=%m\ in\ %f\ on\ line\ %l
+	autocmd FileType perl,cgi :compiler perl  
+augroup END
 
 
 " ---------------------------------------------------------------------
@@ -423,51 +454,6 @@ syntax on
 
 colorscheme hybrid
 
-" highlight StatusLine cterm=NONE ctermbg=DARKBLUE ctermfg=WHITE
-" highlight LineNr ctermfg=DARKBLUE
-" highlight Constant term=NONE ctermfg=DARKRED
-" highlight Comment term=NONE ctermfg=DARKGREEN
-" highlight Identifier cterm=NONE ctermfg=BLUE
-" highlight Statement cterm=BOLD ctermfg=BLUE
-" highlight PreProc ctermfg=BLUE
-" highlight Type ctermfg=BLUE
-" highlight Ignore ctermfg=DARKBLUE
-" highlight Error cterm=BOLD ctermbg=RED ctermfg=WHITE
-" highlight Title ctermfg=WHITE
-" highlight Special cterm=NONE ctermfg=DARKRED
-" highlight Search cterm=NONE ctermbg=YELLOW
-" highlight Todo ctermbg=YELLOW ctermfg=RED
-" highlight cTodo ctermbg=YELLOW ctermfg=RED
-" highlight VertSplit term=NONE cterm=NONE ctermbg=DARKBLUE ctermfg=7
-" highlight Visual term=NONE cterm=NONE ctermbg=DARKBLUE ctermfg=7
-" highlight BufferSelected term=NONE cterm=NONE ctermbg=BLUE ctermfg=7
-" highlight Cursor ctermbg=WHITE ctermfg=BLACK
-" highlight FoldColumn ctermbg=DARKBLUE ctermfg=WHITE
-" highlight Folded ctermbg=DARKBLUE ctermfg=WHITE
-
-"highlight Underlined term=underline cterm=underline ctermfg=WHITE
-" highlight Underlined term=underline cterm=underline ctermfg=BLACK
-" highlight link htmlArg Identifier
-" highlight link htmlValue Identifier
-" highlight MatchParen ctermbg=WHITE ctermfg=BLACK
-"highlight link htmlString SpecialKey
-"highlight link javaScript SpecialKey
-
-" 編集中はステータスバーの色を変える
-" augroup InsertHook
-" autocmd!
-" " autocmd InsertEnter * highlight StatusLine ctermfg=WHITE ctermbg=DARKRED
-" autocmd InsertLeave * highlight StatusLine ctermfg=WHITE ctermbg=DARKBLUE
-" augroup END
-
-" ---------------------------------------------------------------------
-" キーマップ
-" ---------------------------------------------------------------------
-
-" make 
-" map <F9>  :make<ENTER>
-" map <F10> :!make clean; make<ENTER>
-
 " 表示行単位で行移動する
 nnoremap j gj
 nnoremap k gk
@@ -476,7 +462,4 @@ nnoremap k gk
 map <kPlus> <C-W>+
 map <kMinus> <C-W>-
 
-" 直前のyankレジスタをpaste visualでpasteするとyankレジスタが更新されるため
-" もっといい方法ないかね
-vnoremap <silent> <C-p> "0p<CR>
 
