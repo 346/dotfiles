@@ -8,7 +8,7 @@
 " vi互換にしない
 set nocompatible
 
-" os判定 macしか使わないけど・・・
+" os判定
 let s:is_windows = has('win16') || has('win32') || has('win64')
 let s:is_cygwin = has('win32unix')
 let s:is_mac = !s:is_windows && !s:is_cygwin
@@ -37,7 +37,7 @@ nnoremap <silent> ,. :<C-u>edit $MYVIMRC<CR>
 " マクロは使いこなせないのでqを無効
 noremap q <nop>
 
-" 直前のyankレジスタをpaste visualでpasteするとyankレジスタが更新されるため、pasteを別途定義
+" 直前のyankレジスタをpaste。 visualでpasteするとyankレジスタが更新されるため、pasteを別途定義
 " もっといい方法ないかね
 vnoremap <silent> <C-p> "0p<CR>
 
@@ -82,7 +82,7 @@ NeoBundle 'Shougo/vimproc', {
 " 入力モードで開始する
 let g:unite_enable_start_insert = 1
 " 最近開いたファイル履歴の保存数
-let g:unite_source_file_mru_limit = 20 
+let g:unite_source_file_mru_limit = 10 
 "file_mruの表示フォーマットを指定。空にすると表示スピードが高速化される、らしい・・・ホントか？
 let g:unite_source_file_mru_filename_format = ''
 
@@ -92,7 +92,7 @@ if s:is_mac
 endif
 
 " file_recの最大ファイル数
-let g:unite_source_file_rec_max_cache_files = 5000
+let g:unite_source_file_rec_max_cache_files = 1000
 " file_recの除外
 call unite#custom_source('file_rec/async', 'ignore_pattern', (unite#sources#file_rec#define()[0]['ignore_pattern']) . '\|\.png$\|\.jpg$\|\.jpeg$\|\.gif$\|\.mid$\|\.ttf$\|\.mp3$\|lib\/Cake\|tmp\/smarty\|Plugin')
 
@@ -104,7 +104,6 @@ NeoBundle 'h1mesuke/unite-outline'
 nnoremap <silent> ,t :Unite outline -direction=topleft -auto-resize -toggle<CR>
 
 " YankRing.vim
-" set viminfo+=!		" おまじない
 let g:yankring_window_use_bottom=0
 let g:yankring_history_file='.yankring_history'
 let g:yankring_history_dir=$HOME.'/.vim/'
