@@ -92,7 +92,7 @@ if s:is_mac
 endif
 
 " file_recの最大ファイル数
-let g:unite_source_file_rec_max_cache_files = 1000
+let g:unite_source_file_rec_max_cache_files = 2000
 " file_recの除外
 call unite#custom_source('file_rec/async', 'ignore_pattern', (unite#sources#file_rec#define()[0]['ignore_pattern']) . '\|\.png$\|\.jpg$\|\.jpeg$\|\.gif$\|\.mid$\|\.ttf$\|\.mp3$\|lib\/Cake\|tmp\/smarty\|Plugin')
 
@@ -435,7 +435,7 @@ set magic
 " ---------------------------------------------------------------------
 
 let php_sql_query=1
-let php_htmlInStrings=1
+" let php_htmlInStrings=1
 let php_noShortTags=1
 
 " ---------------------------------------------------------------------
