@@ -1,5 +1,5 @@
 # ゆーてぃーえふえいとだよっ
-if [ "`hostname -s`" = "Takahiro-no-MacBook-Pro.local" ]; then
+if [ "`hostname -s`" = "Takahiro-no-MacBook-Pro" ]; then
 	 . ~/.bashrc.mbp2nd
 elif [ "`hostname -s`" = "takahiro-no-MacBook-Pro" ]; then
 	 . ~/.bashrc.trifort.mbp
