@@ -9,4 +9,7 @@ alias vphpini='sudo vim /etc/php.ini'
 alias httpdrestart='sudo /usr/sbin/apachectl restart'
 alias ll='ls -laFG'
 
-
+if [ -f `brew --prefix`/etc/bash_completion.d/git-prompt.sh ]; then
+	. `brew --prefix`/etc/bash_completion.d/git-prompt.sh
+	. `brew --prefix`/etc/bash_completion.d/git-completion.bash
+fi
