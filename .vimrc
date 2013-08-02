@@ -19,9 +19,6 @@ let s:is_mac = !s:is_windows && !s:is_cygwin
 " スクリプト実行中に画面を描画しない
 set lazyredraw
 
-" neobundle用
-filetype plugin indent on     " Required!
-
 " シェルに移動
 nnoremap <silent> ,h :shell<CR>
 
@@ -43,11 +40,14 @@ vnoremap <silent> <C-p> "0p<CR>
 
 " {{{ プラグイン(neobundle)
 if has('vim_starting')
-	set runtimepath&
 	set runtimepath+=~/.vim/bundle/neobundle.vim/
 endif
 
 call neobundle#rc(expand('~/.vim/bundle/'))
+
+" neobundle用
+filetype plugin indent on     " Required!
+
 
 " Let NeoBundle manage NeoBundle
 NeoBundleFetch 'Shougo/neobundle.vim'
