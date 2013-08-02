@@ -13,3 +13,25 @@ if [ -f `brew --prefix`/etc/bash_completion.d/git-prompt.sh ]; then
 	. `brew --prefix`/etc/bash_completion.d/git-prompt.sh
 	. `brew --prefix`/etc/bash_completion.d/git-completion.bash
 fi
+
+program_exists () {
+	type "$1" &> /dev/null ;
+}
+
+if program_exists go; then
+	function setupGOROOT()
+	{
+		local GOPATH=`which go`
+		local GODIR=`dirname $GOPATH`
+		local GOPATH_BREW_RELATIVE=`readlink $GOPATH`
+		local GOPATH_BREW=`dirname $GOPATH_BREW_RELATIVE`
+		export GOROOT=`cd $GODIR; cd $GOPATH_BREW/..; pwd`
+	}
+	setupGOROOT
+fi
+export GOPATH=$HOME/.go
+export PATH=$PATH:$GOROOT/bin:$GOPATH/bin
+
+if [ -f $GOPATH/bin/json2csv ]; then
+	alias json2csv=$GOPATH/bin/json2csv
+fi

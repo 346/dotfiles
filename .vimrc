@@ -94,14 +94,15 @@ endif
 " file_recの最大ファイル数
 let g:unite_source_file_rec_max_cache_files = 2000
 " file_recの除外
-call unite#custom_source('file_rec', 'ignore_pattern', '\.png$\|\.jpg$\|\.jpeg$\|\.gif$\|\.mid$\|\.ttf$\|\.mp3$\|lib\/Cake\|tmp\/smarty\|Plugin\|www_pre')
-call unite#custom_source('file_rec/async', 'ignore_pattern', '\.png$\|\.jpg$\|\.jpeg$\|\.gif$\|\.mid$\|\.ttf$\|\.mp3$\|lib\/Cake\|tmp\/smarty\|Plugin\|www_pre')
+let s:unite_ignore_pattern = (unite#sources#rec#define()[0]['ignore_pattern']) . '\.png$\|\.jpg$\|\.jpeg$\|\.gif$\|\.mid$\|\.ttf$\|\.mp3$\|lib\/Cake\|tmp\/smarty\|Plugin\|tmp\/cache'
+call unite#custom_source('file_rec', 'ignore_pattern', s:unite_ignore_pattern)
+call unite#custom_source('file_rec/async', 'ignore_pattern', s:unite_ignore_pattern)
 
-nnoremap <C-T> :Unite buffer file_mru file_rec -direction=topleft -auto-resize -toggle<CR>
+nnoremap <C-T> :Unite buffer file_mru file_rec/async:! -direction=topleft -auto-resize -toggle<CR>
 nnoremap <silent> ,/ :<C-u>Unite -buffer-name=search line -start-insert<CR>
 
 " unite-outline
-NeoBundle 'h1mesuke/unite-outline'
+NeoBundle 'Shougo/unite-outline'
 nnoremap <silent> ,t :Unite outline -direction=topleft -auto-resize -toggle<CR>
 
 " YankRing.vim
