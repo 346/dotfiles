@@ -187,6 +187,29 @@ let g:vdebug_options = {
 " smarty
 NeoBundle 'smarty-syntax'
 
+" lightline
+NeoBundle 'itchyny/lightline.vim'
+
+let g:lightline = {
+      \ 'colorscheme': 'wombat',
+      \ 'active': {
+      \   'left': [ [ 'mode', 'paste' ],
+      \             [ 'fugitive', 'readonly', 'filename', 'modified' ] ]
+      \ },
+      \ 'component': {
+      \   'readonly': '%{&filetype=="help"?"":&readonly?"⭤":""}',
+      \   'modified': '%{&filetype=="help"?"":&modified?"+":&modifiable?"":"-"}',
+      \   'fugitive': '%{exists("*fugitive#head")?fugitive#head():""}'
+      \ },
+      \ 'component_visible_condition': {
+      \   'readonly': '(&filetype!="help"&& &readonly)',
+      \   'modified': '(&filetype!="help"&&(&modified||!&modifiable))',
+      \   'fugitive': '(exists("*fugitive#head") && ""!=fugitive#head())'
+      \ },
+      \ 'separator': { 'left': '⮀', 'right': '⮂' },
+      \ 'subseparator': { 'left': '⮁', 'right': '⮃' }
+      \ }
+
 "
 " Brief help
 " :NeoBundleList          - list configured bundles
@@ -209,6 +232,7 @@ augroup MyAutoCmd
 	au BufRead,BufNewFile *.phtml set filetype=php
 	au BufRead,BufNewFile *.ctp set filetype=php
 	" au BufRead,BufNewFile *.tpl set filetype=smarty 
+	au BufRead,BufNewFile Vagrantfile set filetype=ruby
 
 	" make
 	autocmd filetype php :set makeprg=php\ -l\ %
@@ -285,7 +309,7 @@ set history=50
 set undolevels=1000
 
 " 行番号を表示
-set number
+set relativenumber number
 
 " タブの空白文字数
 set tabstop=4
