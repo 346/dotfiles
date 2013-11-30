@@ -1,9 +1,9 @@
 # .bashrcとか.vimとかがないとno rule~て表示される
-DOT_FILES = .zshrc .vimrc .vim .bashrc .bashrc.osx .bashrc.linux .xvimrc .gitignore .gitconfig
+DOT_FILES = .zshrc .vimrc .vim .bashrc .bashrc.osx .bashrc.linux .xvimrc .gitignore .gitconfig .gemrc
 
 all: install
 
-install: bash vim
+install: bash vim git
 
 zsh: $(foreach f, $(filter .zsh%, $(DOT_FILES)), link-dot-file-$(f))
 
@@ -14,6 +14,8 @@ vim: $(foreach f, $(filter .vim%, $(DOT_FILES)), link-dot-file-$(f))
 xcode: $(foreach f, $(filter .xvim%, $(DOT_FILES)), link-dot-file-$(f))
 
 git: $(foreach f, $(filter .git%, $(DOT_FILES)), link-dot-file-$(f))
+
+gem: $(foreach f, $(filter .gem%, $(DOT_FILES)), link-dot-file-$(f))
 	
 .PHONY: clean
 	
