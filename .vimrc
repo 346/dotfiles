@@ -40,7 +40,7 @@ vnoremap <silent> <C-p> "0p<CR>
 
 " {{{ プラグイン(neobundle)
 if has('vim_starting')
-	set runtimepath+=~/.vim/bundle/neobundle.vim/
+  set runtimepath+=~/.vim/bundle/neobundle.vim/
 endif
 
 call neobundle#rc(expand('~/.vim/bundle/'))
@@ -68,6 +68,30 @@ NeoBundleFetch 'Shougo/neobundle.vim'
 " Non git repos
 " NeoBundle 'http://svn.macports.org/repository/macports/contrib/mpvim/'
 
+" neocomplete
+NeoBundle 'Shougo/neocomplete'
+
+" neosnippet
+NeoBundle 'Shougo/neosnippet'
+
+" Plugin key-mappings.
+imap <C-k>     <Plug>(neosnippet_expand_or_jump)
+smap <C-k>     <Plug>(neosnippet_expand_or_jump)
+xmap <C-k>     <Plug>(neosnippet_expand_target)
+
+" SuperTab like snippets behavior.
+imap <expr><TAB> neosnippet#expandable_or_jumpable() ?
+      \ "\<Plug>(neosnippet_expand_or_jump)"
+      \: pumvisible() ? "\<C-n>" : "\<TAB>"
+smap <expr><TAB> neosnippet#expandable_or_jumpable() ?
+      \ "\<Plug>(neosnippet_expand_or_jump)"
+      \: "\<TAB>"
+
+" For snippet_complete marker.
+if has('conceal')
+  set conceallevel=2 concealcursor=i
+endif
+
 " unite.vim
 NeoBundle 'Shougo/unite.vim'
 NeoBundle 'Shougo/vimproc', {
@@ -88,7 +112,7 @@ let g:unite_source_file_mru_filename_format = ''
 
 " macだとfindコマンドはディレクトリの指定が必須 gfind使えって？
 if s:is_mac
-	let g:unite_source_file_rec_async_command = "find ."
+  let g:unite_source_file_rec_async_command = "find ."
 endif
 
 " file_recの最大ファイル数
@@ -181,7 +205,7 @@ NeoBundle 'w0ng/vim-hybrid'
 " xdebug
 NeoBundle 'joonty/vdebug'
 let g:vdebug_options = {
-\	"path_maps" : {"/media/sf_www/dmm/www": "/Users/admin/Projects/dmm/www"}
+\ "path_maps" : {"/media/sf_www/dmm/www": "/Users/admin/Projects/dmm/www"}
 \}
 
 " smarty
@@ -219,7 +243,7 @@ let g:lightline = {
 " Installation check.
 if neobundle#exists_not_installed_bundles()
 echomsg 'Not installed bundles : ' .
-	 \ string(neobundle#get_not_installed_bundle_names())
+   \ string(neobundle#get_not_installed_bundle_names())
 echomsg 'Please execute ":NeoBundleInstall" command.'
 endif
 
@@ -228,21 +252,22 @@ endif
 
 " filetype設定
 augroup MyAutoCmd
-	autocmd!
-	au BufRead,BufNewFile *.phtml set filetype=php
-	au BufRead,BufNewFile *.ctp set filetype=php
-	" au BufRead,BufNewFile *.tpl set filetype=smarty 
-	au BufRead,BufNewFile Vagrantfile set filetype=ruby
+  autocmd!
+  au BufRead,BufNewFile *.phtml set filetype=php
+  au BufRead,BufNewFile *.ctp set filetype=php
+  " au BufRead,BufNewFile *.tpl set filetype=smarty 
+  au BufRead,BufNewFile Vagrantfile set filetype=ruby
 
-	" make
-	autocmd filetype php :set makeprg=php\ -l\ %
-	autocmd filetype php :set errorformat=%m\ in\ %f\ on\ line\ %l
+  " make
+  autocmd filetype php :set makeprg=php\ -l\ %
+  autocmd filetype php :set errorformat=%m\ in\ %f\ on\ line\ %l
 
-	" autocmd filetype php setlocal makeprg=php\ -l\ %
-	" autocmd filetype php setlocal errorformat=%m\ in\ %f\ on\ line\ %l
-	autocmd FileType ruby setlocal makeprg=ruby\ -c\ %
-	autocmd FileType ruby setlocal errorformat=%m\ in\ %f\ on\ line\ %l
-	autocmd FileType perl,cgi :compiler perl  
+  " autocmd filetype php setlocal makeprg=php\ -l\ %
+  " autocmd filetype php setlocal errorformat=%m\ in\ %f\ on\ line\ %l
+  autocmd FileType ruby setlocal makeprg=ruby\ -c\ %
+  autocmd FileType ruby setlocal errorformat=%m\ in\ %f\ on\ line\ %l
+  autocmd FileType perl,cgi :compiler perl  
+
 augroup END
 
 
@@ -297,9 +322,9 @@ set shortmess=t
 " タブや改行を表示するときの文字
 set listchars=tab:>-,extends:<,trail:-,eol:<
 if has("gui_running")
-	set list
+  set list
 else
-	set nolist		" Tab や改行を表示しない
+  set nolist    " Tab や改行を表示しない
 endif
 
 " 記憶するコマンド数
@@ -312,10 +337,10 @@ set undolevels=1000
 set relativenumber number
 
 " タブの空白文字数
-set tabstop=4
+set tabstop=2
 
 " 自動インデントの空白文字数
-set shiftwidth=4
+set shiftwidth=2
 
 " 行頭の余白内で Tab を打ち込むと、'shiftwidth' の数だけインデントする
 set smarttab
@@ -323,8 +348,8 @@ set smarttab
 " 新しい行を作ったときに高度な自動インデントを行う
 set smartindent
 
-" Insertモードで: <Tab> を挿入するのに、適切な数の空白を使う
-set noexpandtab
+" タブはスペース
+set expandtab
 
 " コロンコマンドを記録する数
 set history=50
@@ -336,57 +361,57 @@ set hid
 " ---------------------------------------------------------------------
 
 if &encoding !=# 'utf-8'
-	set encoding=japan
-	set fileencoding=japan
+  set encoding=japan
+  set fileencoding=japan
 endif
 
 if has('iconv')
-	let s:enc_euc = 'euc-jp'
-	let s:enc_jis = 'iso-2022-jp'
-	" iconvがeucJP-msに対応しているかをチェック
-	if iconv("\x87\x64\x87\x6a", 'cp932', 'eucjp-ms') ==# "\xad\xc5\xad\xcb"
-		let s:enc_euc = 'eucjp-ms'
-		let s:enc_jis = 'iso-2022-jp-3'
-		" iconvがJISX0213に対応しているかをチェック
-	elseif iconv("\x87\x64\x87\x6a", 'cp932', 'euc-jisx0213') ==# "\xad\xc5\xad\xcb"
-		let s:enc_euc = 'euc-jisx0213'
-		let s:enc_jis = 'iso-2022-jp-3'
-	endif
+  let s:enc_euc = 'euc-jp'
+  let s:enc_jis = 'iso-2022-jp'
+  " iconvがeucJP-msに対応しているかをチェック
+  if iconv("\x87\x64\x87\x6a", 'cp932', 'eucjp-ms') ==# "\xad\xc5\xad\xcb"
+    let s:enc_euc = 'eucjp-ms'
+    let s:enc_jis = 'iso-2022-jp-3'
+    " iconvがJISX0213に対応しているかをチェック
+  elseif iconv("\x87\x64\x87\x6a", 'cp932', 'euc-jisx0213') ==# "\xad\xc5\xad\xcb"
+    let s:enc_euc = 'euc-jisx0213'
+    let s:enc_jis = 'iso-2022-jp-3'
+  endif
 
-	" fileencodingsを構築
-	if &encoding ==# 'utf-8'
-		let s:fileencodings_default = &fileencodings
-		let &fileencodings = s:enc_jis .','. s:enc_euc .',cp932'
-		let &fileencodings = &fileencodings .','. s:fileencodings_default
-		unlet s:fileencodings_default
-	else
-		let &fileencodings = &fileencodings .','. s:enc_jis
-		set fileencodings+=utf-8,ucs-2le,ucs-2
-		if &encoding =~# '^\(euc-jp\|euc-jisx0213\|eucjp-ms\)$'
-			set fileencodings+=cp932
-			set fileencodings-=euc-jp
-			set fileencodings-=euc-jisx0213
-			set fileencodings-=eucjp-ms
-			let &encoding = s:enc_euc
-			let &fileencoding = s:enc_euc
-		else
-			let &fileencodings = &fileencodings .','. s:enc_euc
-		endif
-	endif
+  " fileencodingsを構築
+  if &encoding ==# 'utf-8'
+    let s:fileencodings_default = &fileencodings
+    let &fileencodings = s:enc_jis .','. s:enc_euc .',cp932'
+    let &fileencodings = &fileencodings .','. s:fileencodings_default
+    unlet s:fileencodings_default
+  else
+    let &fileencodings = &fileencodings .','. s:enc_jis
+    set fileencodings+=utf-8,ucs-2le,ucs-2
+    if &encoding =~# '^\(euc-jp\|euc-jisx0213\|eucjp-ms\)$'
+      set fileencodings+=cp932
+      set fileencodings-=euc-jp
+      set fileencodings-=euc-jisx0213
+      set fileencodings-=eucjp-ms
+      let &encoding = s:enc_euc
+      let &fileencoding = s:enc_euc
+    else
+      let &fileencodings = &fileencodings .','. s:enc_euc
+    endif
+  endif
 
-	" 定数を処分
-	unlet s:enc_euc
-	unlet s:enc_jis
+  " 定数を処分
+  unlet s:enc_euc
+  unlet s:enc_jis
 endif
 
 " 日本語を含まない場合は fileencoding に encoding を使うようにする
 if has('autocmd')
-	function! AU_ReCheck_FENC()
-		if &fileencoding =~# 'iso-2022-jp' && search("[^\x01-\x7e]", 'n') == 0
-			let &fileencoding=&encoding
-		endif
-	endfunction
-	autocmd BufReadPost * call AU_ReCheck_FENC()
+  function! AU_ReCheck_FENC()
+    if &fileencoding =~# 'iso-2022-jp' && search("[^\x01-\x7e]", 'n') == 0
+      let &fileencoding=&encoding
+    endif
+  endfunction
+  autocmd BufReadPost * call AU_ReCheck_FENC()
 endif
 
 " 改行コードの自動認識
@@ -394,19 +419,19 @@ set fileformats=unix,dos,mac
 
 " □とか○の文字があってもカーソル位置がずれないようにする
 if exists('&ambiwidth')
-	set ambiwidth=double
+  set ambiwidth=double
 endif
 
 " バイナリ編集(xxd)モード
 " vim -b での起動、もしくは *.bin ファイルを開くと発動
 augroup BinaryXXD
-	autocmd!
-	autocmd BufReadPre  *.bin let &binary =1
-	autocmd BufReadPost * if &binary | silent %!xxd -g 1
-	autocmd BufReadPost * set ft=xxd | endif
-	autocmd BufWritePre * if &binary | %!xxd -r | endif
-	autocmd BufWritePost * if &binary | silent %!xxd -g 1
-	autocmd BufWritePost * set nomod | endif
+  autocmd!
+  autocmd BufReadPre  *.bin let &binary =1
+  autocmd BufReadPost * if &binary | silent %!xxd -g 1
+  autocmd BufReadPost * set ft=xxd | endif
+  autocmd BufWritePre * if &binary | %!xxd -r | endif
+  autocmd BufWritePost * if &binary | silent %!xxd -g 1
+  autocmd BufWritePost * set nomod | endif
 augroup END
 
 " ---------------------------------------------------------------------

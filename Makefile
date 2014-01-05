@@ -1,9 +1,11 @@
 # .bashrcとか.vimとかがないとno rule~て表示される
-DOT_FILES = .zshrc .vimrc .vim .bashrc .bashrc.osx .bashrc.linux .xvimrc .gitignore .gitconfig .gemrc
+DOT_FILES = .zshrc .vimrc .vim .bashrc .bashrc.osx .bashrc.linux .xvimrc .gitignore .gitconfig .gemrc .railsrc .bundle
 
 all: install
 
 install: bash vim git
+
+ruby:gem rails bundler
 
 zsh: $(foreach f, $(filter .zsh%, $(DOT_FILES)), link-dot-file-$(f))
 
@@ -16,6 +18,10 @@ xcode: $(foreach f, $(filter .xvim%, $(DOT_FILES)), link-dot-file-$(f))
 git: $(foreach f, $(filter .git%, $(DOT_FILES)), link-dot-file-$(f))
 
 gem: $(foreach f, $(filter .gem%, $(DOT_FILES)), link-dot-file-$(f))
+
+bundler: $(foreach f, $(filter .bundle%, $(DOT_FILES)), link-dot-file-$(f))
+
+rails: $(foreach f, $(filter .rails%, $(DOT_FILES)), link-dot-file-$(f))
 	
 .PHONY: clean
 	
