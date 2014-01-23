@@ -3,9 +3,11 @@ DOT_FILES = .zshrc .vimrc .vim .bash_profile .bashrc .bashrc.osx .bashrc.linux .
 
 all: install
 
-install: bash git gem rails bundler
+install: bash vim git gem rails bundler
 
 ruby:gem rails bundler
+
+vim: $(foreach f, $(filter .vim%, $(DOT_FILES)), link-dot-file-$(f))
 
 zsh: $(foreach f, $(filter .zsh%, $(DOT_FILES)), link-dot-file-$(f))
 
