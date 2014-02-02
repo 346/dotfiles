@@ -240,6 +240,18 @@ let g:lightline = {
 " :NeoBundleInstall(!)    - install(update) bundles
 " :NeoBundleClean(!)      - confirm(or auto-approve) removal of unused bundles
 
+" Syntastic
+NeoBundle 'scrooloose/syntastic'
+let g:syntastic_enable_signs=1
+let g:syntastic_auto_loc_list=2
+let g:syntastic_mode_map = {
+      \  'mode': 'active',
+      \ 'active_filetypes': ['ruby', 'javascript'],
+      \ 'passive_filetypes': []
+      \ }
+
+" }}}
+
 " Installation check.
 if neobundle#exists_not_installed_bundles()
 echomsg 'Not installed bundles : ' .
