@@ -1,5 +1,5 @@
 # .bashrcとか.vimとかがないとno rule~て表示される
-DOT_FILES = .zshrc .vimrc .vim .bash_profile .bashrc .bashrc.osx .bashrc.linux .xvimrc .gitignore .gitconfig .gemrc .railsrc .bundle .jshintrc
+DOT_FILES = .zshrc .vimrc .bash_profile .bashrc .bashrc.osx .bashrc.linux .xvimrc .gitignore .gitconfig .gemrc .railsrc .bundle .jshintrc
 
 all: install
 
