@@ -1,2 +1,50 @@
 alias ll='ls -laFG'
 EDITOR=vim
+
+# Set up ssh-agent
+SSH_ENV="$HOME/.ssh/environment"
+
+function dport() {
+  sudo docker inspect -format='{{ if index .NetworkSettings.Ports "22/tcp" }}{{(index (index .NetworkSettings.Ports "22/tcp") 0).HostPort}}{{ end }}' "$1" | sed "/^$/d"
+}
+
+function dssh() {
+  ssh -oStrictHostKeyChecking=no -t -t docker@localhost -p `dport $1`
+}
+function dstop() {
+  sudo docker stop $1
+}
+function drun() {
+  sudo docker rm $1;sudo docker run -d -p 22 -name $1 ticketstreet/$1
+}
+function drestart() {
+  dstop $1;drun $1
+}
+function drm() {
+  sudo docker rm $(sudo docker ps -a -q)
+}
+function drmi() {
+  sudo docker images | grep "<none>" | awk '{print $3}' | xargs sudo docker rmi
+}
+
+
+ 
+function start_agent {
+  echo "Initializing new SSH agent..."
+  /usr/bin/ssh-agent | sed 's/^echo/#echo/' > "${SSH_ENV}"
+  echo succeeded
+  chmod 600 "${SSH_ENV}"
+  . "${SSH_ENV}" > /dev/null
+  /usr/bin/ssh-add;
+}
+ 
+# Source SSH settings, if applicable
+if [ -f "${SSH_ENV}" ]; then
+  . "${SSH_ENV}" > /dev/null
+  #ps ${SSH_AGENT_PID} doesn't work under cywgin
+  ps -ef | grep ${SSH_AGENT_PID} | grep ssh-agent$ > /dev/null || {
+      start_agent;
+  }
+else
+  start_agent;
+fi
