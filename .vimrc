@@ -383,6 +383,13 @@ set hid
 " 文字コードの自動認識
 " ---------------------------------------------------------------------
 
+if has('mac')
+  set termencoding=utf-8
+  set encoding=utf-8
+  set fileencoding=utf-8
+  set fileencodings=utf-8,cp932
+endif
+
 if &encoding !=# 'utf-8'
   set encoding=japan
   set fileencoding=japan
