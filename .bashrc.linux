@@ -1,11 +1,11 @@
 alias ll='ls -laFG'
-EDITOR=vim
+export EDITOR=vim
 
 # Set up ssh-agent
-SSH_ENV="$HOME/.ssh/environment"
+export SSH_ENV="$HOME/.ssh/environment"
 
 function dport() {
-  sudo docker inspect -format='{{ if index .NetworkSettings.Ports "22/tcp" }}{{(index (index .NetworkSettings.Ports "22/tcp") 0).HostPort}}{{ end }}' "$1" | sed "/^$/d"
+  sudo docker inspect --format='{{ if index .NetworkSettings.Ports "22/tcp" }}{{(index (index .NetworkSettings.Ports "22/tcp") 0).HostPort}}{{ end }}' "$1" | sed "/^$/d"
 }
 
 function dssh() {
@@ -15,7 +15,7 @@ function dstop() {
   sudo docker stop $1
 }
 function drun() {
-  sudo docker rm $1;sudo docker run -d -p 22 -name $1 ticketstreet/$1
+  sudo docker rm $1;sudo docker run -d -p 22 --name $1 ticketstreet/$1
 }
 function drestart() {
   dstop $1;drun $1
