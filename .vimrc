@@ -110,11 +110,6 @@ let g:unite_source_file_mru_limit = 10
 "file_mruの表示フォーマットを指定。空にすると表示スピードが高速化される、らしい・・・ホントか？
 let g:unite_source_file_mru_filename_format = ''
 
-" macだとfindコマンドはディレクトリの指定が必須 gfind使えって？
-if s:is_mac
-  let g:unite_source_file_rec_async_command = "find ."
-endif
-
 " file_recの最大ファイル数
 let g:unite_source_file_rec_max_cache_files = 2000
 " file_recの除外
