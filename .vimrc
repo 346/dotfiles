@@ -38,6 +38,23 @@ noremap q <nop>
 " もっといい方法ないかね
 vnoremap <silent> <C-p> "0p<CR>
 
+" 自動set paste
+if &term =~ "xterm"
+  let &t_ti .= "\e[?2004h"
+  let &t_te .= "\e[?2004l"
+  let &pastetoggle = "\e[201~"
+
+  function XTermPasteBegin(ret)
+      set paste
+      return a:ret
+  endfunction
+
+  noremap <special> <expr> <Esc>[200~ XTermPasteBegin("0i")
+  inoremap <special> <expr> <Esc>[200~ XTermPasteBegin("")
+  cnoremap <special> <Esc>[200~ <nop>
+  cnoremap <special> <Esc>[201~ <nop>
+endif
+
 " {{{ プラグイン(neobundle)
 if has('vim_starting')
   set runtimepath+=~/.vim/bundle/neobundle.vim/
@@ -103,11 +120,14 @@ NeoBundle 'Shougo/vimproc', {
   \ },
   \ }
 
+NeoBundle 'Shougo/neomru.vim'
+
 " 入力モードで開始する
 let g:unite_enable_start_insert = 1
 " 最近開いたファイル履歴の保存数
 let g:unite_source_file_mru_limit = 10 
-"file_mruの表示フォーマットを指定。空にすると表示スピードが高速化される、らしい・・・ホントか？
+"file_mruの表示フォーマットを指定。空にすると表示スピードが高速化される、らしい・・・
+let g:unite_source_file_mru_time_format = ''
 let g:unite_source_file_mru_filename_format = ''
 
 " file_recの最大ファイル数
@@ -117,7 +137,7 @@ let s:unite_ignore_pattern = (unite#sources#rec#define()[0]['ignore_pattern']) .
 call unite#custom_source('file_rec', 'ignore_pattern', s:unite_ignore_pattern)
 call unite#custom_source('file_rec/async', 'ignore_pattern', s:unite_ignore_pattern)
 
-nnoremap <C-T> :Unite buffer file_mru file_rec/async:! -direction=topleft -auto-resize -toggle<CR>
+nnoremap <C-T> :Unite buffer file_mru file_rec -direction=topleft -auto-resize -toggle<CR>
 nnoremap <silent> ,/ :<C-u>Unite -buffer-name=search line -start-insert<CR>
 
 " unite-outline
