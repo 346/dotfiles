@@ -38,6 +38,23 @@ noremap q <nop>
 " もっといい方法ないかね
 vnoremap <silent> <C-p> "0p<CR>
 
+" 自動set paste
+if &term =~ "xterm"
+  let &t_ti .= "\e[?2004h"
+  let &t_te .= "\e[?2004l"
+  let &pastetoggle = "\e[201~"
+
+  function XTermPasteBegin(ret)
+      set paste
+      return a:ret
+  endfunction
+
+  noremap <special> <expr> <Esc>[200~ XTermPasteBegin("0i")
+  inoremap <special> <expr> <Esc>[200~ XTermPasteBegin("")
+  cnoremap <special> <Esc>[200~ <nop>
+  cnoremap <special> <Esc>[201~ <nop>
+endif
+
 " {{{ プラグイン(neobundle)
 if has('vim_starting')
   set runtimepath+=~/.vim/bundle/neobundle.vim/
@@ -94,17 +111,15 @@ NeoBundle 'Shougo/vimproc', {
   \ },
   \ }
 
+NeoBundle 'Shougo/neomru.vim'
+
 " 入力モードで開始する
 let g:unite_enable_start_insert = 1
 " 最近開いたファイル履歴の保存数
 let g:unite_source_file_mru_limit = 10 
-"file_mruの表示フォーマットを指定。空にすると表示スピードが高速化される、らしい・・・ホントか？
+"file_mruの表示フォーマットを指定。空にすると表示スピードが高速化される、らしい・・・
+let g:unite_source_file_mru_time_format = ''
 let g:unite_source_file_mru_filename_format = ''
-
-if !executable('ag') && s:is_mac
-  " macだとfindコマンドはディレクトリの指定が必須
-  let g:unite_source_rec_async_command = "find ."
-endif
 
 " file_recの最大ファイル数
 let g:unite_source_file_rec_max_cache_files = 2000
@@ -113,7 +128,7 @@ let g:unite_source_file_rec_max_cache_files = 2000
 " call unite#custom_source('file_rec', 'ignore_pattern', s:unite_ignore_pattern)
 " call unite#custom_source('file_rec/async', 'ignore_pattern', s:unite_ignore_pattern)
 
-nnoremap <C-T> :Unite buffer file_mru file_rec/async:! -direction=topleft -auto-resize -toggle<CR>
+nnoremap <C-T> :Unite buffer file_mru file_rec -direction=topleft -auto-resize -toggle<CR>
 nnoremap <silent> ,/ :<C-u>Unite -buffer-name=search line -start-insert<CR>
 
 " unite-outline
@@ -402,73 +417,64 @@ set hid
 " 文字コードの自動認識
 " ---------------------------------------------------------------------
 
-if has('mac')
-  set termencoding=utf-8
-  set encoding=utf-8
-  set fileencoding=utf-8
-  set fileencodings=utf-8,cp932
-endif
+" macの場合は判定をmacvim kaoriyaにまかせる
+if !s:is_mac
+  if has('iconv')
+    let s:enc_euc = 'euc-jp'
+    let s:enc_jis = 'iso-2022-jp'
+    " iconvがeucJP-msに対応しているかをチェック
+    if iconv("\x87\x64\x87\x6a", 'cp932', 'eucjp-ms') ==# "\xad\xc5\xad\xcb"
+      let s:enc_euc = 'eucjp-ms'
+      let s:enc_jis = 'iso-2022-jp-3'
+      " iconvがJISX0213に対応しているかをチェック
+    elseif iconv("\x87\x64\x87\x6a", 'cp932', 'euc-jisx0213') ==# "\xad\xc5\xad\xcb"
+      let s:enc_euc = 'euc-jisx0213'
+      let s:enc_jis = 'iso-2022-jp-3'
+    endif
 
-if &encoding !=# 'utf-8'
-  set encoding=japan
-  set fileencoding=japan
-endif
-
-if has('iconv')
-  let s:enc_euc = 'euc-jp'
-  let s:enc_jis = 'iso-2022-jp'
-  " iconvがeucJP-msに対応しているかをチェック
-  if iconv("\x87\x64\x87\x6a", 'cp932', 'eucjp-ms') ==# "\xad\xc5\xad\xcb"
-    let s:enc_euc = 'eucjp-ms'
-    let s:enc_jis = 'iso-2022-jp-3'
-    " iconvがJISX0213に対応しているかをチェック
-  elseif iconv("\x87\x64\x87\x6a", 'cp932', 'euc-jisx0213') ==# "\xad\xc5\xad\xcb"
-    let s:enc_euc = 'euc-jisx0213'
-    let s:enc_jis = 'iso-2022-jp-3'
-  endif
-
-  " fileencodingsを構築
-  if &encoding ==# 'utf-8'
-    let s:fileencodings_default = &fileencodings
-    let &fileencodings = s:enc_jis .','. s:enc_euc .',cp932'
-    let &fileencodings = &fileencodings .','. s:fileencodings_default
-    unlet s:fileencodings_default
-  else
-    let &fileencodings = &fileencodings .','. s:enc_jis
-    set fileencodings+=utf-8,ucs-2le,ucs-2
-    if &encoding =~# '^\(euc-jp\|euc-jisx0213\|eucjp-ms\)$'
-      set fileencodings+=cp932
-      set fileencodings-=euc-jp
-      set fileencodings-=euc-jisx0213
-      set fileencodings-=eucjp-ms
-      let &encoding = s:enc_euc
-      let &fileencoding = s:enc_euc
+    " fileencodingsを構築
+    if &encoding ==# 'utf-8'
+      let s:fileencodings_default = &fileencodings
+      let &fileencodings = s:enc_jis .','. s:enc_euc .',cp932'
+      let &fileencodings = &fileencodings .','. s:fileencodings_default
+      unlet s:fileencodings_default
     else
-      let &fileencodings = &fileencodings .','. s:enc_euc
+      let &fileencodings = &fileencodings .','. s:enc_jis
+      set fileencodings+=utf-8,ucs-2le,ucs-2
+      if &encoding =~# '^\(euc-jp\|euc-jisx0213\|eucjp-ms\)$'
+        set fileencodings+=cp932
+        set fileencodings-=euc-jp
+        set fileencodings-=euc-jisx0213
+        set fileencodings-=eucjp-ms
+        let &encoding = s:enc_euc
+        let &fileencoding = s:enc_euc
+      else
+        let &fileencodings = &fileencodings .','. s:enc_euc
+      endif
     endif
+
+    " 定数を処分
+    unlet s:enc_euc
+    unlet s:enc_jis
   endif
 
-  " 定数を処分
-  unlet s:enc_euc
-  unlet s:enc_jis
-endif
+  " 日本語を含まない場合は fileencoding に encoding を使うようにする
+  if has('autocmd')
+    function! AU_ReCheck_FENC()
+      if &fileencoding =~# 'iso-2022-jp' && search("[^\x01-\x7e]", 'n') == 0
+        let &fileencoding=&encoding
+      endif
+    endfunction
+    autocmd BufReadPost * call AU_ReCheck_FENC()
+  endif
 
-" 日本語を含まない場合は fileencoding に encoding を使うようにする
-if has('autocmd')
-  function! AU_ReCheck_FENC()
-    if &fileencoding =~# 'iso-2022-jp' && search("[^\x01-\x7e]", 'n') == 0
-      let &fileencoding=&encoding
-    endif
-  endfunction
-  autocmd BufReadPost * call AU_ReCheck_FENC()
-endif
+  " 改行コードの自動認識
+  set fileformats=unix,dos,mac
 
-" 改行コードの自動認識
-set fileformats=unix,dos,mac
-
-" □とか○の文字があってもカーソル位置がずれないようにする
-if exists('&ambiwidth')
-  set ambiwidth=double
+  " □とか○の文字があってもカーソル位置がずれないようにする
+  if exists('&ambiwidth')
+    set ambiwidth=double
+  endif
 endif
 
 " バイナリ編集(xxd)モード

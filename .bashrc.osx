@@ -1,4 +1,5 @@
 export PATH="$HOME/.rbenv/shims:$PATH"
+export DOCKER_HOST=tcp://
 eval "$(rbenv init -)"
 
 export EDITOR=/Applications/MacVim.app/Contents/MacOS/Vim
