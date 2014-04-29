@@ -56,23 +56,14 @@ NeoBundleFetch 'Shougo/neobundle.vim'
 " After install, turn shell ~/.vim/bundle/vimproc, (n,g)make -f your_machines_makefile
 " NeoBundle 'Shougo/vimproc'
 
-" My Bundles here:
-"
-" Note: You don't set neobundle setting in .gvimrc!
-" Original repos on github
-" NeoBundle 'Shougo/neocomplcache'
-
-" Non github repos
-" NeoBundle 'git://git.wincent.com/command-t.git'
-
-" Non git repos
-" NeoBundle 'http://svn.macports.org/repository/macports/contrib/mpvim/'
-
 " neocomplete
 NeoBundle 'Shougo/neocomplete'
 
+let g:neocomplete#enable_at_startup = 1
+
 " neosnippet
 NeoBundle 'Shougo/neosnippet'
+NeoBundle 'Shougo/neosnippet-snippets'
 
 " Plugin key-mappings.
 imap <C-k>     <Plug>(neosnippet_expand_or_jump)
@@ -110,17 +101,17 @@ let g:unite_source_file_mru_limit = 10
 "file_mruの表示フォーマットを指定。空にすると表示スピードが高速化される、らしい・・・ホントか？
 let g:unite_source_file_mru_filename_format = ''
 
-" macだとfindコマンドはディレクトリの指定が必須 gfind使えって？
-if s:is_mac
-  let g:unite_source_file_rec_async_command = "find ."
+if !executable('ag') && s:is_mac
+  " macだとfindコマンドはディレクトリの指定が必須
+  let g:unite_source_rec_async_command = "find ."
 endif
 
 " file_recの最大ファイル数
 let g:unite_source_file_rec_max_cache_files = 2000
 " file_recの除外
-let s:unite_ignore_pattern = (unite#sources#rec#define()[0]['ignore_pattern']) .  '\.png$\|\.jpg$\|\.jpeg$\|\.gif$\|\.mid$\|\.ttf$\|\.mp3$\|lib\/Cake\|tmp\/smarty\|Plugin\|tmp\/cache\|\.git\|vendors\|Vendor'
-call unite#custom_source('file_rec', 'ignore_pattern', s:unite_ignore_pattern)
-call unite#custom_source('file_rec/async', 'ignore_pattern', s:unite_ignore_pattern)
+" let s:unite_ignore_pattern = (unite#sources#rec#define()[0]['ignore_pattern']) .  '\.png$\|\.jpg$\|\.jpeg$\|\.gif$\|\.mid$\|\.ttf$\|\.mp3$\|lib\/Cake\|tmp\/smarty\|Plugin\|tmp\/cache\|\.git\|vendors\|Vendor'
+" call unite#custom_source('file_rec', 'ignore_pattern', s:unite_ignore_pattern)
+" call unite#custom_source('file_rec/async', 'ignore_pattern', s:unite_ignore_pattern)
 
 nnoremap <C-T> :Unite buffer file_mru file_rec/async:! -direction=topleft -auto-resize -toggle<CR>
 nnoremap <silent> ,/ :<C-u>Unite -buffer-name=search line -start-insert<CR>
@@ -129,11 +120,28 @@ nnoremap <silent> ,/ :<C-u>Unite -buffer-name=search line -start-insert<CR>
 NeoBundle 'Shougo/unite-outline'
 nnoremap <silent> ,t :Unite outline -direction=topleft -auto-resize -toggle<CR>
 
+" neomru
+NeoBundle 'Shougo/neomru.vim'
+
 " YankRing.vim
-let g:yankring_window_use_bottom=0
-let g:yankring_history_file='.yankring_history'
-let g:yankring_history_dir=$HOME.'/.vim/'
-NeoBundle 'YankRing.vim'
+" let g:yankring_window_use_bottom=0
+" let g:yankring_history_file='.yankring_history'
+" let g:yankring_history_dir=$HOME.'/.vim/'
+" NeoBundle 'YankRing.vim'
+
+" Yankround
+NeoBundle 'LeafCage/yankround.vim'
+NeoBundle 'kien/ctrlp.vim'
+"" キーマップ
+nmap p <Plug>(yankround-p)
+nmap P <Plug>(yankround-P)
+nmap <C-p> <Plug>(yankround-prev)
+nmap <C-n> <Plug>(yankround-next)
+"" 履歴取得数
+let g:yankround_max_history = 100
+""履歴一覧(kien/ctrlp.vim)
+nnoremap <silent>g<C-p> :<C-u>CtrlPYankRound<CR>
+let g:yankround_dir = '~/.cache/yankround'
 
 " sudo.vim
 NeoBundle 'sudo.vim'
@@ -168,10 +176,21 @@ let NERDSpaceDelims = 1
 nmap <silent> ,, <Plug>NERDCommenterToggle
 vmap <silent> ,, <Plug>NERDCommenterToggle
 " matchit
-" NeoBundle 'matchit.zip'
+NeoBundle 'matchit.zip'
 
 " quickrun
 NeoBundle 'thinca/vim-quickrun'
+
+" vim-ndwise
+" NeoBundle 'tpope/vim-endwise'
+
+" inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
+" function! s:my_cr_function()
+  " return neocomplete#close_popup() . "\<CR>"
+  " " For no inserting <CR> key.
+  " "return pumvisible() ? neocomplete#close_popup() : "\<CR>"
+" endfunction
+
 
 
 "" solarized カラースキーム
