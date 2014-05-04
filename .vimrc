@@ -172,19 +172,6 @@ NeoBundle 'tpope/vim-fugitive'
 " sparkup
 " NeoBundle 'rstacruz/sparkup', {'rtp': 'vim/'}
 
-" php doc系
-"NeoBundle 'bthemad/php-doc.vim'
-let g:pdv_cfg_Type = "mixed"
-let g:pdv_cfg_Package = ""
-let g:pdv_cfg_Version = ""
-let g:pdv_cfg_Author = "Takahiro Mishiro"
-let g:pdv_cfg_Copyright = "2013 Trifort inc."
-let g:pdv_cfg_License = ""
-NeoBundle 'php-doc-upgrade'
-"inoremap ,p <ESC>:call PhpDocSingle()<CR>i
-nnoremap <silent> ,p :call PhpDocSingle()<CR>
-vnoremap <silent> ,p :call PhpDocRange()<CR> 
-
 " nerd commenter
 NeoBundle 'The-NERD-Commenter'
 let NERDSpaceDelims = 1
@@ -294,6 +281,16 @@ let g:syntastic_mode_map = {
       \ 'active_filetypes': ['ruby', 'javascript'],
       \ 'passive_filetypes': []
       \ }
+
+" vim-tags
+NeoBundle 'szw/vim-tags'
+
+if s:is_mac
+  let g:vim_tags_project_tags_command = "/usr/local/bin/ctags -R {OPTIONS} {DIRECTORY} 2>/dev/null"
+  let g:vim_tags_gems_tags_command = "/usr/local/bin/ctags -R {OPTIONS} `bundle show --paths` 2>/dev/null"
+endif
+set tags+=.tags
+set tags+=.Gemfile.lock.tags
 
 " }}}
 
