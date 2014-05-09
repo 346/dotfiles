@@ -21,8 +21,8 @@ else
 fi
 
 export LESS="-eirMX"
+eval "$(direnv hook bash)"
 
 ### Added by the Heroku Toolbelt
 export PATH="/usr/local/heroku/bin:$PATH"
 
-eval "$(direnv hook bash)"

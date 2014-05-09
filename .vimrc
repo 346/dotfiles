@@ -122,10 +122,11 @@ let g:unite_source_file_mru_time_format = ''
 let g:unite_source_file_mru_filename_format = ''
 
 " file_recの最大ファイル数
-let g:unite_source_file_rec_max_cache_files = 2000
+let g:unite_source_rec_max_cache_files = 5000
 " file_recの除外
 let s:unite_ignore_pattern = (unite#sources#rec#define()[0]['ignore_pattern']) .  '\.png$\|\.jpg$\|\.jpeg$\|\.gif$\|\.mid$\|\.ttf$\|\.mp3$\|lib\/Cake\|tmp\/smarty\|Plugin\|tmp\/cache\|\.git\|vendors\|Vendor\|vendor'
 call unite#custom_source('file_rec', 'ignore_pattern', s:unite_ignore_pattern)
+" call unite#custom#source('file_rec/async', 'ignore_pattern', s:unite_ignore_pattern)
 
 if executable('ag')
   let g:unite_source_rec_async_command='ag --nocolor --nogroup -g ""'
@@ -136,6 +137,7 @@ endif
 
 
 " 基本
+" nnoremap <C-T> :Unite -direction=topleft -auto-resize -toggle buffer file_rec/async:!<CR>
 nnoremap <C-T> :Unite buffer file_rec -direction=topleft -auto-resize -toggle<CR>
 " カレントファイル検索
 nnoremap <silent> ,/ :<C-u>Unite -buffer-name=search line -start-insert<CR>
@@ -158,7 +160,14 @@ NeoBundle 'Shougo/neomru.vim'
 
 " Yankround
 NeoBundle 'LeafCage/yankround.vim'
-NeoBundle 'kien/ctrlp.vim'
+nmap p <Plug>(yankround-p)
+xmap p <Plug>(yankround-p)
+nmap P <Plug>(yankround-P)
+nmap gp <Plug>(yankround-gp)
+xmap gp <Plug>(yankround-gp)
+nmap gP <Plug>(yankround-gP)
+nmap <C-p> <Plug>(yankround-prev)
+nmap <C-n> <Plug>(yankround-next)
 "" キーマップ
 nmap p <Plug>(yankround-p)
 nmap P <Plug>(yankround-P)
