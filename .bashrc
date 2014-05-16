@@ -20,10 +20,9 @@ else
 	export PS1='\[\033[01;32m\]\u@\h\[\033[01;33m\] \w \n\[\033[01;34m\]\$\[\033[00m\] '
 fi
 
+export LESS="-eirMX"
+eval "$(direnv hook bash)"
 
 ### Added by the Heroku Toolbelt
 export PATH="/usr/local/heroku/bin:$PATH"
 
-export LESS="-eirMX"
-
-eval "$(direnv hook bash)"
