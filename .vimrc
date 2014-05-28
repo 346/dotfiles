@@ -409,7 +409,7 @@ set history=50
 set undolevels=1000
 
 " 行番号を表示
-set relativenumber number
+set number
 
 " タブの空白文字数
 set tabstop=2
