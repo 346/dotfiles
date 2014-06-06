@@ -62,8 +62,6 @@ endif
 
 call neobundle#rc(expand('~/.vim/bundle/'))
 
-" neobundle用
-filetype plugin indent on     " Required!
 
 
 " Let NeoBundle manage NeoBundle
@@ -183,7 +181,7 @@ let g:yankround_dir = '~/.cache/yankround'
 NeoBundle 'sudo.vim'
 
 " vim-fugitive
-NeoBundle 'tpope/vim-fugitive'
+" NeoBundle 'tpope/vim-fugitive'
 
 " easy motion
 " let g:EasyMotion_leader_key = '<Space><Space>'
@@ -245,13 +243,13 @@ NeoBundle 'w0ng/vim-hybrid'
 " NeoBundle 'kmnk/vim-unite-svn'
 
 " xdebug
-NeoBundle 'joonty/vdebug'
-let g:vdebug_options = {
-\ "path_maps" : {"/media/sf_www/dmm/www": "/Users/admin/Projects/dmm/www"}
-\}
+" NeoBundle 'joonty/vdebug'
+" let g:vdebug_options = {
+" \ "path_maps" : {"/media/sf_www/dmm/www": "/Users/admin/Projects/dmm/www"}
+" \}
 
 " smarty
-NeoBundle 'smarty-syntax'
+" NeoBundle 'smarty-syntax'
 
 " lightline
 NeoBundle 'itchyny/lightline.vim'
@@ -313,14 +311,13 @@ endif
 set tags+=.tags
 set tags+=.Gemfile.lock.tags
 
-" }}}
 
-" Installation check.
-if neobundle#exists_not_installed_bundles()
-echomsg 'Not installed bundles : ' .
-   \ string(neobundle#get_not_installed_bundle_names())
-echomsg 'Please execute ":NeoBundleInstall" command.'
-endif
+" slim
+NeoBundle 'slim-template/vim-slim'
+
+call neobundle#end()
+
+" }}}
 
 
 " }}}
@@ -577,6 +574,7 @@ set foldmethod=marker
 " ---------------------------------------------------------------------
 
 syntax on
+filetype plugin indent on
 
 colorscheme hybrid
 
@@ -589,3 +587,4 @@ map <kPlus> <C-W>+
 map <kMinus> <C-W>-
 
 
+NeoBundleCheck
