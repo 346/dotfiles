@@ -113,43 +113,6 @@ NeoBundle 'Shougo/vimproc', {
 
 NeoBundle 'Shougo/neomru.vim'
 
-" {{{ test matcher
-let s:save_cpo = &cpo
-set cpo&vim
-
-function! unite#filters#matcher_keyword#define()
-  return s:matcher
-endfunction
-
-let s:matcher = {
-      \ 'name' : 'matcher_file_name',
-      \ 'description' : 'file name matcher',
-      \}
-
-function! s:matcher.filter(candidates, context)
-  if a:context.input == ''
-    return a:candidates
-  endif
-
-  let candidates = a:candidates
-  for input in split(a:context.input, '\\\@<! ')
-    let input = substitute(input, '\\ ', ' ', 'g')
-
-    let input = substitute(substitute(unite#util#escape_match(input),
-          \ '[[:alnum:]._-]', '\0.*', 'g'), '\*\*', '*', 'g')
-
-    let expr = 'fnamemodify(v:val.word, ":t") =~' . string(input)
-    let candidates = unite#filters#filter_matcher(candidates, expr, a:context)
-  endfor
-
-  return candidates
-endfunction
-
-let &cpo = s:save_cpo
-unlet s:save_cpo
-
-" }}}
-
 " 入力モードで開始する
 let g:unite_enable_start_insert = 1
 " 最近開いたファイル履歴の保存数
@@ -159,32 +122,18 @@ let g:unite_source_file_mru_time_format = ''
 let g:unite_source_file_mru_filename_format = ''
 
 " file_recの最大ファイル数
-let g:unite_source_rec_max_cache_files = 5000
+let g:unite_source_file_rec_max_cache_files = 2000
 " file_recの除外
-let s:unite_ignore_pattern = (unite#sources#rec#define()[0]['ignore_pattern']) .  '\.png$\|\.jpg$\|\.jpeg$\|\.gif$\|\.mid$\|\.ttf$\|\.mp3$\|lib\/Cake\|tmp\/smarty\|Plugin\|tmp\/cache\|\.git\|vendors\|Vendor\|vendor'
-call unite#custom_source('file_rec', 'ignore_pattern', s:unite_ignore_pattern)
-" call unite#custom#source('file_rec/async', 'ignore_pattern', s:unite_ignore_pattern)
+" let s:unite_ignore_pattern = (unite#sources#rec#define()[0]['ignore_pattern']) .  '\.png$\|\.jpg$\|\.jpeg$\|\.gif$\|\.mid$\|\.ttf$\|\.mp3$\|lib\/Cake\|tmp\/smarty\|Plugin\|tmp\/cache\|\.git\|vendors\|Vendor'
+" call unite#custom_source('file_rec', 'ignore_pattern', s:unite_ignore_pattern)
+" call unite#custom_source('file_rec/async', 'ignore_pattern', s:unite_ignore_pattern)
 
-if executable('ag')
-  let g:unite_source_rec_async_command='ag --nocolor --nogroup -g ""'
-  let g:unite_source_grep_command = 'ag'
-  let g:unite_source_grep_default_opts = '--nogroup --nocolor --column'
-  let g:unite_source_grep_recursive_opt = ''
-endif
-
-
-" 基本
-" nnoremap <C-T> :Unite -direction=topleft -auto-resize -toggle buffer file_rec/async:!<CR>
-nnoremap <C-T> :Unite buffer file_rec -direction=topleft -auto-resize -toggle<CR>
-" カレントファイル検索
+nnoremap <C-T> :Unite buffer file_mru file_rec -direction=topleft -auto-resize -toggle<CR>
 nnoremap <silent> ,/ :<C-u>Unite -buffer-name=search line -start-insert<CR>
 
 " unite-outline
 NeoBundle 'Shougo/unite-outline'
 nnoremap <silent> ,t :Unite outline -direction=topleft -auto-resize -toggle<CR>
-
-" grep
-nnoremap <silent> ,g  :<C-u>Unite grep:. -buffer-name=search-buffer<CR>
 
 " neomru
 NeoBundle 'Shougo/neomru.vim'
