@@ -122,7 +122,7 @@ let g:unite_source_file_mru_filename_format = ''
 " file_recの最大ファイル数
 let g:unite_source_rec_max_cache_files = 5000
 " file_recの除外
-let s:unite_ignore_pattern = (unite#sources#rec#define()[0]['ignore_pattern']) .  '\.png$\|\.jpg$\|\.jpeg$\|\.gif$\|\.mid$\|\.ttf$\|\.mp3$\|lib\/Cake\|tmp\/smarty\|Plugin\|tmp\/cache\|\.git\|vendors\|Vendor\|vendor'
+let s:unite_ignore_pattern = (unite#sources#rec#define()[0]['ignore_pattern']) .  '\.png$\|\.jpg$\|\.jpeg$\|\.gif$\|\.mid$\|\.ttf$\|\.mp3$\|lib\/Cake\|tmp\/smarty\|Plugin\|tmp\/cache\|\.git\|vendors\|Vendor\|vendor\|node_modules'
 call unite#custom_source('file_rec', 'ignore_pattern', s:unite_ignore_pattern)
 " call unite#custom#source('file_rec/async', 'ignore_pattern', s:unite_ignore_pattern)
 
@@ -155,6 +155,8 @@ NeoBundle 'Shougo/neomru.vim'
 " let g:yankring_history_file='.yankring_history'
 " let g:yankring_history_dir=$HOME.'/.vim/'
 " NeoBundle 'YankRing.vim'
+
+NeoBundle 'Shougo/vimshell' 
 
 " Yankround
 NeoBundle 'LeafCage/yankround.vim'
@@ -315,6 +317,10 @@ set tags+=.Gemfile.lock.tags
 " slim
 NeoBundle 'slim-template/vim-slim'
 
+" vim-javascript
+NeoBundle "pangloss/vim-javascript"
+NeoBundle 'vim-ruby/vim-ruby'
+
 call neobundle#end()
 
 " }}}
@@ -339,6 +345,7 @@ augroup MyAutoCmd
   autocmd FileType ruby setlocal makeprg=ruby\ -c\ %
   autocmd FileType ruby setlocal errorformat=%m\ in\ %f\ on\ line\ %l
   autocmd FileType perl,cgi :compiler perl  
+  autocmd filetype coffee,javascript setlocal shiftwidth=2 softtabstop=2 tabstop=2 expandtab
 
 augroup END
 
