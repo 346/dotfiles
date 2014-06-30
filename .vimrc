@@ -44,7 +44,7 @@ if &term =~ "xterm"
   let &t_te .= "\e[?2004l"
   let &pastetoggle = "\e[201~"
 
-  function XTermPasteBegin(ret)
+  function! XTermPasteBegin(ret)
       set paste
       return a:ret
   endfunction
@@ -121,6 +121,7 @@ let g:unite_source_file_mru_filename_format = ''
 
 " file_recの最大ファイル数
 let g:unite_source_file_rec_max_cache_files = 2000
+
 " file_recの除外
 let s:unite_ignore_pattern = (unite#sources#rec#define()[0]['ignore_pattern']) .  '\.png$\|\.jpg$\|\.jpeg$\|\.gif$\|\.mid$\|\.ttf$\|\.mp3$\|lib\/Cake\|tmp\/smarty\|Plugin\|tmp\/cache\|\.git\|vendors\|Vendor\|vendor\|node_modules'
 call unite#custom_source('file_rec', 'ignore_pattern', s:unite_ignore_pattern)
@@ -132,6 +133,22 @@ if executable('ag')
   let g:unite_source_grep_default_opts = '--nogroup --nocolor --column'
   let g:unite_source_grep_recursive_opt = ''
 endif
+
+function! Unite_substitute(pattern, substitute)
+  call unite#custom#substitute('default', '[[:blank:]]\zs' . a:pattern . '\ze[[:blank:]]\|^\zs' . a:pattern . '\ze[[:blank:]]', a:substitute)
+endfunction
+
+call Unite_substitute('m', 'models')
+call Unite_substitute('v', 'views')
+call Unite_substitute('c', 'controllers')
+call Unite_substitute('h', 'helpers')
+call Unite_substitute('ce', 'cells')
+call Unite_substitute('se', 'serializers')
+call Unite_substitute('wo', 'workers')
+call Unite_substitute('rr', 'spec\/requests')
+call Unite_substitute('rm', 'spec\/models')
+call Unite_substitute('fa', 'spec\/factories')
+
 nnoremap <C-T> :Unite buffer file_mru file_rec -direction=topleft -auto-resize -toggle<CR>
 nnoremap <silent> ,/ :<C-u>Unite -buffer-name=search line -start-insert<CR>
 
@@ -141,7 +158,6 @@ nnoremap <silent> ,t :Unite outline -direction=topleft -auto-resize -toggle<CR>
 
 " grep
 nnoremap <silent> ,g  :<C-u>Unite grep:. -buffer-name=search-buffer<CR>
-
 
 " neomru
 NeoBundle 'Shougo/neomru.vim'
