@@ -14,3 +14,5 @@
 [user]
 	name = 346
 	email = 346@ticketstreet.jp
+[push]
+	default = simple

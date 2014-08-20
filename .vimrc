@@ -115,6 +115,7 @@ NeoBundle 'Shougo/neomru.vim'
 let g:unite_enable_start_insert = 1
 " 最近開いたファイル履歴の保存数
 let g:unite_source_file_mru_limit = 10 
+let g:unite_source_buffer_limit = 3
 "file_mruの表示フォーマットを指定。空にすると表示スピードが高速化される、らしい・・・
 let g:unite_source_file_mru_time_format = ''
 let g:unite_source_file_mru_filename_format = ''
@@ -123,7 +124,7 @@ let g:unite_source_file_mru_filename_format = ''
 let g:unite_source_file_rec_max_cache_files = 2000
 
 " file_recの除外
-let s:unite_ignore_pattern = (unite#sources#rec#define()[0]['ignore_pattern']) .  '\.png$\|\.jpg$\|\.jpeg$\|\.gif$\|\.mid$\|\.ttf$\|\.mp3$\|lib\/Cake\|tmp\/smarty\|Plugin\|tmp\/cache\|\.git\|vendors\|Vendor\|vendor\|node_modules'
+let s:unite_ignore_pattern = (unite#sources#rec#define()[0]['ignore_pattern']) .  '\.png$\|\.jpg$\|\.jpeg$\|\.gif$\|\.mid$\|\.ttf$\|\.mp3$\|lib\/Cake\|tmp\/smarty\|Plugin\|tmp\/cache\|\.git\|vendors\|Vendor\|vendor\|node_modules\|log\/'
 call unite#custom_source('file_rec', 'ignore_pattern', s:unite_ignore_pattern)
 " call unite#custom#source('file_rec/async', 'ignore_pattern', s:unite_ignore_pattern)
 
@@ -138,16 +139,25 @@ function! Unite_substitute(pattern, substitute)
   call unite#custom#substitute('default', '[[:blank:]]\zs' . a:pattern . '\ze[[:blank:]]\|^\zs' . a:pattern . '\ze[[:blank:]]', a:substitute)
 endfunction
 
+call unite#custom#source('file_rec,file_rec/async,buffer, file_mru', 'filters',
+        \ ['converter_relative_word', 'matcher_default',
+        \  'sorter_rank', 'converter_relative_abbr', 'converter_file_directory'])
+
+
 call Unite_substitute('m', 'models')
 call Unite_substitute('v', 'views')
 call Unite_substitute('c', 'controllers')
 call Unite_substitute('h', 'helpers')
+call Unite_substitute('a', 'app\/api')
+call Unite_substitute('s', 'app\/services')
 call Unite_substitute('ce', 'cells')
 call Unite_substitute('se', 'serializers')
 call Unite_substitute('wo', 'workers')
 call Unite_substitute('rr', 'spec\/requests')
 call Unite_substitute('rm', 'spec\/models')
 call Unite_substitute('fa', 'spec\/factories')
+call Unite_substitute('con', 'config\/')
+call Unite_substitute('li', 'lib\/')
 
 nnoremap <C-T> :Unite buffer file_mru file_rec -direction=topleft -auto-resize -toggle<CR>
 nnoremap <silent> ,/ :<C-u>Unite -buffer-name=search line -start-insert<CR>
@@ -339,27 +349,6 @@ call neobundle#end()
 
 
 " }}}
-
-" filetype設定
-augroup MyAutoCmd
-  autocmd!
-  au BufRead,BufNewFile *.phtml set filetype=php
-  au BufRead,BufNewFile *.ctp set filetype=php
-  " au BufRead,BufNewFile *.tpl set filetype=smarty 
-  au BufRead,BufNewFile Vagrantfile set filetype=ruby
-
-  " make
-  autocmd filetype php :set makeprg=php\ -l\ %
-  autocmd filetype php :set errorformat=%m\ in\ %f\ on\ line\ %l
-
-  " autocmd filetype php setlocal makeprg=php\ -l\ %
-  " autocmd filetype php setlocal errorformat=%m\ in\ %f\ on\ line\ %l
-  autocmd FileType ruby setlocal makeprg=ruby\ -c\ %
-  autocmd FileType ruby setlocal errorformat=%m\ in\ %f\ on\ line\ %l
-  autocmd FileType perl,cgi :compiler perl  
-  autocmd filetype coffee,javascript setlocal shiftwidth=2 softtabstop=2 tabstop=2 expandtab
-
-augroup END
 
 
 " ---------------------------------------------------------------------
@@ -604,6 +593,26 @@ nnoremap k gk
 " フレームサイズを怠惰に変更する
 map <kPlus> <C-W>+
 map <kMinus> <C-W>-
+
+" filetype設定
+augroup MyAutoCmd
+  autocmd!
+  au BufRead,BufNewFile *.phtml set filetype=php
+  au BufRead,BufNewFile *.ctp set filetype=php
+  " au BufRead,BufNewFile *.tpl set filetype=smarty 
+  au BufRead,BufNewFile Vagrantfile,*.eye,*.cap set filetype=ruby
+  au BufRead,BufNewFile */db/seeds.rb set filetype=text
+
+  " make
+  autocmd filetype php :set makeprg=php\ -l\ %
+  autocmd filetype php :set errorformat=%m\ in\ %f\ on\ line\ %l
+
+  autocmd FileType ruby setlocal makeprg=ruby\ -c\ %
+  autocmd FileType ruby setlocal errorformat=%m\ in\ %f\ on\ line\ %l
+  autocmd FileType perl,cgi :compiler perl  
+  autocmd filetype coffee,javascript setlocal shiftwidth=2 softtabstop=2 tabstop=2 expandtab
+
+augroup END
 
 
 NeoBundleCheck
