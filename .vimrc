@@ -343,6 +343,9 @@ NeoBundle 'slim-template/vim-slim'
 NeoBundle "pangloss/vim-javascript"
 NeoBundle 'vim-ruby/vim-ruby'
 
+" powershell
+NeoBundle "PProvost/vim-ps1"
+
 call neobundle#end()
 
 " }}}
