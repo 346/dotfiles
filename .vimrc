@@ -205,7 +205,7 @@ let g:yankround_dir = '~/.cache/yankround'
 NeoBundle 'sudo.vim'
 
 " vim-fugitive
-" NeoBundle 'tpope/vim-fugitive'
+NeoBundle 'tpope/vim-fugitive'
 
 " easy motion
 " let g:EasyMotion_leader_key = '<Space><Space>'
