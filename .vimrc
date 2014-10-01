@@ -162,7 +162,7 @@ call Unite_substitute('fa', 'spec\/factories')
 call Unite_substitute('con', 'config\/')
 call Unite_substitute('li', 'lib\/')
 
-nnoremap <C-T> :Unite buffer file_rec/git -direction=topleft -auto-resize -toggle<CR>
+nnoremap <C-T> :Unite buffer file_rec/git:--cached:--others:--exclude-standard -direction=topleft -auto-resize -toggle<CR>
 nnoremap <silent> ,/ :<C-u>Unite -buffer-name=search line -start-insert<CR>
 
 " unite-outline
