@@ -128,6 +128,13 @@ let g:unite_source_file_rec_max_cache_files = 2000
 " let s:unite_ignore_pattern = (unite#sources#rec#define()[0]['ignore_pattern']) .  '\.png$\|\.jpg$\|\.jpeg$\|\.gif$\|\.mid$\|\.ttf$\|\.mp3$\|lib\/Cake\|tmp\/smarty\|Plugin\|tmp\/cache\|\.git\|vendors\|Vendor\|vendor\|node_modules\|log\/'
 " call unite#custom_source('file_rec', 'ignore_globs', split(&wildignore,','))
 " call unite#custom#source('file_rec/async', 'ignore_pattern', s:unite_ignore_pattern)
+" call unite#custom#source('file_rec, file_rec/async, file_rec/git', 'ignore_globs', split(&wildignore,','))
+" call unite#custom#source('file_rec,file_rec/async,file_rec/git,buffer,file_mru', 'matchers',
+        " \ ['converter_relative_word', 
+        " \ 'matcher_default',
+        " \ 'matcher_project_ignore_files',
+        " \  'sorter_rank', 'converter_relative_abbr', 'converter_file_directory'])
+
 
 if executable('ag')
   let g:unite_source_rec_async_command='ag --nocolor --nogroup -g ""'
@@ -139,11 +146,6 @@ endif
 function! Unite_substitute(pattern, substitute)
   call unite#custom#substitute('default', '[[:blank:]]\zs' . a:pattern . '\ze[[:blank:]]\|^\zs' . a:pattern . '\ze[[:blank:]]', a:substitute)
 endfunction
-
-call unite#custom#source('file_rec,file_rec/async,buffer, file_mru', 'matchers',
-        \ ['converter_relative_word', 'matcher_default',
-        \  'sorter_rank', 'converter_relative_abbr', 'converter_file_directory'])
-
 
 call Unite_substitute('m', 'models')
 call Unite_substitute('v', 'views')
@@ -160,7 +162,7 @@ call Unite_substitute('fa', 'spec\/factories')
 call Unite_substitute('con', 'config\/')
 call Unite_substitute('li', 'lib\/')
 
-nnoremap <C-T> :Unite buffer file_mru file_rec -direction=topleft -auto-resize -toggle<CR>
+nnoremap <C-T> :Unite buffer file_rec/git -direction=topleft -auto-resize -toggle<CR>
 nnoremap <silent> ,/ :<C-u>Unite -buffer-name=search line -start-insert<CR>
 
 " unite-outline
