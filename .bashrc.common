@@ -58,7 +58,7 @@ end tell
 EOF
 }
  
-export LESS="-eirMX"
+export LESS="-eirMXR"
 eval "$(direnv hook bash)"
 
 ### Added by the Heroku Toolbelt
