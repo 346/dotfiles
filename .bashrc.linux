@@ -1,9 +1,8 @@
 alias ll='ls -laFG'
 export EDITOR=vim
 
-# Set up ssh-agent
-export SSH_ENV="$HOME/.ssh/environment"
 
+# docker 
 function dport() {
   sudo docker inspect --format='{{ if index .NetworkSettings.Ports "22/tcp" }}{{(index (index .NetworkSettings.Ports "22/tcp") 0).HostPort}}{{ end }}' "$1" | sed "/^$/d"
 }
@@ -26,9 +25,10 @@ function drm() {
 function drmi() {
   sudo docker images | grep "<none>" | awk '{print $3}' | xargs sudo docker rmi
 }
-
-
  
+# Set up ssh-agent
+export SSH_ENV="$HOME/.ssh/environment"
+
 function start_agent {
   echo "Initializing new SSH agent..."
   /usr/bin/ssh-agent | sed 's/^echo/#echo/' > "${SSH_ENV}"

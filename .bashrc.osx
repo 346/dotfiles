@@ -1,23 +1,25 @@
+# rbenv
 export PATH="$HOME/.rbenv/shims:$PATH"
-export DOCKER_HOST=tcp://
 eval "$(rbenv init -)"
 
-export EDITOR=/Applications/MacVim.app/Contents/MacOS/Vim
+# docker
+export DOCKER_HOST=tcp://
+
+# commands
 export PATH=/usr/local/bin:$PATH
 alias vi='env LANG=ja_JP.UTF-8 /Applications/MacVim.app/Contents/MacOS/Vim "$@"'
 alias vim='env LANG=ja_JP.UTF-8 /Applications/MacVim.app/Contents/MacOS/Vim "$@"'
+export EDITOR=vim
 alias find=gfind
-
-alias vhttpd='sudo vim /etc/apache2/httpd.conf'
-alias vphpini='sudo vim /etc/php.ini'
-alias httpdrestart='sudo /usr/sbin/apachectl restart'
 alias ll='ls -laFG'
 
+# homebrew
 if [ -f `brew --prefix`/etc/bash_completion.d/git-prompt.sh ]; then
   . `brew --prefix`/etc/bash_completion.d/git-prompt.sh
   . `brew --prefix`/etc/bash_completion.d/git-completion.bash
 fi
 
+# go
 program_exists () {
   type "$1" &> /dev/null ;
 }
@@ -36,6 +38,41 @@ fi
 export GOPATH=$HOME/.go
 export PATH=$PATH:$GOROOT/bin:$GOPATH/bin
 
-if [ -f $GOPATH/bin/json2csv ]; then
-  alias json2csv=$GOPATH/bin/json2csv
-fi
+# environment specific colors
+ssh() {
+  # Host-specific background colors.
+  if [[ "$@" =~ ^pro.* ]]; then
+  set_term_bgcolor 127 0 0
+  elif [[ "$@" =~ ^stg.* ]]; then
+    set_term_bgcolor 0 100 0
+  elif [[ "$@" =~ ^dev.* ]]; then
+    set_term_bgcolor 0 0 100
+  elif [[ "$@" =~ ^dep.* ]]; then
+    set_term_bgcolor 127 127 0
+  fi
+   
+  command ssh $@
+   
+  set_term_bgcolor 0 0 0
+}
+set_term_bgcolor() {
+   local R=$1
+   local G=$2
+   local B=$3
+   # /usr/bin/osascript <<EOF
+# tell application "Terminal"
+   # tell window 0
+      # set the background color to {$(($R*65535/255)), $(($G*65535/255)), $(($B*65535/255))}
+   # end tell
+# end tell
+# EOF
+  /usr/bin/osascript <<EOF
+tell application "iTerm"
+  tell the current terminal
+    tell the current session
+      set background color to {$(($R*65535/255)), $(($G*65535/255)), $(($B*65535/255))}
+    end tell
+  end tell
+end tell
+EOF
+}
