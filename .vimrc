@@ -180,6 +180,8 @@ nnoremap <silent> ,t :Unite outline -direction=topleft -auto-resize -toggle<CR>
 
 " grep
 nnoremap <silent> ,g  :<C-u>Unite grep:. -buffer-name=search-buffer<CR>
+" grep with keyword under cursor
+nnoremap <silent> ,* :<C-u>UniteWithCursorWord grep:. -buffer-name=search-buffer<CR>
 
 " neomru
 NeoBundle 'Shougo/neomru.vim'
