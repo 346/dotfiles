@@ -20,6 +20,7 @@ let s:is_mac = !s:is_windows && !s:is_cygwin
 set lazyredraw
 
 " シェルに移動
+" nnoremap <silent> ,h :VimShell<CR>
 nnoremap <silent> ,h :shell<CR>
 
 " make
@@ -60,7 +61,9 @@ if has('vim_starting')
   set runtimepath+=~/.vim/bundle/neobundle.vim/
 endif
 
-call neobundle#rc(expand('~/.vim/bundle/'))
+call neobundle#begin(expand('~/.vim/bundle/'))
+NeoBundleFetch 'Shougo/neobundle.vim'
+call neobundle#end()
 
 
 
@@ -124,6 +127,9 @@ let g:unite_source_file_mru_filename_format = ''
 let g:unite_source_file_rec_max_cache_files = 2000
 
 " file_recの除外
+let s:file_rec_ignore_globs = ['*.png', '*.jpg', '*.gif', '**/vendor/**', '**/Smarty/**', '**/gmopg/**', '**/Yahoo/**', '*~']
+call unite#custom#source('file_rec/git', 'ignore_globs', s:file_rec_ignore_globs)
+call unite#custom#source('grep', 'ignore_globs', s:file_rec_ignore_globs)
 " set wildignore=*.png,*.jpg,*.jpeg,*.gif,*.mid,*.ttf,*.mp3
 " let s:unite_ignore_pattern = (unite#sources#rec#define()[0]['ignore_pattern']) .  '\.png$\|\.jpg$\|\.jpeg$\|\.gif$\|\.mid$\|\.ttf$\|\.mp3$\|lib\/Cake\|tmp\/smarty\|Plugin\|tmp\/cache\|\.git\|vendors\|Vendor\|vendor\|node_modules\|log\/'
 " call unite#custom_source('file_rec', 'ignore_globs', split(&wildignore,','))
@@ -153,14 +159,17 @@ call Unite_substitute('c', 'controllers')
 call Unite_substitute('h', 'helpers')
 call Unite_substitute('a', 'app\/api')
 call Unite_substitute('s', 'app\/services')
+call Unite_substitute('f', 'app\/forms')
 call Unite_substitute('ce', 'cells')
 call Unite_substitute('se', 'serializers')
-call Unite_substitute('wo', 'workers')
-call Unite_substitute('rr', 'spec\/requests')
-call Unite_substitute('rm', 'spec\/models')
+call Unite_substitute('au', 'authorizers')
+call Unite_substitute('ma', 'mailers')
+call Unite_substitute('w', 'workers')
+call Unite_substitute('t', '_spec.rb')
+call Unite_substitute('r', 'requests')
 call Unite_substitute('fa', 'spec\/factories')
 call Unite_substitute('con', 'config\/')
-call Unite_substitute('li', 'lib\/')
+call Unite_substitute('l', 'lib\/')
 
 nnoremap <C-T> :Unite buffer file_rec/git:--cached:--others:--exclude-standard -direction=topleft -auto-resize -toggle<CR>
 nnoremap <silent> ,/ :<C-u>Unite -buffer-name=search line -start-insert<CR>
