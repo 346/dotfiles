@@ -1,5 +1,5 @@
 # .bashrcとか.vimとかがないとno rule~て表示される
-DOT_FILES = .zshrc .vimrc .bash_profile .bashrc.common .bashrc.osx .bashrc.linux .xvimrc .gitignore .gitconfig .gemrc .railsrc .bundle .jshintrc
+DOT_FILES = .zshrc .vimrc .bash_profile .bashrc.common .bashrc.osx .bashrc.linux .xvimrc .gitignore .gitconfig .gemrc .railsrc .bundle .jshintrc .agignore
 
 all: install
 
@@ -24,6 +24,8 @@ bundler: $(foreach f, $(filter .bundle%, $(DOT_FILES)), link-dot-file-$(f))
 rails: $(foreach f, $(filter .rails%, $(DOT_FILES)), link-dot-file-$(f))
 
 javascript : $(foreach f, $(filter .jshintrc%, $(DOT_FILES)), link-dot-file-$(f))
+
+ag : $(foreach f, $(filter .agignore, $(DOT_FILES)), link-dot-file-$(f))
 	
 .PHONY: clean
 	

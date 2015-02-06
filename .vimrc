@@ -126,9 +126,13 @@ let g:unite_source_file_mru_filename_format = ''
 " file_recの最大ファイル数
 let g:unite_source_file_rec_max_cache_files = 2000
 
+" lightline
+let g:unite_force_overwrite_statusline = 0
+
 " file_recの除外
 let s:file_rec_ignore_globs = ['*.png', '*.jpg', '*.gif', '**/vendor/**', '**/Smarty/**', '**/gmopg/**', '**/Yahoo/**', '*~']
 call unite#custom#source('file_rec/git', 'ignore_globs', s:file_rec_ignore_globs)
+call unite#custom#source('buffer', 'ignore_globs', s:file_rec_ignore_globs)
 call unite#custom#source('grep', 'ignore_globs', s:file_rec_ignore_globs)
 " set wildignore=*.png,*.jpg,*.jpeg,*.gif,*.mid,*.ttf,*.mp3
 " let s:unite_ignore_pattern = (unite#sources#rec#define()[0]['ignore_pattern']) .  '\.png$\|\.jpg$\|\.jpeg$\|\.gif$\|\.mid$\|\.ttf$\|\.mp3$\|lib\/Cake\|tmp\/smarty\|Plugin\|tmp\/cache\|\.git\|vendors\|Vendor\|vendor\|node_modules\|log\/'
@@ -153,13 +157,13 @@ function! Unite_substitute(pattern, substitute)
   call unite#custom#substitute('default', '[[:blank:]]\zs' . a:pattern . '\ze[[:blank:]]\|^\zs' . a:pattern . '\ze[[:blank:]]', a:substitute)
 endfunction
 
-call Unite_substitute('m', 'models')
-call Unite_substitute('v', 'views')
-call Unite_substitute('c', 'controllers')
-call Unite_substitute('h', 'helpers')
+call Unite_substitute('m', 'app\/models')
+call Unite_substitute('v', 'app\/views')
+call Unite_substitute('c', 'app\/controllers')
+call Unite_substitute('h', 'app\/helpers')
 call Unite_substitute('a', 'app\/api')
-call Unite_substitute('s', 'app\/services')
-call Unite_substitute('f', 'app\/forms')
+call Unite_substitute('s', 'services')
+call Unite_substitute('f', 'forms')
 call Unite_substitute('ce', 'cells')
 call Unite_substitute('se', 'serializers')
 call Unite_substitute('au', 'authorizers')
@@ -296,7 +300,11 @@ let g:lightline = {
       \ 'colorscheme': 'wombat',
       \ 'active': {
       \   'left': [ [ 'mode', 'paste' ],
-      \             [ 'fugitive', 'readonly', 'filename', 'modified' ] ]
+      \             [ 'readonly', 'filename', 'modified' ],
+      \             [ 'fugitive' ] ],
+      \   'right': [ [ 'syntastic', 'lineinfo' ],
+      \              [ 'percent' ],
+      \              [ 'fileformat', 'fileencoding', 'filetype' ] ]
       \ },
       \ 'component': {
       \   'readonly': '%{&filetype=="help"?"":&readonly?"⭤":""}',
@@ -308,8 +316,12 @@ let g:lightline = {
       \   'modified': '(&filetype!="help"&&(&modified||!&modifiable))',
       \   'fugitive': '(exists("*fugitive#head") && ""!=fugitive#head())'
       \ },
-      \ 'separator': { 'left': '⮀', 'right': '⮂' },
-      \ 'subseparator': { 'left': '⮁', 'right': '⮃' }
+      \ 'component_expand': {
+      \   'syntastic': 'SyntasticStatuslineFlag'
+      \ },
+      \ 'component_type': {
+      \   'syntastic': 'error'
+      \ }
       \ }
 
 " vim-indent-guide
@@ -333,11 +345,16 @@ let g:indentLine_color_term = 237
 NeoBundle 'scrooloose/syntastic'
 let g:syntastic_enable_signs=1
 let g:syntastic_auto_loc_list=2
-let g:syntastic_mode_map = {
-      \  'mode': 'active',
-      \ 'active_filetypes': ['ruby', 'javascript'],
-      \ 'passive_filetypes': []
-      \ }
+let g:syntastic_mode_map = { 'mode': 'passive' }
+
+augroup AutoSyntastic
+  autocmd!
+  autocmd BufWritePost *.rb,*.js call s:syntastic()
+augroup END
+function! s:syntastic()
+  SyntasticCheck
+  " call lightline#update()
+endfunction
 
 " vim-tags
 NeoBundle 'szw/vim-tags'
