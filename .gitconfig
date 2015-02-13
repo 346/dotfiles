@@ -16,3 +16,6 @@
 	email = 346@ticketstreet.jp
 [push]
 	default = simple
+[merge "gemfilelock"]
+  name = relocks the gemfile.lock
+  driver = bundle install

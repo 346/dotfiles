@@ -293,6 +293,9 @@ NeoBundle 'w0ng/vim-hybrid'
 " smarty
 " NeoBundle 'smarty-syntax'
 
+" jinja2
+NeoBundle 'Glench/Vim-Jinja2-Syntax'
+
 " lightline
 NeoBundle 'itchyny/lightline.vim'
 
