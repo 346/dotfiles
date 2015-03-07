@@ -243,17 +243,18 @@ NeoBundle 'matchit.zip'
 
 " quickrun
 NeoBundle 'thinca/vim-quickrun'
-
-" vim-ndwise
-" NeoBundle 'tpope/vim-endwise'
-
-" inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
-" function! s:my_cr_function()
-  " return neocomplete#close_popup() . "\<CR>"
-  " " For no inserting <CR> key.
-  " "return pumvisible() ? neocomplete#close_popup() : "\<CR>"
-" endfunction
-
+NeoBundle 'janko-m/vim-test'
+function! s:load_rspec_settings()
+  nnoremap <silent>,rn :TestNearest<CR>
+  nnoremap <silent>,rf :TestFile<CR>
+  nnoremap <silent>,rs :TestSuite<CR>
+  nnoremap <silent>,rl :TestLast<CR>
+  nnoremap <silent>,rv :TestVisit<CR>
+endfunction
+augroup RSpecSetting
+  au!
+  au BufEnter *.rb call s:load_rspec_settings()
+augroup END
 
 
 "" solarized カラースキーム
@@ -286,9 +287,6 @@ NeoBundle 'w0ng/vim-hybrid'
 
 " xdebug
 " NeoBundle 'joonty/vdebug'
-" let g:vdebug_options = {
-" \ "path_maps" : {"/media/sf_www/dmm/www": "/Users/admin/Projects/dmm/www"}
-" \}
 
 " smarty
 " NeoBundle 'smarty-syntax'
@@ -360,15 +358,15 @@ function! s:syntastic()
 endfunction
 
 " vim-tags
-NeoBundle 'szw/vim-tags'
-
-if s:is_mac
-  let g:vim_tags_project_tags_command = "/usr/local/bin/ctags -R {OPTIONS} {DIRECTORY} 2>/dev/null"
-  let g:vim_tags_gems_tags_command = "/usr/local/bin/ctags -R {OPTIONS} `bundle show --paths` 2>/dev/null"
-endif
-set tags+=.tags
-set tags+=.Gemfile.lock.tags
-
+NeoBundleLazy 'alpaca-tc/alpaca_tags', {
+      \ 'depends': ['Shougo/vimproc'],
+      \ 'autoload' : {
+      \   'commands' : [
+      \     { 'name' : 'AlpacaTagsBundle', 'complete': 'customlist,alpaca_tags#complete_source' },
+      \     { 'name' : 'AlpacaTagsUpdate', 'complete': 'customlist,alpaca_tags#complete_source' },
+      \     'AlpacaTagsSet', 'AlpacaTagsCleanCache', 'AlpacaTagsEnable', 'AlpacaTagsDisable', 'AlpacaTagsKillProcess', 'AlpacaTagsProcessStatus',
+      \ ],
+      \ }}
 
 " slim
 NeoBundle 'slim-template/vim-slim'
