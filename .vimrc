@@ -187,6 +187,9 @@ nnoremap <silent> ,g  :<C-u>Unite grep:. -buffer-name=search-buffer<CR>
 " grep with keyword under cursor
 nnoremap <silent> ,* :<C-u>UniteWithCursorWord grep:. -buffer-name=search-buffer<CR>
 
+" unite-tags
+NeoBundle 'tsukkee/unite-tag'
+
 " neomru
 NeoBundle 'Shougo/neomru.vim'
 
@@ -367,6 +370,31 @@ NeoBundleLazy 'alpaca-tc/alpaca_tags', {
       \     'AlpacaTagsSet', 'AlpacaTagsCleanCache', 'AlpacaTagsEnable', 'AlpacaTagsDisable', 'AlpacaTagsKillProcess', 'AlpacaTagsProcessStatus',
       \ ],
       \ }}
+let g:alpaca_tags#config = {
+       \ '_' : '-R --sort=yes --languages=+Ruby --languages=-js,JavaScript',
+       \ 'js' : '--languages=+js',
+       \ '-js' : '--languages=-js,JavaScript',
+       \ 'vim' : '--languages=+Vim,vim',
+       \ 'php' : '--languages=+php',
+       \ '-vim' : '--languages=-Vim,vim',
+       \ '-style': '--languages=-css,scss,js,JavaScript,html',
+       \ 'scss' : '--languages=+scss --languages=-css',
+       \ 'css' : '--languages=+css',
+       \ 'java' : '--languages=+java $JAVA_HOME/src',
+       \ 'ruby': '--languages=+Ruby',
+       \ 'coffee': '--languages=+coffee',
+       \ '-coffee': '--languages=-coffee',
+       \ 'bundle': '--languages=+Ruby',
+       \ }
+augroup AlpacaTags
+  autocmd!
+  if exists(':AlpacaTags')
+    autocmd BufWritePost Gemfile AlpacaTagsBundle
+    autocmd BufEnter * AlpacaTagsSet
+    autocmd BufWritePost * AlpacaTagsUpdate
+  endif
+augroup END
+
 
 " slim
 NeoBundle 'slim-template/vim-slim'
