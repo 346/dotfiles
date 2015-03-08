@@ -75,9 +75,9 @@ NeoBundleFetch 'Shougo/neobundle.vim'
 " NeoBundle 'Shougo/vimproc'
 
 " neocomplete
-NeoBundle 'Shougo/neocomplete'
+" NeoBundle 'Shougo/neocomplete'
+" let g:neocomplete#enable_at_startup = 1
 
-let g:neocomplete#enable_at_startup = 1
 
 " neosnippet
 NeoBundle 'Shougo/neosnippet'
@@ -132,6 +132,7 @@ let g:unite_force_overwrite_statusline = 0
 " file_recの除外
 let s:file_rec_ignore_globs = ['*.png', '*.jpg', '*.gif', '**/vendor/**', '**/Smarty/**', '**/gmopg/**', '**/Yahoo/**', '*~']
 call unite#custom#source('file_rec/git', 'ignore_globs', s:file_rec_ignore_globs)
+call unite#custom_source('file_rec/git', 'sorters', 'sorter_length')
 call unite#custom#source('buffer', 'ignore_globs', s:file_rec_ignore_globs)
 call unite#custom#source('grep', 'ignore_globs', s:file_rec_ignore_globs)
 " set wildignore=*.png,*.jpg,*.jpeg,*.gif,*.mid,*.ttf,*.mp3
@@ -189,6 +190,8 @@ nnoremap <silent> ,* :<C-u>UniteWithCursorWord grep:. -buffer-name=search-buffer
 
 " unite-tags
 NeoBundle 'tsukkee/unite-tag'
+let g:unite_source_tag_max_fname_length = 100
+nnoremap <silent> ,] :<C-u>UniteWithCursorWord -immediately tag<CR>
 
 " neomru
 NeoBundle 'Shougo/neomru.vim'
@@ -396,14 +399,10 @@ augroup AlpacaTags
 augroup END
 
 
-" slim
+" lang
 NeoBundle 'slim-template/vim-slim'
-
-" vim-javascript
 NeoBundle "pangloss/vim-javascript"
 NeoBundle 'vim-ruby/vim-ruby'
-
-" powershell
 NeoBundle "PProvost/vim-ps1"
 
 call neobundle#end()
