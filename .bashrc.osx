@@ -5,6 +5,9 @@ eval "$(rbenv init -)"
 # docker
 export DOCKER_HOST=tcp://
 
+# vagrant-digitalocean
+export SSL_CERT_FILE=/usr/local/etc/openssl/cert.pem
+
 # commands
 export PATH=/usr/local/bin:$PATH
 alias vi='env LANG=ja_JP.UTF-8 /Applications/MacVim.app/Contents/MacOS/Vim "$@"'
