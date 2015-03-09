@@ -370,12 +370,12 @@ set tags+=.tags
 set tags+=.Gemfile.lock.tags
 
 
-" slim
+" other langs
 NeoBundle 'slim-template/vim-slim'
-
-" vim-javascript
 NeoBundle "pangloss/vim-javascript"
 NeoBundle 'vim-ruby/vim-ruby'
+NeoBundle 'kchmck/vim-coffee-script'
+NeoBundle 'chase/vim-ansible-yaml'
 
 " powershell
 NeoBundle "PProvost/vim-ps1"
