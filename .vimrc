@@ -389,15 +389,14 @@ let g:alpaca_tags#config = {
        \ '-coffee': '--languages=-coffee',
        \ 'bundle': '--languages=+Ruby',
        \ }
-augroup AlpacaTags
-  autocmd!
-  if exists(':AlpacaTags')
+if neobundle#is_installed('alpaca_tags')
+  augroup AlpacaTags
+    autocmd!
     autocmd BufWritePost Gemfile AlpacaTagsBundle
-    autocmd BufEnter * AlpacaTagsSet
+    autocmd BufRead,BufNew * AlpacaTagsSet
     autocmd BufWritePost * AlpacaTagsUpdate
-  endif
-augroup END
-
+  augroup END
+endif
 
 " other langs
 NeoBundle "pangloss/vim-javascript"
