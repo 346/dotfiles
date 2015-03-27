@@ -47,9 +47,9 @@ ssh() {
   if [[ "$@" =~ ^pro.* ]]; then
   set_term_bgcolor 127 0 0
   elif [[ "$@" =~ ^stg.* ]]; then
-    set_term_bgcolor 0 100 0
-  elif [[ "$@" =~ ^dev.* ]]; then
     set_term_bgcolor 0 0 100
+  elif [[ "$@" =~ ^dev.* ]]; then
+    set_term_bgcolor 0 100 0
   elif [[ "$@" =~ ^dep.* ]]; then
     set_term_bgcolor 127 127 0
   fi
