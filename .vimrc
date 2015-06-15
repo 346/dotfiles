@@ -70,10 +70,6 @@ call neobundle#end()
 " Let NeoBundle manage NeoBundle
 NeoBundleFetch 'Shougo/neobundle.vim'
 
-" Recommended to install
-" After install, turn shell ~/.vim/bundle/vimproc, (n,g)make -f your_machines_makefile
-" NeoBundle 'Shougo/vimproc'
-
 " neocomplete
 " NeoBundle 'Shougo/neocomplete'
 " let g:neocomplete#enable_at_startup = 1
@@ -130,7 +126,7 @@ let g:unite_source_file_rec_max_cache_files = 2000
 let g:unite_force_overwrite_statusline = 0
 
 " file_recの除外
-let s:file_rec_ignore_globs = ['*.png', '*.jpg', '*.gif', '**/vendor/**', '**/Smarty/**', '**/gmopg/**', '**/Yahoo/**', '*~']
+let s:file_rec_ignore_globs = ['*.png', '*.jpg', '*.gif', '**/vendor/**', '**/Smarty/**', '**/gmopg/**', '**/Yahoo/**', '*~', 'seeds.rb']
 call unite#custom#source('file_rec/git', 'ignore_globs', s:file_rec_ignore_globs)
 call unite#custom_source('file_rec/git', 'sorters', 'sorter_length')
 call unite#custom#source('buffer', 'ignore_globs', s:file_rec_ignore_globs)
@@ -150,7 +146,7 @@ call unite#custom#source('grep', 'ignore_globs', s:file_rec_ignore_globs)
 if executable('ag')
   let g:unite_source_rec_async_command='ag --nocolor --nogroup -g ""'
   let g:unite_source_grep_command = 'ag'
-  let g:unite_source_grep_default_opts = '--nogroup --nocolor --column'
+  let g:unite_source_grep_default_opts = '--nogroup --nocolor'
   let g:unite_source_grep_recursive_opt = ''
 endif
 
@@ -262,6 +258,8 @@ augroup RSpecSetting
   au BufEnter *.rb call s:load_rspec_settings()
 augroup END
 
+" replace with quickfix
+NeoBundle "thinca/vim-qfreplace"
 
 "" solarized カラースキーム
 "NeoBundle 'altercation/vim-colors-solarized'
