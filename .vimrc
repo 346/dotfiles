@@ -63,23 +63,57 @@ endif
 
 call neobundle#begin(expand('~/.vim/bundle/'))
 NeoBundleFetch 'Shougo/neobundle.vim'
+NeoBundle 'Shougo/neosnippet'
+NeoBundle 'Shougo/neosnippet-snippets'
+" NeoBundle 'Shougo/neocomplete'
+NeoBundle 'Shougo/unite.vim'
+NeoBundle 'Shougo/vimproc', {
+    \ 'build' : {
+    \ 'windows' : 'make -f make_mingw32.mak',
+    \ 'cygwin' : 'make -f make_cygwin.mak',
+    \ 'mac' : 'make -f make_mac.mak',
+    \ 'unix' : 'make -f make_unix.mak',
+  \ },
+  \ }
+
+NeoBundle 'Shougo/neomru.vim'
+NeoBundle 'Shougo/unite-outline'
+NeoBundle 'tsukkee/unite-tag'
+NeoBundle 'Shougo/neomru.vim'
+NeoBundle 'Shougo/vimshell' 
+NeoBundle 'LeafCage/yankround.vim'
+NeoBundle 'sudo.vim'
+NeoBundle 'tpope/vim-fugitive'
+NeoBundle 'The-NERD-Commenter'
+NeoBundle 'matchit.zip'
+NeoBundle 'thinca/vim-quickrun'
+NeoBundle 'janko-m/vim-test'
+NeoBundle 'w0ng/vim-hybrid'
+NeoBundle 'Glench/Vim-Jinja2-Syntax'
+NeoBundle 'itchyny/lightline.vim'
+NeoBundle 'Yggdroot/indentLine'
+NeoBundle 'scrooloose/syntastic'
+NeoBundleLazy 'alpaca-tc/alpaca_tags', {
+      \ 'depends': ['Shougo/vimproc'],
+      \ 'autoload' : {
+      \   'commands' : [
+      \     { 'name' : 'AlpacaTagsBundle', 'complete': 'customlist,alpaca_tags#complete_source' },
+      \     { 'name' : 'AlpacaTagsUpdate', 'complete': 'customlist,alpaca_tags#complete_source' },
+      \     'AlpacaTagsSet', 'AlpacaTagsCleanCache', 'AlpacaTagsEnable', 'AlpacaTagsDisable', 'AlpacaTagsKillProcess', 'AlpacaTagsProcessStatus',
+      \ ],
+      \ }}
+NeoBundle 'kchmck/vim-coffee-script'
+NeoBundle 'chase/vim-ansible-yaml'
+NeoBundle 'slim-template/vim-slim'
+NeoBundle 'vim-ruby/vim-ruby'
 call neobundle#end()
 
 
-
-" Let NeoBundle manage NeoBundle
-NeoBundleFetch 'Shougo/neobundle.vim'
-
 " neocomplete
-" NeoBundle 'Shougo/neocomplete'
 " let g:neocomplete#enable_at_startup = 1
 
 
 " neosnippet
-NeoBundle 'Shougo/neosnippet'
-NeoBundle 'Shougo/neosnippet-snippets'
-
-" Plugin key-mappings.
 imap <C-k>     <Plug>(neosnippet_expand_or_jump)
 smap <C-k>     <Plug>(neosnippet_expand_or_jump)
 xmap <C-k>     <Plug>(neosnippet_expand_target)
@@ -98,18 +132,6 @@ if has('conceal')
 endif
 
 " unite.vim
-NeoBundle 'Shougo/unite.vim'
-NeoBundle 'Shougo/vimproc', {
-  \ 'build' : {
-    \ 'windows' : 'make -f make_mingw32.mak',
-    \ 'cygwin' : 'make -f make_cygwin.mak',
-    \ 'mac' : 'make -f make_mac.mak',
-    \ 'unix' : 'make -f make_unix.mak',
-  \ },
-  \ }
-
-NeoBundle 'Shougo/neomru.vim'
-
 " 入力モードで開始する
 let g:unite_enable_start_insert = 1
 " 最近開いたファイル履歴の保存数
@@ -176,7 +198,6 @@ nnoremap <C-T> :Unite buffer file_rec/git:--cached:--others:--exclude-standard -
 nnoremap <silent> ,/ :<C-u>Unite -buffer-name=search line -start-insert<CR>
 
 " unite-outline
-NeoBundle 'Shougo/unite-outline'
 nnoremap <silent> ,t :Unite outline -direction=topleft -auto-resize -toggle<CR>
 
 " grep
@@ -185,23 +206,10 @@ nnoremap <silent> ,g  :<C-u>Unite grep:. -buffer-name=search-buffer<CR>
 nnoremap <silent> ,* :<C-u>UniteWithCursorWord grep:. -buffer-name=search-buffer<CR>
 
 " unite-tags
-NeoBundle 'tsukkee/unite-tag'
 let g:unite_source_tag_max_fname_length = 100
 nnoremap <silent> ,] :<C-u>UniteWithCursorWord -immediately tag<CR>
 
-" neomru
-NeoBundle 'Shougo/neomru.vim'
-
-" YankRing.vim
-" let g:yankring_window_use_bottom=0
-" let g:yankring_history_file='.yankring_history'
-" let g:yankring_history_dir=$HOME.'/.vim/'
-" NeoBundle 'YankRing.vim'
-
-NeoBundle 'Shougo/vimshell' 
-
 " Yankround
-NeoBundle 'LeafCage/yankround.vim'
 nmap p <Plug>(yankround-p)
 xmap p <Plug>(yankround-p)
 nmap P <Plug>(yankround-P)
@@ -221,31 +229,12 @@ let g:yankround_max_history = 100
 nnoremap <silent>g<C-p> :<C-u>CtrlPYankRound<CR>
 let g:yankround_dir = '~/.cache/yankround'
 
-" sudo.vim
-NeoBundle 'sudo.vim'
-
-" vim-fugitive
-NeoBundle 'tpope/vim-fugitive'
-
-" easy motion
-" let g:EasyMotion_leader_key = '<Space><Space>'
-" NeoBundle 'Lokaltog/vim-easymotion'
-" let g:EasyMotion_keys = 'fjdkslaureiwoqpvncm'
-
-" sparkup
-" NeoBundle 'rstacruz/sparkup', {'rtp': 'vim/'}
-
 " nerd commenter
-NeoBundle 'The-NERD-Commenter'
 let NERDSpaceDelims = 1
 nmap <silent> ,, <Plug>NERDCommenterToggle
 vmap <silent> ,, <Plug>NERDCommenterToggle
-" matchit
-NeoBundle 'matchit.zip'
 
 " quickrun
-NeoBundle 'thinca/vim-quickrun'
-NeoBundle 'janko-m/vim-test'
 function! s:load_rspec_settings()
   nnoremap <silent>,rn :TestNearest<CR>
   nnoremap <silent>,rf :TestFile<CR>
@@ -258,49 +247,8 @@ augroup RSpecSetting
   au BufEnter *.rb call s:load_rspec_settings()
 augroup END
 
-" replace with quickfix
-NeoBundle "thinca/vim-qfreplace"
-
-"" solarized カラースキーム
-"NeoBundle 'altercation/vim-colors-solarized'
-"" mustang カラースキーム
-"NeoBundle 'croaker/mustang-vim'
-"" wombat カラースキーム
-"NeoBundle 'jeffreyiacono/vim-colors-wombat'
-"" jellybeans カラースキーム
-"NeoBundle 'nanotech/jellybeans.vim'
-"" lucius カラースキーム
-"NeoBundle 'vim-scripts/Lucius'
-"" zenburn カラースキーム
-"NeoBundle 'vim-scripts/Zenburn'
-"" mrkn256 カラースキーム
-"NeoBundle 'mrkn/mrkn256.vim'
-"" railscasts カラースキーム
-"NeoBundle 'jpo/vim-railscasts-theme'
-"" pyte カラースキーム
-"NeoBundle 'therubymug/vim-pyte'
-"" molokai カラースキーム
-"NeoBundle 'tomasr/molokai'
-"" uniteでカラースキーム選択
-"NeoBundle 'ujihisa/unite-colorscheme'
-" hybrid カラースキーム
-NeoBundle 'w0ng/vim-hybrid'
-
-" svnのunite source
-" NeoBundle 'kmnk/vim-unite-svn'
-
-" xdebug
-" NeoBundle 'joonty/vdebug'
-
-" smarty
-" NeoBundle 'smarty-syntax'
-
 " jinja2
-NeoBundle 'Glench/Vim-Jinja2-Syntax'
-
 " lightline
-NeoBundle 'itchyny/lightline.vim'
-
 let g:lightline = {
       \ 'colorscheme': 'wombat',
       \ 'active': {
@@ -328,26 +276,10 @@ let g:lightline = {
       \   'syntastic': 'error'
       \ }
       \ }
-
-" vim-indent-guide
-" NeoBundle 'nathanaelkane/vim-indent-guides'
-" let g:indent_guides_enable_on_vim_startup=1
-" let g:indent_guides_guide_size=2
-" let g:indent_guides_auto_colors = 0
-" autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd  guibg=Darkgray ctermbg=darkgray
-
 " indentLine
-NeoBundle 'Yggdroot/indentLine'
 let g:indentLine_color_term = 237
 
-"
-" Brief help
-" :NeoBundleList          - list configured bundles
-" :NeoBundleInstall(!)    - install(update) bundles
-" :NeoBundleClean(!)      - confirm(or auto-approve) removal of unused bundles
-
 " Syntastic
-NeoBundle 'scrooloose/syntastic'
 let g:syntastic_enable_signs=1
 let g:syntastic_auto_loc_list=2
 let g:syntastic_mode_map = { 'mode': 'passive' }
@@ -362,15 +294,7 @@ function! s:syntastic()
 endfunction
 
 " vim-tags
-NeoBundleLazy 'alpaca-tc/alpaca_tags', {
-      \ 'depends': ['Shougo/vimproc'],
-      \ 'autoload' : {
-      \   'commands' : [
-      \     { 'name' : 'AlpacaTagsBundle', 'complete': 'customlist,alpaca_tags#complete_source' },
-      \     { 'name' : 'AlpacaTagsUpdate', 'complete': 'customlist,alpaca_tags#complete_source' },
-      \     'AlpacaTagsSet', 'AlpacaTagsCleanCache', 'AlpacaTagsEnable', 'AlpacaTagsDisable', 'AlpacaTagsKillProcess', 'AlpacaTagsProcessStatus',
-      \ ],
-      \ }}
+      
 let g:alpaca_tags#config = {
        \ '_' : '-R --sort=yes --languages=+Ruby --languages=-js,JavaScript',
        \ 'js' : '--languages=+js',
@@ -396,21 +320,7 @@ if neobundle#is_installed('alpaca_tags')
   augroup END
 endif
 
-" other langs
-NeoBundle "pangloss/vim-javascript"
-NeoBundle 'kchmck/vim-coffee-script'
-NeoBundle 'chase/vim-ansible-yaml'
-NeoBundle 'slim-template/vim-slim'
-NeoBundle 'vim-ruby/vim-ruby'
-NeoBundle "PProvost/vim-ps1"
-
-call neobundle#end()
-
 " }}}
-
-
-" }}}
-
 
 " ---------------------------------------------------------------------
 " 共通
@@ -677,6 +587,5 @@ augroup MyAutoCmd
   autocmd filetype coffee,javascript setlocal shiftwidth=2 softtabstop=2 tabstop=2 expandtab
 
 augroup END
-
 
 NeoBundleCheck
