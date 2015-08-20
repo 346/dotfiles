@@ -107,6 +107,7 @@ NeoBundle 'kchmck/vim-coffee-script'
 NeoBundle 'chase/vim-ansible-yaml'
 NeoBundle 'slim-template/vim-slim'
 NeoBundle 'vim-ruby/vim-ruby'
+NeoBundle 'wakatime/vim-wakatime'
 call neobundle#end()
 
 
