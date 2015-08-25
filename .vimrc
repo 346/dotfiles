@@ -134,6 +134,10 @@ if has('conceal')
 endif
 
 " unite.vim
+autocmd FileType unite call s:unite_my_settings()
+function! s:unite_my_settings()"{{{
+  nmap <buffer> <space> <nop>
+endfunction"}}}
 " 入力モードで開始する
 let g:unite_enable_start_insert = 1
 " 最近開いたファイル履歴の保存数
