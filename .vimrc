@@ -415,7 +415,7 @@ set history=50
 set hid
 
 " :shellをログインシェルに
-set shell=bash\ -l
+" set shell=bash\ -l
 " ---------------------------------------------------------------------
 " 文字コードの自動認識
 " ---------------------------------------------------------------------
@@ -580,7 +580,7 @@ augroup MyAutoCmd
   au BufRead,BufNewFile *.phtml set filetype=php
   au BufRead,BufNewFile *.ctp set filetype=php
   " au BufRead,BufNewFile *.tpl set filetype=smarty 
-  au BufRead,BufNewFile Vagrantfile,*.eye,*.cap set filetype=ruby
+  au BufRead,BufNewFile Vagrantfile,*.eye,*.cap,*.rake set filetype=ruby
   au BufRead,BufNewFile */db/seeds.rb set filetype=text
 
   " make
