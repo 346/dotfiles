@@ -106,6 +106,7 @@ NeoBundleLazy 'alpaca-tc/alpaca_tags', {
 NeoBundle 'kchmck/vim-coffee-script'
 NeoBundle 'chase/vim-ansible-yaml'
 NeoBundle 'slim-template/vim-slim'
+NeoBundle 'slm-lang/vim-slm'
 NeoBundle 'vim-ruby/vim-ruby'
 NeoBundle 'wakatime/vim-wakatime'
 call neobundle#end()
@@ -415,7 +416,7 @@ set history=50
 set hid
 
 " :shellをログインシェルに
-set shell=bash\ -l
+"set shell=bash\ -l
 " ---------------------------------------------------------------------
 " 文字コードの自動認識
 " ---------------------------------------------------------------------
@@ -582,6 +583,8 @@ augroup MyAutoCmd
   " au BufRead,BufNewFile *.tpl set filetype=smarty 
   au BufRead,BufNewFile Vagrantfile,*.eye,*.cap set filetype=ruby
   au BufRead,BufNewFile */db/seeds.rb set filetype=text
+  au BufRead,BufNewFile *.ux set filetype=xml
+  au BufRead,BufNewFile *.uno set filetype=cs
 
   " make
   autocmd filetype php :set makeprg=php\ -l\ %
