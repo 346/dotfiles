@@ -65,7 +65,7 @@ call neobundle#begin(expand('~/.vim/bundle/'))
 NeoBundleFetch 'Shougo/neobundle.vim'
 NeoBundle 'Shougo/neosnippet'
 NeoBundle 'Shougo/neosnippet-snippets'
-" NeoBundle 'Shougo/neocomplete'
+NeoBundle 'Shougo/neocomplete'
 NeoBundle 'Shougo/unite.vim'
 NeoBundle 'Shougo/vimproc', {
     \ 'build' : {
@@ -113,7 +113,8 @@ call neobundle#end()
 
 
 " neocomplete
-" let g:neocomplete#enable_at_startup = 1
+let g:neocomplete#enable_at_startup = 1
+autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
 
 
 " neosnippet
@@ -293,7 +294,7 @@ let g:syntastic_mode_map = { 'mode': 'passive' }
 
 augroup AutoSyntastic
   autocmd!
-  autocmd BufWritePost *.rb,*.js call s:syntastic()
+  autocmd BufWritePost *.rb,*.js,*.ux call s:syntastic()
 augroup END
 function! s:syntastic()
   SyntasticCheck
