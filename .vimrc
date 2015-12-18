@@ -65,7 +65,7 @@ call neobundle#begin(expand('~/.vim/bundle/'))
 NeoBundleFetch 'Shougo/neobundle.vim'
 NeoBundle 'Shougo/neosnippet'
 NeoBundle 'Shougo/neosnippet-snippets'
-" NeoBundle 'Shougo/neocomplete'
+NeoBundle 'Shougo/neocomplete'
 NeoBundle 'Shougo/unite.vim'
 NeoBundle 'Shougo/vimproc', {
     \ 'build' : {
@@ -106,13 +106,15 @@ NeoBundleLazy 'alpaca-tc/alpaca_tags', {
 NeoBundle 'kchmck/vim-coffee-script'
 NeoBundle 'chase/vim-ansible-yaml'
 NeoBundle 'slim-template/vim-slim'
+NeoBundle 'slm-lang/vim-slm'
 NeoBundle 'vim-ruby/vim-ruby'
 NeoBundle 'wakatime/vim-wakatime'
 call neobundle#end()
 
 
 " neocomplete
-" let g:neocomplete#enable_at_startup = 1
+let g:neocomplete#enable_at_startup = 1
+autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
 
 
 " neosnippet
@@ -292,7 +294,7 @@ let g:syntastic_mode_map = { 'mode': 'passive' }
 
 augroup AutoSyntastic
   autocmd!
-  autocmd BufWritePost *.rb,*.js call s:syntastic()
+  autocmd BufWritePost *.rb,*.js,*.ux call s:syntastic()
 augroup END
 function! s:syntastic()
   SyntasticCheck
@@ -415,7 +417,7 @@ set history=50
 set hid
 
 " :shellをログインシェルに
-" set shell=bash\ -l
+"set shell=bash\ -l
 " ---------------------------------------------------------------------
 " 文字コードの自動認識
 " ---------------------------------------------------------------------
@@ -582,6 +584,8 @@ augroup MyAutoCmd
   " au BufRead,BufNewFile *.tpl set filetype=smarty 
   au BufRead,BufNewFile Vagrantfile,*.eye,*.cap,*.rake set filetype=ruby
   au BufRead,BufNewFile */db/seeds.rb set filetype=text
+  au BufRead,BufNewFile *.ux set filetype=xml
+  au BufRead,BufNewFile *.uno set filetype=cs
 
   " make
   autocmd filetype php :set makeprg=php\ -l\ %
