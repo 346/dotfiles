@@ -1,8 +1,8 @@
 # ゆーてぃーえふえいとだよっ
-if [ "`hostname -s`" = "Takahiro-no-MacBook-Pro" ]; then
-	 . ~/.bashrc.mbp2nd
+# if [ "`hostname -s`" = "Takahiro-no-MacBook-Pro" ]; then
+# . ~/.bashrc.mbp2nd
 # elif [ "`hostname -s`" = "takahiro-no-MacBook-Pro" ]; then
-fi
+# fi
 
 export HISTSIZE=2000
 export HISTFILESIZE=2000

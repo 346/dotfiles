@@ -41,6 +41,12 @@ fi
 export GOPATH=$HOME/.go
 export PATH=$PATH:$GOROOT/bin:$GOPATH/bin
 
+# android ccache
+export NDK_CCACHE=/usr/local/bin/ccache
+export CCACHE_COMPILERCHECK=content
+export CCACHE_MAXSIZE=3G
+
+
 # environment specific colors
 ssh() {
   # Host-specific background colors.
