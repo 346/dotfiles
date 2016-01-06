@@ -109,13 +109,34 @@ NeoBundle 'slim-template/vim-slim'
 NeoBundle 'slm-lang/vim-slm'
 NeoBundle 'vim-ruby/vim-ruby'
 NeoBundle 'wakatime/vim-wakatime'
+NeoBundleLazy 'leafgarland/typescript-vim', {
+\ 'autoload' : {
+\   'filetypes' : ['typescript'] }
+\}
+NeoBundleLazy 'Quramy/tsuquyomi', {
+\ 'autoload' : {
+\   'filetypes' : ['typescript'] }
+\}
+NeoBundleLazy 'jason0x43/vim-js-indent', {
+\ 'autoload' : {
+\   'filetypes' : ['javascript', 'typescript', 'html'],
+\}}
 call neobundle#end()
+
 
 
 " neocomplete
 let g:neocomplete#enable_at_startup = 1
 autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
 
+let g:neocomplete#force_omni_input_patterns = {}
+let g:neocomplete#force_omni_input_patterns.typescript = '[^. *\t]\.\w*\|\h\w*::'
+
+" typescript
+let g:js_indent_typescript = 1
+autocmd FileType typescript setlocal completeopt+=menu,preview
+let g:tsuquyomi_disable_default_mappings = 1
+nnoremap <C-]> <Plug>(TsuquyomiDefinition)
 
 " neosnippet
 imap <C-k>     <Plug>(neosnippet_expand_or_jump)
