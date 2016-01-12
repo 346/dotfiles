@@ -182,20 +182,9 @@ call unite#custom#source('file_rec/git', 'ignore_globs', s:file_rec_ignore_globs
 call unite#custom_source('file_rec/git', 'sorters', 'sorter_length')
 call unite#custom#source('buffer', 'ignore_globs', s:file_rec_ignore_globs)
 call unite#custom#source('grep', 'ignore_globs', s:file_rec_ignore_globs)
-" set wildignore=*.png,*.jpg,*.jpeg,*.gif,*.mid,*.ttf,*.mp3
-" let s:unite_ignore_pattern = (unite#sources#rec#define()[0]['ignore_pattern']) .  '\.png$\|\.jpg$\|\.jpeg$\|\.gif$\|\.mid$\|\.ttf$\|\.mp3$\|lib\/Cake\|tmp\/smarty\|Plugin\|tmp\/cache\|\.git\|vendors\|Vendor\|vendor\|node_modules\|log\/'
-" call unite#custom_source('file_rec', 'ignore_globs', split(&wildignore,','))
-" call unite#custom#source('file_rec/async', 'ignore_pattern', s:unite_ignore_pattern)
-" call unite#custom#source('file_rec, file_rec/async, file_rec/git', 'ignore_globs', split(&wildignore,','))
-" call unite#custom#source('file_rec,file_rec/async,file_rec/git,buffer,file_mru', 'matchers',
-        " \ ['converter_relative_word', 
-        " \ 'matcher_default',
-        " \ 'matcher_project_ignore_files',
-        " \  'sorter_rank', 'converter_relative_abbr', 'converter_file_directory'])
-
 
 if executable('ag')
-  let g:unite_source_rec_async_command='ag --nocolor --nogroup -g ""'
+  let g:unite_source_rec_async_command = ["ag", "--nocolor", "--nogroup", "-g"]
   let g:unite_source_grep_command = 'ag'
   let g:unite_source_grep_default_opts = '--nogroup --nocolor'
   let g:unite_source_grep_recursive_opt = ''
