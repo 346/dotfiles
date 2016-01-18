@@ -67,14 +67,15 @@ NeoBundle 'Shougo/neosnippet'
 NeoBundle 'Shougo/neosnippet-snippets'
 NeoBundle 'Shougo/neocomplete'
 NeoBundle 'Shougo/unite.vim'
-NeoBundle 'Shougo/vimproc', {
-    \ 'build' : {
-    \ 'windows' : 'make -f make_mingw32.mak',
-    \ 'cygwin' : 'make -f make_cygwin.mak',
-    \ 'mac' : 'make -f make_mac.mak',
-    \ 'unix' : 'make -f make_unix.mak',
-  \ },
-  \ }
+NeoBundle 'Shougo/vimproc.vim', {
+\ 'build' : {
+\     'windows' : 'tools\\update-dll-mingw',
+\     'cygwin' : 'make -f make_cygwin.mak',
+\     'mac' : 'make',
+\     'linux' : 'make',
+\     'unix' : 'gmake',
+\    },
+\ }
 
 NeoBundle 'Shougo/neomru.vim'
 NeoBundle 'Shougo/unite-outline'
@@ -114,6 +115,7 @@ NeoBundleLazy 'leafgarland/typescript-vim', {
 \   'filetypes' : ['typescript'] }
 \}
 NeoBundleLazy 'Quramy/tsuquyomi', {
+\ 'depends': ['Shougo/vimproc'],
 \ 'autoload' : {
 \   'filetypes' : ['typescript'] }
 \}
@@ -135,6 +137,7 @@ let g:neocomplete#force_omni_input_patterns.typescript = '[^. *\t]\.\w*\|\h\w*::
 " typescript
 let g:js_indent_typescript = 1
 autocmd FileType typescript setlocal completeopt+=menu,preview
+autocmd FileType typescript setlocal omnifunc=tsuquyomi#complete
 let g:tsuquyomi_disable_default_mappings = 1
 nnoremap <C-]> <Plug>(TsuquyomiDefinition)
 
@@ -222,6 +225,10 @@ call Unite_substitute('r', 'requests')
 call Unite_substitute('fa', 'spec\/factories')
 call Unite_substitute('con', 'config\/')
 call Unite_substitute('l', 'lib\/')
+
+call Unite_substitute('ux', '\.ux')
+call Unite_substitute('vm', 'vm\/')
+call Unite_substitute('ts', '\.ts')
 
 nnoremap <C-T> :Unite buffer file_rec/git:--cached:--others:--exclude-standard -direction=topleft -auto-resize -toggle<CR>
 nnoremap <silent> ,/ :<C-u>Unite -buffer-name=search line -start-insert<CR>
@@ -606,6 +613,7 @@ augroup MyAutoCmd
   au BufRead,BufNewFile Vagrantfile,*.eye,*.cap,*.rake set filetype=ruby
   au BufRead,BufNewFile */db/seeds.rb set filetype=text
   au BufRead,BufNewFile *.ux set filetype=xml
+  au BufRead,BufNewFile *.uxl set filetype=xml
   au BufRead,BufNewFile *.uno set filetype=cs
 
   " make
