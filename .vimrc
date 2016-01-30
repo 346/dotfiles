@@ -610,7 +610,7 @@ augroup MyAutoCmd
   au BufRead,BufNewFile *.phtml set filetype=php
   au BufRead,BufNewFile *.ctp set filetype=php
   " au BufRead,BufNewFile *.tpl set filetype=smarty 
-  au BufRead,BufNewFile Vagrantfile,*.eye,*.cap,*.rake set filetype=ruby
+  au BufRead,BufNewFile Fastfile,Vagrantfile,*.eye,*.cap,*.rake set filetype=ruby
   au BufRead,BufNewFile */db/seeds.rb set filetype=text
   au BufRead,BufNewFile *.ux set filetype=xml
   au BufRead,BufNewFile *.uxl set filetype=xml
