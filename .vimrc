@@ -63,8 +63,8 @@ endif
 
 call neobundle#begin(expand('~/.vim/bundle/'))
 NeoBundleFetch 'Shougo/neobundle.vim'
-NeoBundle 'Shougo/neosnippet'
-NeoBundle 'Shougo/neosnippet-snippets'
+" NeoBundle 'Shougo/neosnippet'
+" NeoBundle 'Shougo/neosnippet-snippets'
 NeoBundle 'Shougo/neocomplete'
 NeoBundle 'Shougo/unite.vim'
 NeoBundle 'Shougo/vimproc.vim', {
@@ -95,15 +95,6 @@ NeoBundle 'Glench/Vim-Jinja2-Syntax'
 NeoBundle 'itchyny/lightline.vim'
 NeoBundle 'Yggdroot/indentLine'
 NeoBundle 'scrooloose/syntastic'
-NeoBundleLazy 'alpaca-tc/alpaca_tags', {
-      \ 'depends': ['Shougo/vimproc'],
-      \ 'autoload' : {
-      \   'commands' : [
-      \     { 'name' : 'AlpacaTagsBundle', 'complete': 'customlist,alpaca_tags#complete_source' },
-      \     { 'name' : 'AlpacaTagsUpdate', 'complete': 'customlist,alpaca_tags#complete_source' },
-      \     'AlpacaTagsSet', 'AlpacaTagsCleanCache', 'AlpacaTagsEnable', 'AlpacaTagsDisable', 'AlpacaTagsKillProcess', 'AlpacaTagsProcessStatus',
-      \ ],
-      \ }}
 NeoBundle 'kchmck/vim-coffee-script'
 NeoBundle 'chase/vim-ansible-yaml'
 NeoBundle 'slim-template/vim-slim'
@@ -129,7 +120,6 @@ call neobundle#end()
 
 " neocomplete
 let g:neocomplete#enable_at_startup = 1
-autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
 
 let g:neocomplete#force_omni_input_patterns = {}
 let g:neocomplete#force_omni_input_patterns.typescript = '[^. *\t]\.\w*\|\h\w*::'
@@ -142,22 +132,17 @@ let g:tsuquyomi_disable_default_mappings = 1
 nnoremap <C-]> <Plug>(TsuquyomiDefinition)
 
 " neosnippet
-imap <C-k>     <Plug>(neosnippet_expand_or_jump)
-smap <C-k>     <Plug>(neosnippet_expand_or_jump)
-xmap <C-k>     <Plug>(neosnippet_expand_target)
+" imap <C-k>     <Plug>(neosnippet_expand_or_jump)
+" smap <C-k>     <Plug>(neosnippet_expand_or_jump)
+" xmap <C-k>     <Plug>(neosnippet_expand_target)
 
-" SuperTab like snippets behavior.
-imap <expr><TAB> neosnippet#expandable_or_jumpable() ?
-      \ "\<Plug>(neosnippet_expand_or_jump)"
-      \: pumvisible() ? "\<C-n>" : "\<TAB>"
-smap <expr><TAB> neosnippet#expandable_or_jumpable() ?
-      \ "\<Plug>(neosnippet_expand_or_jump)"
-      \: "\<TAB>"
+" smap <expr><TAB> neosnippet#expandable_or_jumpable() ?
+" \ "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
 
-" For snippet_complete marker.
-if has('conceal')
-  set conceallevel=2 concealcursor=i
-endif
+" " For conceal markers.
+" if has('conceal')
+  " set conceallevel=2 concealcursor=niv
+" endif
 
 " unite.vim
 autocmd FileType unite call s:unite_my_settings()
@@ -317,33 +302,6 @@ function! s:syntastic()
   SyntasticCheck
   " call lightline#update()
 endfunction
-
-" vim-tags
-      
-let g:alpaca_tags#config = {
-       \ '_' : '-R --sort=yes --languages=+Ruby --languages=-js,JavaScript',
-       \ 'js' : '--languages=+js',
-       \ '-js' : '--languages=-js,JavaScript',
-       \ 'vim' : '--languages=+Vim,vim',
-       \ 'php' : '--languages=+php',
-       \ '-vim' : '--languages=-Vim,vim',
-       \ '-style': '--languages=-css,scss,js,JavaScript,html',
-       \ 'scss' : '--languages=+scss --languages=-css',
-       \ 'css' : '--languages=+css',
-       \ 'java' : '--languages=+java $JAVA_HOME/src',
-       \ 'ruby': '--languages=+Ruby',
-       \ 'coffee': '--languages=+coffee',
-       \ '-coffee': '--languages=-coffee',
-       \ 'bundle': '--languages=+Ruby',
-       \ }
-if neobundle#is_installed('alpaca_tags')
-  augroup AlpacaTags
-    autocmd!
-    autocmd BufWritePost Gemfile AlpacaTagsBundle
-    autocmd BufRead,BufNew * AlpacaTagsSet
-    autocmd BufWritePost * AlpacaTagsUpdate
-  augroup END
-endif
 
 " }}}
 
