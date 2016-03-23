@@ -1,31 +1,6 @@
 alias ll='ls -laFG'
 export EDITOR=vim
 
-
-# docker 
-function dport() {
-  sudo docker inspect --format='{{ if index .NetworkSettings.Ports "22/tcp" }}{{(index (index .NetworkSettings.Ports "22/tcp") 0).HostPort}}{{ end }}' "$1" | sed "/^$/d"
-}
-
-function dssh() {
-  ssh -oStrictHostKeyChecking=no -t -t docker@localhost -p `dport $1`
-}
-function dstop() {
-  sudo docker stop $1
-}
-function drun() {
-  sudo docker rm $1;sudo docker run -d -p 22 --name $1 ticketstreet/$1
-}
-function drestart() {
-  dstop $1;drun $1
-}
-function drm() {
-  sudo docker rm $(sudo docker ps -a -q)
-}
-function drmi() {
-  sudo docker images | grep "<none>" | awk '{print $3}' | xargs sudo docker rmi
-}
- 
 # Set up ssh-agent
 export SSH_ENV="$HOME/.ssh/environment"
 

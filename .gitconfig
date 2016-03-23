@@ -14,7 +14,7 @@
 	delete-merged-branches = !git branch --merged | grep -v \\* | xargs -I % git branch -d %
 [user]
 	name = 346
-	email = 346@ticketstreet.jp
+  email = flytalez@gmail.com
 [push]
 	default = simple
 ; [merge "gemfilelock"]

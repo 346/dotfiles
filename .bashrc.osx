@@ -2,9 +2,6 @@
 export PATH="$HOME/.rbenv/shims:$PATH"
 eval "$(rbenv init -)"
 
-# docker
-export DOCKER_HOST=tcp://
-
 # vagrant-digitalocean
 export SSL_CERT_FILE=/usr/local/etc/openssl/cert.pem
 
