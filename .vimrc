@@ -121,13 +121,18 @@ call neobundle#end()
 " neocomplete
 let g:neocomplete#enable_at_startup = 1
 
-let g:neocomplete#force_omni_input_patterns = {}
+if !exists('g:neocomplete#force_omni_input_patterns')
+  let g:neocomplete#force_omni_input_patterns = {}
+endif
 let g:neocomplete#force_omni_input_patterns.typescript = '[^. *\t]\.\w*\|\h\w*::'
+autocmd FileType xml        setlocal omnifunc=xmlcomplete#CompleteTags
+autocmd FileType ruby       setlocal omnifunc=rubycomplete#Complete
+autocmd FileType javascript setlocal omnifunc=jscomplete#CompleteJS
+autocmd FileType css        setlocal omnifunc=csscomplete#CompleteCSS
 
 " typescript
 let g:js_indent_typescript = 1
-autocmd FileType typescript setlocal completeopt+=menu,preview
-autocmd FileType typescript setlocal omnifunc=tsuquyomi#complete
+autocmd FileType typescript setlocal completeopt+=menuone,preview
 let g:tsuquyomi_disable_default_mappings = 1
 nnoremap <C-]> <Plug>(TsuquyomiDefinition)
 
@@ -174,7 +179,7 @@ call unite#custom#source('grep', 'ignore_globs', s:file_rec_ignore_globs)
 if executable('ag')
   let g:unite_source_rec_async_command = ["ag", "--nocolor", "--nogroup", "-g"]
   let g:unite_source_grep_command = 'ag'
-  let g:unite_source_grep_default_opts = '--nogroup --nocolor'
+  let g:unite_source_grep_default_opts = '--vimgrep'
   let g:unite_source_grep_recursive_opt = ''
 endif
 
@@ -297,7 +302,7 @@ let g:syntastic_xml_xmllint_quiet_messages = { 'regex': 'namespace' }
 
 augroup AutoSyntastic
   autocmd!
-  autocmd BufWritePost *.rb,*.js,*.ux call s:syntastic()
+  autocmd BufWritePost Fastfile,*.rb,*.js,*.ux call s:syntastic()
 augroup END
 function! s:syntastic()
   SyntasticCheck
