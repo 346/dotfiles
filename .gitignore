@@ -5,3 +5,5 @@
 .vim/*
 .build
 .cache
+npm-debug.log
+

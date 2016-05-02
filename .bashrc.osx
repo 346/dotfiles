@@ -15,9 +15,8 @@ alias ll='ls -laFG'
 export unodir='/usr/local/share/uno/Packages'
 
 # homebrew
-if [ -f `brew --prefix`/etc/bash_completion.d/git-prompt.sh ]; then
-  . `brew --prefix`/etc/bash_completion.d/git-prompt.sh
-  . `brew --prefix`/etc/bash_completion.d/git-completion.bash
+if [ -f $(brew --prefix)/etc/bash_completion ]; then
+  . $(brew --prefix)/etc/bash_completion
 fi
 
 # go
