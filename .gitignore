@@ -4,6 +4,7 @@
 .DS_Store
 .vim/*
 .build
+.bundle/cache
 .cache
 npm-debug.log
 

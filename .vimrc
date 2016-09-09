@@ -78,10 +78,10 @@ NeoBundle 'Shougo/vimproc.vim', {
 \ }
 
 NeoBundle 'Shougo/neomru.vim'
-NeoBundle 'Shougo/unite-outline'
 NeoBundle 'tsukkee/unite-tag'
 NeoBundle 'Shougo/neomru.vim'
 NeoBundle 'Shougo/vimshell' 
+NeoBundle 'Shougo/unite-outline'
 NeoBundle 'LeafCage/yankround.vim'
 NeoBundle 'sudo.vim'
 NeoBundle 'tpope/vim-fugitive'
@@ -114,8 +114,31 @@ NeoBundleLazy 'jason0x43/vim-js-indent', {
 \ 'autoload' : {
 \   'filetypes' : ['javascript', 'typescript', 'html'],
 \}}
+NeoBundleLazy 'fatih/vim-go', {
+\ 'depends': ['Shougo/vimproc'],
+\ 'autoload' : {
+\   'filetypes' : ['go'] }
+\}
+NeoBundle 'sudar/vim-arduino-syntax'
+NeoBundle 'majutsushi/tagbar.git'
+
 call neobundle#end()
 
+
+" go
+let g:go_def_mapping_enabled = 0
+let g:go_highlight_functions = 1
+let g:go_highlight_methods = 1
+let g:go_highlight_structs = 1
+let g:go_highlight_interfaces = 1
+let g:go_highlight_operators = 1
+let g:go_highlight_build_constraints = 1
+let g:go_fmt_command = "goimports"
+let g:go_fmt_autosave = 0
+augroup MyVimGo
+  autocmd!
+  autocmd BufWritePre *.go call go#fmt#Format(-1)
+augroup END
 
 
 " neocomplete
@@ -125,14 +148,20 @@ if !exists('g:neocomplete#force_omni_input_patterns')
   let g:neocomplete#force_omni_input_patterns = {}
 endif
 let g:neocomplete#force_omni_input_patterns.typescript = '[^. *\t]\.\w*\|\h\w*::'
-autocmd FileType xml        setlocal omnifunc=xmlcomplete#CompleteTags
-autocmd FileType ruby       setlocal omnifunc=rubycomplete#Complete
-autocmd FileType javascript setlocal omnifunc=jscomplete#CompleteJS
-autocmd FileType css        setlocal omnifunc=csscomplete#CompleteCSS
+augroup MyNeoComplete
+  autocmd!
+  autocmd FileType xml        setlocal omnifunc=xmlcomplete#CompleteTags
+  autocmd FileType ruby       setlocal omnifunc=rubycomplete#Complete
+  autocmd FileType javascript setlocal omnifunc=jscomplete#CompleteJS
+  autocmd FileType css        setlocal omnifunc=csscomplete#CompleteCSS
+augroup END
 
 " typescript
 let g:js_indent_typescript = 1
-autocmd FileType typescript setlocal completeopt+=menuone,preview
+augroup MyTsuquyomi
+  autocmd!
+  autocmd FileType typescript setlocal completeopt+=menuone,preview
+augroup END
 let g:tsuquyomi_disable_default_mappings = 1
 nnoremap <C-]> <Plug>(TsuquyomiDefinition)
 
@@ -150,7 +179,10 @@ nnoremap <C-]> <Plug>(TsuquyomiDefinition)
 " endif
 
 " unite.vim
-autocmd FileType unite call s:unite_my_settings()
+augroup MyUniteVim
+  autocmd!
+  autocmd FileType unite call s:unite_my_settings()
+augroup END
 function! s:unite_my_settings()"{{{
   nmap <buffer> <space> <nop>
 endfunction"}}}
@@ -299,10 +331,17 @@ let g:syntastic_enable_signs=1
 let g:syntastic_auto_loc_list=2
 let g:syntastic_mode_map = { 'mode': 'passive' }
 let g:syntastic_xml_xmllint_quiet_messages = { 'regex': 'namespace' }
+let g:syntastic_go_checkers = ['golint', 'govet', 'errcheck']
+let g:syntastic_mode_map = { 'mode': 'active', 'passive_filetypes': ['go'] }
+
+" tagbar
+let g:tagbar_autoshowtag = 1
+let g:tagbar_autofocus = 1
+let g:tagbar_left = 1
 
 augroup AutoSyntastic
   autocmd!
-  autocmd BufWritePost Fastfile,*.rb,*.js,*.ux call s:syntastic()
+  autocmd BufWritePost Fastfile,*.rb,*.js,*.ux,*.go call s:syntastic()
 augroup END
 function! s:syntastic()
   SyntasticCheck
@@ -331,9 +370,6 @@ set wrap
 
 " スペースで折り返さない
 set nolinebreak
-
-" gq コマンド以外では自動改行しない
-autocmd FileType * setlocal formatoptions-=ro
 
 " 全て Backspace で削除可能にする
 set backspace=indent,eol,start
@@ -498,11 +534,9 @@ set title
 set laststatus=2
 
 " ステータス行のフォーマット
-set statusline=%<%f\ %m%r%h%w%{'['.(&fenc!=''?&fenc:&enc).']['.&ff.']'}%=%l,%c%V%8P
+" set statusline=%<%f\ %m%r%h%w%{'['.(&fenc!=''?&fenc:&enc).']['.&ff.']'}%=%l,%c%V%8P
 
-" ---------------------------------------------------------------------
-" 検索関連
-" ---------------------------------------------------------------------
+" 検索
 
 " 結果をハイライト
 set hlsearch
@@ -525,24 +559,16 @@ set wrapscan
 " 正規表現使用時に magic モードにする
 set magic
 
-" ---------------------------------------------------------------------
 " PHP
-" ---------------------------------------------------------------------
 
 let php_sql_query=1
 " let php_htmlInStrings=1
 let php_noShortTags=1
-
-" ---------------------------------------------------------------------
-" folding
-" ---------------------------------------------------------------------
-
 "let php_folding=1
-set foldmethod=marker
 
-" ---------------------------------------------------------------------
-" ハイライト
-" ---------------------------------------------------------------------
+
+" etc
+set foldmethod=marker
 
 syntax on
 filetype plugin indent on
@@ -560,24 +586,32 @@ map <kMinus> <C-W>-
 " filetype設定
 augroup MyAutoCmd
   autocmd!
-  au BufRead,BufNewFile *.phtml set filetype=php
-  au BufRead,BufNewFile *.ctp set filetype=php
-  " au BufRead,BufNewFile *.tpl set filetype=smarty 
-  au BufRead,BufNewFile Fastfile,Vagrantfile,*.eye,*.cap,*.rake set filetype=ruby
-  au BufRead,BufNewFile */db/seeds.rb set filetype=text
-  au BufRead,BufNewFile *.ux set filetype=xml
-  au BufRead,BufNewFile *.uxl set filetype=xml
-  au BufRead,BufNewFile *.uno set filetype=cs
+  autocmd BufRead,BufNewFile *.phtml set filetype=php
+  autocmd BufRead,BufNewFile *.ctp set filetype=php
+  " autocmd BufRead,BufNewFile *.tpl set filetype=smarty 
+  autocmd BufRead,BufNewFile Fastfile,Vagrantfile,*.eye,*.cap,*.rake set filetype=ruby
+  autocmd BufRead,BufNewFile */db/seeds.rb set filetype=text
+  autocmd BufRead,BufNewFile *.ux set filetype=xml
+  autocmd BufRead,BufNewFile *.uxl set filetype=xml
+  autocmd BufRead,BufNewFile *.uno set filetype=cs
+  autocmd BufRead,BufNewFile *.go set filetype=go
 
   " make
-  autocmd filetype php :set makeprg=php\ -l\ %
-  autocmd filetype php :set errorformat=%m\ in\ %f\ on\ line\ %l
+  autocmd filetype php setlocal makeprg=php\ -l\ %
+  autocmd filetype php setlocal errorformat=%m\ in\ %f\ on\ line\ %l
 
   autocmd FileType ruby setlocal makeprg=ruby\ -c\ %
   autocmd FileType ruby setlocal errorformat=%m\ in\ %f\ on\ line\ %l
   autocmd FileType perl,cgi :compiler perl  
   autocmd filetype coffee,javascript setlocal shiftwidth=2 softtabstop=2 tabstop=2 expandtab
 
+  " gq コマンド以外では自動改行しない
+  autocmd FileType * setlocal formatoptions-=ro
+  " au FileType gmaio setlocal sw=4 ts=4 sts=4 noet
+  " au FileType go setlocal makeprg=go\ build\ ./... errorformat=%f:%l:\ %m
+
 augroup END
+
+
 
 NeoBundleCheck

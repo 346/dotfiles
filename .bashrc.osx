@@ -2,8 +2,11 @@
 export PATH="$HOME/.rbenv/shims:$PATH"
 eval "$(rbenv init -)"
 
+# nodebrew
+export PATH=$HOME/.nodebrew/current/bin:$PATH
+
 # vagrant-digitalocean
-export SSL_CERT_FILE=/usr/local/etc/openssl/cert.pem
+#export SSL_CERT_FILE=/usr/local/etc/openssl/cert.pem
 
 # commands
 export PATH=/usr/local/bin:$PATH
@@ -20,23 +23,8 @@ if [ -f $(brew --prefix)/etc/bash_completion ]; then
 fi
 
 # go
-program_exists () {
-  type "$1" &> /dev/null ;
-}
-
-if program_exists go; then
-  function setupGOROOT()
-  {
-    local GOPATH=`which go`
-    local GODIR=`dirname $GOPATH`
-    local GOPATH_BREW_RELATIVE=`readlink $GOPATH`
-    local GOPATH_BREW=`dirname $GOPATH_BREW_RELATIVE`
-    export GOROOT=`cd $GODIR; cd $GOPATH_BREW/..; pwd`
-  }
-  setupGOROOT
-fi
-export GOPATH=$HOME/.go
-export PATH=$PATH:$GOROOT/bin:$GOPATH/bin
+export GOPATH=$HOME/gopath
+export PATH=$PATH:/usr/local/opt/go/libexec/bin:$GOPATH/bin
 
 # android ccache
 export NDK_CCACHE=/usr/local/bin/ccache
@@ -62,22 +50,13 @@ ssh() {
   set_term_bgcolor 0 0 0
 }
 set_term_bgcolor() {
-   local R=$1
-   local G=$2
-   local B=$3
-   # /usr/bin/osascript <<EOF
-# tell application "Terminal"
-   # tell window 0
-      # set the background color to {$(($R*65535/255)), $(($G*65535/255)), $(($B*65535/255))}
-   # end tell
-# end tell
-# EOF
+  local R=$1
+  local G=$2
+  local B=$3
   /usr/bin/osascript <<EOF
 tell application "iTerm"
-  tell the current terminal
-    tell the current session
-      set background color to {$(($R*65535/255)), $(($G*65535/255)), $(($B*65535/255))}
-    end tell
+  tell current session of first window
+    set background color to {$(($R*65535/255)), $(($G*65535/255)), $(($B*65535/255))}
   end tell
 end tell
 EOF
