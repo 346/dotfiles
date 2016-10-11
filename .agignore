@@ -1,2 +1,7 @@
 *~
 *.swp
+jquery-*.js
+bootstrap*.css
+bootstrap*.js
+jquery.js
+*.js.map
