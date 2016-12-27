@@ -121,7 +121,10 @@ NeoBundleLazy 'fatih/vim-go', {
 \}
 NeoBundle 'sudar/vim-arduino-syntax'
 NeoBundle 'majutsushi/tagbar.git'
-
+NeoBundle 'bronson/vim-trailing-whitespace'
+if neobundle#tap('vim-trailing-whitespace')
+  let g:extra_whitespace_ignored_filetypes = ['unite']
+endif
 call neobundle#end()
 
 
@@ -148,6 +151,13 @@ if !exists('g:neocomplete#force_omni_input_patterns')
   let g:neocomplete#force_omni_input_patterns = {}
 endif
 let g:neocomplete#force_omni_input_patterns.typescript = '[^. *\t]\.\w*\|\h\w*::'
+call neocomplete#custom#source('include', 'disabled_filetypes', {'sql' : 1})
+call neocomplete#custom#source('member', 'disabled_filetypes', {'sql' : 1})
+call neocomplete#custom#source('syntax', 'disabled_filetypes', {'sql' : 1})
+call neocomplete#custom#source('buffer', 'disabled_filetypes', {'sql' : 1})
+call neocomplete#custom#source('file', 'disabled_filetypes', {'sql' : 1})
+call neocomplete#custom#source('file_include', 'disabled_filetypes', {'sql' : 1})
+call neocomplete#custom#source('tag', 'disabled_filetypes', {'sql' : 1})
 augroup MyNeoComplete
   autocmd!
   autocmd FileType xml        setlocal omnifunc=xmlcomplete#CompleteTags
