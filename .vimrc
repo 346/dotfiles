@@ -100,7 +100,6 @@ NeoBundle 'chase/vim-ansible-yaml'
 NeoBundle 'slim-template/vim-slim'
 NeoBundle 'slm-lang/vim-slm'
 NeoBundle 'vim-ruby/vim-ruby'
-NeoBundle 'wakatime/vim-wakatime'
 NeoBundleLazy 'leafgarland/typescript-vim', {
 \ 'autoload' : {
 \   'filetypes' : ['typescript'] }
@@ -418,6 +417,7 @@ set history=50
 
 " アンドゥ可能な変更の最大値
 set undolevels=1000
+set undofile
 
 " 行番号を表示
 set number

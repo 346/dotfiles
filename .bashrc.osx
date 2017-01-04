@@ -10,9 +10,9 @@ export PATH=$HOME/.nodebrew/current/bin:$PATH
 
 # commands
 export PATH=/usr/local/bin:$PATH
-alias vi='env LANG=ja_JP.UTF-8 /Applications/MacVim.app/Contents/MacOS/Vim "$@"'
-alias vim='env LANG=ja_JP.UTF-8 /Applications/MacVim.app/Contents/MacOS/Vim "$@"'
-export EDITOR='env LANG=ja_JP.UTF-8 /Applications/MacVim.app/Contents/MacOS/Vim "$@"'
+alias vi='env LANG=ja_JP.UTF-8 vim "$@"'
+alias vim='env LANG=ja_JP.UTF-8 vim "$@"'
+export EDITOR='env LANG=ja_JP.UTF-8 vim "$@"'
 alias find=gfind
 alias ll='ls -laFG'
 export unodir='/usr/local/share/uno/Packages'
