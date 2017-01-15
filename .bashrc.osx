@@ -2,8 +2,20 @@
 export PATH="$HOME/.rbenv/shims:$PATH"
 eval "$(rbenv init -)"
 
+# pyenv
+export PYENV_ROOT="$HOME/.pyenv"
+export PATH="$PYENV_ROOT/bin:$PATH"
+eval "$(pyenv init -)"
+
+# jenv
+export JENV_ROOT=/usr/local/var/jenv
+eval "$(jenv init -)"
+
 # nodebrew
 export PATH=$HOME/.nodebrew/current/bin:$PATH
+
+# digdag
+export PATH="$HOME/bin:$PATH"
 
 # vagrant-digitalocean
 #export SSL_CERT_FILE=/usr/local/etc/openssl/cert.pem
@@ -44,9 +56,7 @@ ssh() {
   elif [[ "$@" =~ ^dep.* ]]; then
     set_term_bgcolor 127 127 0
   fi
-   
   command ssh $@
-   
   set_term_bgcolor 0 0 0
 }
 set_term_bgcolor() {

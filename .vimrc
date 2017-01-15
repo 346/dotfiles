@@ -80,7 +80,7 @@ NeoBundle 'Shougo/vimproc.vim', {
 NeoBundle 'Shougo/neomru.vim'
 NeoBundle 'tsukkee/unite-tag'
 NeoBundle 'Shougo/neomru.vim'
-NeoBundle 'Shougo/vimshell' 
+NeoBundle 'Shougo/vimshell'
 NeoBundle 'Shougo/unite-outline'
 NeoBundle 'LeafCage/yankround.vim'
 NeoBundle 'sudo.vim'
@@ -94,7 +94,7 @@ NeoBundle 'w0ng/vim-hybrid'
 NeoBundle 'Glench/Vim-Jinja2-Syntax'
 NeoBundle 'itchyny/lightline.vim'
 NeoBundle 'Yggdroot/indentLine'
-NeoBundle 'scrooloose/syntastic'
+NeoBundle 'neomake/neomake'
 NeoBundle 'kchmck/vim-coffee-script'
 NeoBundle 'chase/vim-ansible-yaml'
 NeoBundle 'slim-template/vim-slim'
@@ -198,7 +198,7 @@ endfunction"}}}
 " 入力モードで開始する
 let g:unite_enable_start_insert = 1
 " 最近開いたファイル履歴の保存数
-let g:unite_source_file_mru_limit = 10 
+let g:unite_source_file_mru_limit = 10
 let g:unite_source_buffer_limit = 3
 "file_mruの表示フォーマットを指定。空にすると表示スピードが高速化される、らしい・・・
 let g:unite_source_file_mru_time_format = ''
@@ -311,7 +311,7 @@ let g:lightline = {
       \   'left': [ [ 'mode', 'paste' ],
       \             [ 'readonly', 'filename', 'modified' ],
       \             [ 'fugitive' ] ],
-      \   'right': [ [ 'syntastic', 'lineinfo' ],
+      \   'right': [ [ 'neomake', 'lineinfo' ],
       \              [ 'percent' ],
       \              [ 'fileformat', 'fileencoding', 'filetype' ] ]
       \ },
@@ -325,37 +325,32 @@ let g:lightline = {
       \   'modified': '(&filetype!="help"&&(&modified||!&modifiable))',
       \   'fugitive': '(exists("*fugitive#head") && ""!=fugitive#head())'
       \ },
-      \ 'component_expand': {
-      \   'syntastic': 'SyntasticStatuslineFlag'
+      \ 'component_function': {
+      \   'neomake': 'neomake#statusline#LoclistStatus'
       \ },
       \ 'component_type': {
-      \   'syntastic': 'error'
+      \   'neomake': 'error'
       \ }
       \ }
 " indentLine
 let g:indentLine_color_term = 237
 
 " Syntastic
-let g:syntastic_enable_signs=1
-let g:syntastic_auto_loc_list=2
-let g:syntastic_mode_map = { 'mode': 'passive' }
-let g:syntastic_xml_xmllint_quiet_messages = { 'regex': 'namespace' }
-let g:syntastic_go_checkers = ['golint', 'govet', 'errcheck']
-let g:syntastic_mode_map = { 'mode': 'active', 'passive_filetypes': ['go'] }
+" let g:syntastic_enable_signs=1
+" let g:syntastic_auto_loc_list=2
+" let g:syntastic_mode_map = { 'mode': 'passive' }
+" let g:syntastic_xml_xmllint_quiet_messages = { 'regex': 'namespace' }
+" let g:syntastic_go_checkers = ['golint', 'govet', 'errcheck']
+" let g:syntastic_mode_map = { 'mode': 'active', 'passive_filetypes': ['go'] }
 
 " tagbar
 let g:tagbar_autoshowtag = 1
 let g:tagbar_autofocus = 1
 let g:tagbar_left = 1
 
-augroup AutoSyntastic
-  autocmd!
-  autocmd BufWritePost Fastfile,*.rb,*.js,*.ux,*.go call s:syntastic()
-augroup END
-function! s:syntastic()
-  SyntasticCheck
-  " call lightline#update()
-endfunction
+" neomake
+autocmd! BufWritePost * Neomake " 保存時に実行する
+let g:neomake_javascript_enabled_makers = ['eslint']
 
 " }}}
 
@@ -598,7 +593,7 @@ augroup MyAutoCmd
   autocmd!
   autocmd BufRead,BufNewFile *.phtml set filetype=php
   autocmd BufRead,BufNewFile *.ctp set filetype=php
-  " autocmd BufRead,BufNewFile *.tpl set filetype=smarty 
+  " autocmd BufRead,BufNewFile *.tpl set filetype=smarty
   autocmd BufRead,BufNewFile Fastfile,Vagrantfile,*.eye,*.cap,*.rake set filetype=ruby
   autocmd BufRead,BufNewFile */db/seeds.rb set filetype=text
   autocmd BufRead,BufNewFile *.ux set filetype=xml
@@ -612,7 +607,7 @@ augroup MyAutoCmd
 
   autocmd FileType ruby setlocal makeprg=ruby\ -c\ %
   autocmd FileType ruby setlocal errorformat=%m\ in\ %f\ on\ line\ %l
-  autocmd FileType perl,cgi :compiler perl  
+  autocmd FileType perl,cgi :compiler perl
   autocmd filetype coffee,javascript setlocal shiftwidth=2 softtabstop=2 tabstop=2 expandtab
 
   " gq コマンド以外では自動改行しない
