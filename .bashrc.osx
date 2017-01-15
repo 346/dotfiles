@@ -17,8 +17,8 @@ export PATH=$HOME/.nodebrew/current/bin:$PATH
 # digdag
 export PATH="$HOME/bin:$PATH"
 
-# vagrant-digitalocean
-#export SSL_CERT_FILE=/usr/local/etc/openssl/cert.pem
+# embulk
+export PATH="$HOME/.embulk/bin:$PATH"
 
 # commands
 export PATH=/usr/local/bin:$PATH

@@ -600,6 +600,7 @@ augroup MyAutoCmd
   autocmd BufRead,BufNewFile *.uxl set filetype=xml
   autocmd BufRead,BufNewFile *.uno set filetype=cs
   autocmd BufRead,BufNewFile *.go set filetype=go
+  autocmd BufRead,BufNewFile *.dig set filetype=yaml
 
   " make
   autocmd filetype php setlocal makeprg=php\ -l\ %
