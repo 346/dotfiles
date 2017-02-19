@@ -3,7 +3,7 @@
 " .vimrc
 "
 " ---------------------------------------------------------------------
-" カンマで始まるキーマップはMacのSparkでCtrl+Shift同時押しにしている
+" カンマで始まるキーマップはMacのKeyboardMaestroでCtrl+Shift同時押しにしている
 
 " vi互換にしない
 set nocompatible
@@ -56,75 +56,78 @@ if &term =~ "xterm"
   cnoremap <special> <Esc>[201~ <nop>
 endif
 
-" {{{ プラグイン(neobundle)
-if has('vim_starting')
-  set runtimepath+=~/.vim/bundle/neobundle.vim/
-endif
+" {{{ プラグイン(dein.vim)
+set runtimepath+=~/.vim/repos/github.com/Shougo/dein.vim
 
-call neobundle#begin(expand('~/.vim/bundle/'))
-NeoBundleFetch 'Shougo/neobundle.vim'
-" NeoBundle 'Shougo/neosnippet'
-" NeoBundle 'Shougo/neosnippet-snippets'
-NeoBundle 'Shougo/neocomplete'
-NeoBundle 'Shougo/unite.vim'
-NeoBundle 'Shougo/vimproc.vim', {
-\ 'build' : {
-\     'windows' : 'tools\\update-dll-mingw',
-\     'cygwin' : 'make -f make_cygwin.mak',
-\     'mac' : 'make',
-\     'linux' : 'make',
-\     'unix' : 'gmake',
-\    },
-\ }
+if dein#load_state('~/.vim')
+  call dein#begin('~/.vim/bundle')
 
-NeoBundle 'Shougo/neomru.vim'
-NeoBundle 'tsukkee/unite-tag'
-NeoBundle 'Shougo/neomru.vim'
-NeoBundle 'Shougo/vimshell'
-NeoBundle 'Shougo/unite-outline'
-NeoBundle 'LeafCage/yankround.vim'
-NeoBundle 'sudo.vim'
-NeoBundle 'tpope/vim-fugitive'
-NeoBundle 'The-NERD-Commenter'
-NeoBundle 'matchit.zip'
-NeoBundle 'thinca/vim-quickrun'
-NeoBundle 'thinca/vim-qfreplace'
-NeoBundle 'janko-m/vim-test'
-NeoBundle 'w0ng/vim-hybrid'
-NeoBundle 'Glench/Vim-Jinja2-Syntax'
-NeoBundle 'itchyny/lightline.vim'
-NeoBundle 'Yggdroot/indentLine'
-NeoBundle 'neomake/neomake'
-NeoBundle 'kchmck/vim-coffee-script'
-NeoBundle 'chase/vim-ansible-yaml'
-NeoBundle 'slim-template/vim-slim'
-NeoBundle 'slm-lang/vim-slm'
-NeoBundle 'vim-ruby/vim-ruby'
-NeoBundleLazy 'leafgarland/typescript-vim', {
-\ 'autoload' : {
-\   'filetypes' : ['typescript'] }
-\}
-NeoBundleLazy 'Quramy/tsuquyomi', {
-\ 'depends': ['Shougo/vimproc'],
-\ 'autoload' : {
-\   'filetypes' : ['typescript'] }
-\}
-NeoBundleLazy 'jason0x43/vim-js-indent', {
-\ 'autoload' : {
-\   'filetypes' : ['javascript', 'typescript', 'html'],
-\}}
-NeoBundleLazy 'fatih/vim-go', {
-\ 'depends': ['Shougo/vimproc'],
-\ 'autoload' : {
-\   'filetypes' : ['go'] }
-\}
-NeoBundle 'sudar/vim-arduino-syntax'
-NeoBundle 'majutsushi/tagbar.git'
-NeoBundle 'bronson/vim-trailing-whitespace'
-if neobundle#tap('vim-trailing-whitespace')
-  let g:extra_whitespace_ignored_filetypes = ['unite']
+  call dein#add('Shougo/dein.vim')
+  call dein#add('Shougo/neocomplete.vim')
+  call dein#add('Shougo/unite.vim')
+  call dein#add('Shougo/vimproc.vim', {
+  \ 'build' : {
+  \     'windows' : 'tools\\update-dll-mingw',
+  \     'cygwin' : 'make -f make_cygwin.mak',
+  \     'mac' : 'make',
+  \     'linux' : 'make',
+  \     'unix' : 'gmake',
+  \    },
+  \ })
+
+  call dein#add('Shougo/neomru.vim')
+  call dein#add('tsukkee/unite-tag')
+  call dein#add('Shougo/vimshell')
+  call dein#add('Shougo/unite-outline')
+  call dein#add('LeafCage/yankround.vim')
+  call dein#add('sudo.vim')
+  call dein#add('tpope/vim-fugitive')
+  call dein#add('The-NERD-Commenter')
+  call dein#add('matchit.zip')
+  call dein#add('thinca/vim-quickrun')
+  call dein#add('thinca/vim-qfreplace')
+  call dein#add('janko-m/vim-test')
+  call dein#add('w0ng/vim-hybrid')
+  call dein#add('Glench/Vim-Jinja2-Syntax')
+  call dein#add('itchyny/lightline.vim')
+  call dein#add('Yggdroot/indentLine')
+  call dein#add('neomake/neomake')
+  call dein#add('kchmck/vim-coffee-script')
+  call dein#add('chase/vim-ansible-yaml')
+  call dein#add('slim-template/vim-slim')
+  call dein#add('slm-lang/vim-slm')
+  call dein#add('vim-ruby/vim-ruby')
+  call dein#add('leafgarland/typescript-vim', {
+  \ 'autoload' : {
+  \   'filetypes' : ['typescript'] }
+  \})
+  call dein#add('Quramy/tsuquyomi', {
+  \ 'depends': ['Shougo/vimproc'],
+  \ 'autoload' : {
+  \   'filetypes' : ['typescript'] }
+  \})
+  call dein#add('jason0x43/vim-js-indent', {
+  \ 'autoload' : {
+  \   'filetypes' : ['javascript', 'typescript', 'html'],
+  \}})
+  call dein#add('fatih/vim-go', {
+  \ 'depends': ['Shougo/vimproc'],
+  \ 'autoload' : {
+  \   'filetypes' : ['go'] }
+  \})
+  call dein#add('sudar/vim-arduino-syntax')
+  call dein#add('majutsushi/tagbar.git')
+  call dein#add('bronson/vim-trailing-whitespace')
+  if dein#tap('vim-trailing-whitespace')
+    let g:extra_whitespace_ignored_filetypes = ['unite']
+  endif
+
+  call dein#end()
+  call dein#save_state()
 endif
-call neobundle#end()
+if has('vim_starting') && dein#check_install()
+  call dein#install()
+endif
 
 
 " go
@@ -617,7 +620,3 @@ augroup MyAutoCmd
   " au FileType go setlocal makeprg=go\ build\ ./... errorformat=%f:%l:\ %m
 
 augroup END
-
-
-
-NeoBundleCheck
