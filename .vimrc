@@ -118,6 +118,11 @@ if dein#load_state('~/.vim')
   call dein#add('sudar/vim-arduino-syntax')
   call dein#add('majutsushi/tagbar.git')
   call dein#add('bronson/vim-trailing-whitespace')
+  " call dein#add('posva/vim-vue')
+  call dein#add('Shougo/context_filetype.vim')
+  call dein#add('osyo-manga/vim-precious')
+  call dein#add('digitaltoad/vim-pug')
+  call dein#add('wavded/vim-stylus')
   if dein#tap('vim-trailing-whitespace')
     let g:extra_whitespace_ignored_filetypes = ['unite']
   endif
@@ -338,14 +343,6 @@ let g:lightline = {
 " indentLine
 let g:indentLine_color_term = 237
 
-" Syntastic
-" let g:syntastic_enable_signs=1
-" let g:syntastic_auto_loc_list=2
-" let g:syntastic_mode_map = { 'mode': 'passive' }
-" let g:syntastic_xml_xmllint_quiet_messages = { 'regex': 'namespace' }
-" let g:syntastic_go_checkers = ['golint', 'govet', 'errcheck']
-" let g:syntastic_mode_map = { 'mode': 'active', 'passive_filetypes': ['go'] }
-
 " tagbar
 let g:tagbar_autoshowtag = 1
 let g:tagbar_autofocus = 1
@@ -354,6 +351,17 @@ let g:tagbar_left = 1
 " neomake
 autocmd! BufWritePost * Neomake " 保存時に実行する
 let g:neomake_javascript_enabled_makers = ['eslint']
+
+" context_filetype
+if !exists('g:context_filetype#filetypes')
+  let g:context_filetype#filetypes = {}
+endif
+let g:context_filetype#filetypes.vue = [
+  \ { 'start' : '<template\%( [^>]*\)\? lang="pug"\%( [^>]*\)\?>', 'end' : '</template>', 'filetype' : 'pug' },
+  \ { 'start' : '<script\%( [^>]*\)\? lang="coffee"\%( [^>]*\)\?>', 'end' : '</script>', 'filetype' : 'coffee' },
+  \ { 'start' : '<style\%( [^>]*\)\? lang="stylus"\%( [^>]*\)\?>', 'end' : '</style>', 'filetype' : 'stylus' }
+\ ]
+
 
 " }}}
 
@@ -604,6 +612,7 @@ augroup MyAutoCmd
   autocmd BufRead,BufNewFile *.uno set filetype=cs
   autocmd BufRead,BufNewFile *.go set filetype=go
   autocmd BufRead,BufNewFile *.dig set filetype=yaml
+  autocmd BufNewFile,BufRead *.vue set filetype=vue
 
   " make
   autocmd filetype php setlocal makeprg=php\ -l\ %
