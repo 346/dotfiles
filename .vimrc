@@ -129,9 +129,6 @@ if dein#load_state(s:dein_dir)
   call dein#add('osyo-manga/vim-precious')
   call dein#add('digitaltoad/vim-pug')
   call dein#add('wavded/vim-stylus')
-  if dein#tap('vim-trailing-whitespace')
-    let g:extra_whitespace_ignored_filetypes = ['unite']
-  endif
 
   call dein#end()
   call dein#save_state()
@@ -140,6 +137,7 @@ if has('vim_starting') && dein#check_install()
   call dein#install()
 endif
 
+let g:extra_whitespace_ignored_filetypes = ['unite']
 
 " go
 let g:go_def_mapping_enabled = 0
