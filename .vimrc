@@ -71,15 +71,14 @@ if dein#load_state(s:dein_dir)
   call dein#add('Shougo/dein.vim')
   call dein#add('Shougo/neocomplete.vim')
   call dein#add('Shougo/unite.vim')
-  call dein#add('Shougo/vimproc.vim', {
-  \ 'build' : {
-  \     'windows' : 'tools\\update-dll-mingw',
-  \     'cygwin' : 'make -f make_cygwin.mak',
-  \     'mac' : 'make',
-  \     'linux' : 'make',
-  \     'unix' : 'gmake',
-  \    },
-  \ })
+  call dein#add('Shougo/vimproc', {
+     \ 'build' : {
+     \ 'windows' : 'make -f make_mingw32.mak',
+     \ 'cygwin' : 'make -f make_cygwin.mak',
+     \ 'mac' : 'make -f make_mac.mak',
+     \ 'unix' : 'make -f make_unix.mak',
+     \ },
+     \ })
 
   call dein#add('Shougo/neomru.vim')
   call dein#add('tsukkee/unite-tag')
