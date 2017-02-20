@@ -213,6 +213,7 @@ let g:unite_force_overwrite_statusline = 0
 " file_recの除外
 let s:file_rec_ignore_globs = ['*.png', '*.jpg', '*.gif', '**/vendor/**', '**/Smarty/**', '**/gmopg/**', '**/Yahoo/**', '*~', 'seeds.rb']
 call unite#custom#source('file_rec/git', 'ignore_globs', s:file_rec_ignore_globs)
+call unite#custom#source('file_rec/git', 'white_globs', ['vendor/assets/javascripts/banner.js'])
 call unite#custom_source('file_rec/git', 'sorters', 'sorter_length')
 call unite#custom#source('buffer', 'ignore_globs', s:file_rec_ignore_globs)
 call unite#custom#source('grep', 'ignore_globs', s:file_rec_ignore_globs)
