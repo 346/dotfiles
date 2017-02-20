@@ -3,7 +3,7 @@
 " .vimrc
 "
 " ---------------------------------------------------------------------
-" カンマで始まるキーマップはMacのSparkでCtrl+Shift同時押しにしている
+" カンマで始まるキーマップはMacのKeyboardMaestroでCtrl+Shift同時押しにしている
 
 " vi互換にしない
 set nocompatible
@@ -56,76 +56,88 @@ if &term =~ "xterm"
   cnoremap <special> <Esc>[201~ <nop>
 endif
 
-" {{{ プラグイン(neobundle)
-if has('vim_starting')
-  set runtimepath+=~/.vim/bundle/neobundle.vim/
+" {{{ プラグイン(dein.vim)
+let s:cache_home = empty($XDG_CACHE_HOME) ? expand('~/.vim') : $XDG_CACHE_HOME
+let s:dein_dir = s:cache_home . '/dein'
+let s:dein_repo_dir = s:dein_dir . '/repos/github.com/Shougo/dein.vim'
+if !isdirectory(s:dein_repo_dir)
+  call system('git clone https://github.com/Shougo/dein.vim ' . shellescape(s:dein_repo_dir))
+endif
+let &runtimepath = s:dein_repo_dir .",". &runtimepath
+
+if dein#load_state(s:dein_dir)
+  call dein#begin(s:dein_dir)
+
+  call dein#add('Shougo/dein.vim')
+  call dein#add('Shougo/neocomplete.vim')
+  call dein#add('Shougo/unite.vim')
+  call dein#add('Shougo/vimproc.vim', {
+  \ 'build' : {
+  \     'windows' : 'tools\\update-dll-mingw',
+  \     'cygwin' : 'make -f make_cygwin.mak',
+  \     'mac' : 'make',
+  \     'linux' : 'make',
+  \     'unix' : 'gmake',
+  \    },
+  \ })
+
+  call dein#add('Shougo/neomru.vim')
+  call dein#add('tsukkee/unite-tag')
+  call dein#add('Shougo/vimshell')
+  call dein#add('Shougo/unite-outline')
+  call dein#add('LeafCage/yankround.vim')
+  call dein#add('sudo.vim')
+  call dein#add('tpope/vim-fugitive')
+  call dein#add('The-NERD-Commenter')
+  call dein#add('matchit.zip')
+  call dein#add('thinca/vim-quickrun')
+  call dein#add('thinca/vim-qfreplace')
+  call dein#add('janko-m/vim-test')
+  call dein#add('w0ng/vim-hybrid')
+  call dein#add('Glench/Vim-Jinja2-Syntax')
+  call dein#add('itchyny/lightline.vim')
+  call dein#add('Yggdroot/indentLine')
+  call dein#add('neomake/neomake')
+  call dein#add('kchmck/vim-coffee-script')
+  call dein#add('chase/vim-ansible-yaml')
+  call dein#add('slim-template/vim-slim')
+  call dein#add('slm-lang/vim-slm')
+  call dein#add('vim-ruby/vim-ruby')
+  call dein#add('leafgarland/typescript-vim', {
+  \ 'autoload' : {
+  \   'filetypes' : ['typescript'] }
+  \})
+  call dein#add('Quramy/tsuquyomi', {
+  \ 'depends': ['Shougo/vimproc'],
+  \ 'autoload' : {
+  \   'filetypes' : ['typescript'] }
+  \})
+  call dein#add('jason0x43/vim-js-indent', {
+  \ 'autoload' : {
+  \   'filetypes' : ['javascript', 'typescript', 'html'],
+  \}})
+  call dein#add('fatih/vim-go', {
+  \ 'depends': ['Shougo/vimproc'],
+  \ 'autoload' : {
+  \   'filetypes' : ['go'] }
+  \})
+  call dein#add('sudar/vim-arduino-syntax')
+  call dein#add('majutsushi/tagbar.git')
+  call dein#add('bronson/vim-trailing-whitespace')
+  " call dein#add('posva/vim-vue')
+  call dein#add('Shougo/context_filetype.vim')
+  call dein#add('osyo-manga/vim-precious')
+  call dein#add('digitaltoad/vim-pug')
+  call dein#add('wavded/vim-stylus')
+
+  call dein#end()
+  call dein#save_state()
+endif
+if has('vim_starting') && dein#check_install()
+  call dein#install()
 endif
 
-call neobundle#begin(expand('~/.vim/bundle/'))
-NeoBundleFetch 'Shougo/neobundle.vim'
-" NeoBundle 'Shougo/neosnippet'
-" NeoBundle 'Shougo/neosnippet-snippets'
-NeoBundle 'Shougo/neocomplete'
-NeoBundle 'Shougo/unite.vim'
-NeoBundle 'Shougo/vimproc.vim', {
-\ 'build' : {
-\     'windows' : 'tools\\update-dll-mingw',
-\     'cygwin' : 'make -f make_cygwin.mak',
-\     'mac' : 'make',
-\     'linux' : 'make',
-\     'unix' : 'gmake',
-\    },
-\ }
-
-NeoBundle 'Shougo/neomru.vim'
-NeoBundle 'tsukkee/unite-tag'
-NeoBundle 'Shougo/neomru.vim'
-NeoBundle 'Shougo/vimshell'
-NeoBundle 'Shougo/unite-outline'
-NeoBundle 'LeafCage/yankround.vim'
-NeoBundle 'sudo.vim'
-NeoBundle 'tpope/vim-fugitive'
-NeoBundle 'The-NERD-Commenter'
-NeoBundle 'matchit.zip'
-NeoBundle 'thinca/vim-quickrun'
-NeoBundle 'thinca/vim-qfreplace'
-NeoBundle 'janko-m/vim-test'
-NeoBundle 'w0ng/vim-hybrid'
-NeoBundle 'Glench/Vim-Jinja2-Syntax'
-NeoBundle 'itchyny/lightline.vim'
-NeoBundle 'Yggdroot/indentLine'
-NeoBundle 'neomake/neomake'
-NeoBundle 'kchmck/vim-coffee-script'
-NeoBundle 'chase/vim-ansible-yaml'
-NeoBundle 'slim-template/vim-slim'
-NeoBundle 'slm-lang/vim-slm'
-NeoBundle 'vim-ruby/vim-ruby'
-NeoBundleLazy 'leafgarland/typescript-vim', {
-\ 'autoload' : {
-\   'filetypes' : ['typescript'] }
-\}
-NeoBundleLazy 'Quramy/tsuquyomi', {
-\ 'depends': ['Shougo/vimproc'],
-\ 'autoload' : {
-\   'filetypes' : ['typescript'] }
-\}
-NeoBundleLazy 'jason0x43/vim-js-indent', {
-\ 'autoload' : {
-\   'filetypes' : ['javascript', 'typescript', 'html'],
-\}}
-NeoBundleLazy 'fatih/vim-go', {
-\ 'depends': ['Shougo/vimproc'],
-\ 'autoload' : {
-\   'filetypes' : ['go'] }
-\}
-NeoBundle 'sudar/vim-arduino-syntax'
-NeoBundle 'majutsushi/tagbar.git'
-NeoBundle 'bronson/vim-trailing-whitespace'
-if neobundle#tap('vim-trailing-whitespace')
-  let g:extra_whitespace_ignored_filetypes = ['unite']
-endif
-call neobundle#end()
-
+let g:extra_whitespace_ignored_filetypes = ['unite']
 
 " go
 let g:go_def_mapping_enabled = 0
@@ -336,14 +348,6 @@ let g:lightline = {
 " indentLine
 let g:indentLine_color_term = 237
 
-" Syntastic
-" let g:syntastic_enable_signs=1
-" let g:syntastic_auto_loc_list=2
-" let g:syntastic_mode_map = { 'mode': 'passive' }
-" let g:syntastic_xml_xmllint_quiet_messages = { 'regex': 'namespace' }
-" let g:syntastic_go_checkers = ['golint', 'govet', 'errcheck']
-" let g:syntastic_mode_map = { 'mode': 'active', 'passive_filetypes': ['go'] }
-
 " tagbar
 let g:tagbar_autoshowtag = 1
 let g:tagbar_autofocus = 1
@@ -352,6 +356,17 @@ let g:tagbar_left = 1
 " neomake
 autocmd! BufWritePost * Neomake " 保存時に実行する
 let g:neomake_javascript_enabled_makers = ['eslint']
+
+" context_filetype
+if !exists('g:context_filetype#filetypes')
+  let g:context_filetype#filetypes = {}
+endif
+let g:context_filetype#filetypes.vue = [
+  \ { 'start' : '<template\%( [^>]*\)\? lang="pug"\%( [^>]*\)\?>', 'end' : '</template>', 'filetype' : 'pug' },
+  \ { 'start' : '<script\%( [^>]*\)\? lang="coffee"\%( [^>]*\)\?>', 'end' : '</script>', 'filetype' : 'coffee' },
+  \ { 'start' : '<style\%( [^>]*\)\? lang="stylus"\%( [^>]*\)\?>', 'end' : '</style>', 'filetype' : 'stylus' }
+\ ]
+
 
 " }}}
 
@@ -602,6 +617,7 @@ augroup MyAutoCmd
   autocmd BufRead,BufNewFile *.uno set filetype=cs
   autocmd BufRead,BufNewFile *.go set filetype=go
   autocmd BufRead,BufNewFile *.dig set filetype=yaml
+  autocmd BufNewFile,BufRead *.vue set filetype=vue
 
   " make
   autocmd filetype php setlocal makeprg=php\ -l\ %
@@ -618,7 +634,3 @@ augroup MyAutoCmd
   " au FileType go setlocal makeprg=go\ build\ ./... errorformat=%f:%l:\ %m
 
 augroup END
-
-
-
-NeoBundleCheck
