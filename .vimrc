@@ -128,6 +128,7 @@ if dein#load_state(s:dein_dir)
   call dein#add('osyo-manga/vim-precious')
   call dein#add('digitaltoad/vim-pug')
   call dein#add('wavded/vim-stylus')
+  call dein#add('othree/yajs.vim')
 
   call dein#end()
   call dein#save_state()
@@ -616,7 +617,8 @@ augroup MyAutoCmd
   autocmd BufRead,BufNewFile *.uno set filetype=cs
   autocmd BufRead,BufNewFile *.go set filetype=go
   autocmd BufRead,BufNewFile *.dig set filetype=yaml
-  autocmd BufNewFile,BufRead *.vue set filetype=vue
+  autocmd BufRead,BufNewFile *.vue set filetype=vue
+  autocmd BufRead,BufNewFile *.es6 set filetype=javascript
 
   " make
   autocmd filetype php setlocal makeprg=php\ -l\ %
