@@ -13,6 +13,7 @@
 	log-all = log --graph --all --color --pretty='%x09%h %cn%x09%s %Cred%d%Creset'
 	delete-merged-branches = !git branch --merged | grep -v \\* | xargs -I % git branch -d %
 	showpr = "!f() { git log --merges --oneline --reverse --ancestry-path $1...master | grep 'Merge pull request #' | head -n 1; }; f"
+  releases = log --merges --oneline --reverse --first-parent --pretty=format:'* %s' master..develop
 [user]
 	name = 346
   email = flytalez@gmail.com

@@ -24,8 +24,9 @@ eval "$(pyenv init -)"
 export JENV_ROOT=/usr/local/var/jenv
 eval "$(jenv init -)"
 
-# nodebrew
-export PATH=$HOME/.nodebrew/current/bin:$PATH
+# nodenv
+export PATH="$HOME/.nodenv/bin:$PATH"
+eval "$(nodenv init -)"
 
 # digdag
 export PATH="$HOME/bin:$PATH"
