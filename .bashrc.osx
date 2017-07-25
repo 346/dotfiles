@@ -44,6 +44,10 @@ export NDK_CCACHE=/usr/local/bin/ccache
 export CCACHE_COMPILERCHECK=content
 export CCACHE_MAXSIZE=3G
 
+# virtualenv
+source /usr/local/bin/virtualenvwrapper.sh
+export WORKON_HOME=~/.virtualenvs
+
 
 # environment specific colors
 ssh() {

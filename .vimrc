@@ -71,32 +71,26 @@ if dein#load_state(s:dein_dir)
   call dein#add('Shougo/dein.vim')
   call dein#add('Shougo/neocomplete.vim')
   call dein#add('Shougo/unite.vim')
-  call dein#add('Shougo/vimproc', {
-     \ 'build' : {
-     \ 'windows' : 'make -f make_mingw32.mak',
-     \ 'cygwin' : 'make -f make_cygwin.mak',
-     \ 'mac' : 'make -f make_mac.mak',
-     \ 'unix' : 'make -f make_unix.mak',
-     \ },
-     \ })
-
+  call dein#add('Shougo/vimproc', {'build': 'make'})
   call dein#add('Shougo/neomru.vim')
   call dein#add('tsukkee/unite-tag')
   call dein#add('Shougo/vimshell')
   call dein#add('Shougo/unite-outline')
   call dein#add('LeafCage/yankround.vim')
-  call dein#add('sudo.vim')
+  call dein#add('vim-scripts/sudo.vim')
   call dein#add('tpope/vim-fugitive')
-  call dein#add('The-NERD-Commenter')
-  call dein#add('matchit.zip')
+  call dein#add('vim-scripts/The-NERD-Commenter')
+  call dein#add('vim-scripts/matchit.zip')
   call dein#add('thinca/vim-quickrun')
   call dein#add('thinca/vim-qfreplace')
   call dein#add('janko-m/vim-test')
   call dein#add('w0ng/vim-hybrid')
+  call dein#add('cocopon/iceberg.vim')
   call dein#add('Glench/Vim-Jinja2-Syntax')
   call dein#add('itchyny/lightline.vim')
   call dein#add('Yggdroot/indentLine')
   call dein#add('neomake/neomake')
+  call dein#add('benjie/neomake-local-eslint.vim')
   call dein#add('kchmck/vim-coffee-script')
   call dein#add('chase/vim-ansible-yaml')
   call dein#add('slim-template/vim-slim')
@@ -217,13 +211,13 @@ let g:unite_source_file_mru_time_format = ''
 let g:unite_source_file_mru_filename_format = ''
 
 " file_recの最大ファイル数
-let g:unite_source_file_rec_max_cache_files = 2000
+let g:unite_source_file_rec_max_cache_files = 100000
 
 " lightline
 let g:unite_force_overwrite_statusline = 0
 
 " file_recの除外
-let s:file_rec_ignore_globs = ['*.png', '*.jpg', '*.gif', '**/vendor/**', '**/Smarty/**', '**/gmopg/**', '**/Yahoo/**', '*~', 'seeds.rb']
+let s:file_rec_ignore_globs = ['*.png', '*.jpg', '*.gif', '*~', 'seeds.rb']
 call unite#custom#source('file_rec/git', 'ignore_globs', s:file_rec_ignore_globs)
 call unite#custom#source('file_rec/git', 'white_globs', ['vendor/assets/javascripts/banner.js'])
 call unite#custom_source('file_rec/git', 'sorters', 'sorter_length')
@@ -233,7 +227,7 @@ call unite#custom#source('grep', 'ignore_globs', s:file_rec_ignore_globs)
 if executable('ag')
   let g:unite_source_rec_async_command = ["ag", "--nocolor", "--nogroup", "-g"]
   let g:unite_source_grep_command = 'ag'
-  let g:unite_source_grep_default_opts = '--vimgrep'
+  let g:unite_source_grep_default_opts = '--vimgrep -Q'
   let g:unite_source_grep_recursive_opt = ''
 endif
 
@@ -263,8 +257,8 @@ call Unite_substitute('ux', '\.ux')
 call Unite_substitute('vm', 'vm\/')
 call Unite_substitute('ts', '\.ts')
 
-nnoremap <C-T> :Unite buffer file_rec/git:--cached:--others:--exclude-standard -direction=topleft -auto-resize -toggle<CR>
-nnoremap <silent> ,/ :<C-u>Unite -buffer-name=search line -start-insert<CR>
+nnoremap <C-T> :Unite buffer file_rec/git:--cached:--others:--exclude-standard -direction=topleft -auto-resize -toggle -buffer-name=search line<CR>
+nnoremap <silent> ,/ :<C-u>Unite -buffer-name=search-buffer -start-insert<CR>
 
 " unite-outline
 nnoremap <silent> ,t :Unite outline -direction=topleft -auto-resize -toggle<CR>
@@ -273,6 +267,7 @@ nnoremap <silent> ,t :Unite outline -direction=topleft -auto-resize -toggle<CR>
 nnoremap <silent> ,g  :<C-u>Unite grep:. -buffer-name=search-buffer<CR>
 " grep with keyword under cursor
 nnoremap <silent> ,* :<C-u>UniteWithCursorWord grep:. -buffer-name=search-buffer<CR>
+nnoremap <silent> ,r  :<C-u>UniteResume search-buffer<CR>
 
 " unite-tags
 let g:unite_source_tag_max_fname_length = 100
@@ -355,13 +350,24 @@ let g:tagbar_left = 1
 
 " neomake
 autocmd! BufWritePost * Neomake " 保存時に実行する
+augroup my_neomake_highlights
+    au!
+    autocmd ColorScheme *
+      \ hi MyErrorMsg cterm=bold ctermfg=234 ctermbg=167 guifg=#1d1f21 guibg=#cc6666 |
+      \ hi link NeoMakeError MyErrorMsg |
+      \ hi link NeoMakeErrorSign MyErrorMsg
+augroup END
 let g:neomake_javascript_enabled_makers = ['eslint']
+let g:neomake_highlight_lines = 1
+
 
 " context_filetype
 if !exists('g:context_filetype#filetypes')
   let g:context_filetype#filetypes = {}
 endif
 let g:context_filetype#filetypes.vue = [
+  \ { 'start' : '<template>', 'end' : '</template>', 'filetype' : 'html' },
+  \ { 'start' : '<script>', 'end' : '</script>', 'filetype' : 'javascript' },
   \ { 'start' : '<template\%( [^>]*\)\? lang="pug"\%( [^>]*\)\?>', 'end' : '</template>', 'filetype' : 'pug' },
   \ { 'start' : '<script\%( [^>]*\)\? lang="coffee"\%( [^>]*\)\?>', 'end' : '</script>', 'filetype' : 'coffee' },
   \ { 'start' : '<style\%( [^>]*\)\? lang="stylus"\%( [^>]*\)\?>', 'end' : '</style>', 'filetype' : 'stylus' }
@@ -594,7 +600,7 @@ set foldmethod=marker
 syntax on
 filetype plugin indent on
 
-colorscheme hybrid
+colorscheme iceberg
 
 " 表示行単位で行移動する
 nnoremap j gj
@@ -610,7 +616,11 @@ augroup MyAutoCmd
   autocmd BufRead,BufNewFile *.phtml set filetype=php
   autocmd BufRead,BufNewFile *.ctp set filetype=php
   " autocmd BufRead,BufNewFile *.tpl set filetype=smarty
-  autocmd BufRead,BufNewFile Fastfile,Vagrantfile,*.eye,*.cap,*.rake set filetype=ruby
+  autocmd bufread,bufnewfile Fastfile set filetype=ruby
+  autocmd bufread,bufnewfile Vagrantfile set filetype=ruby
+  autocmd bufread,bufnewfile *.eye set filetype=ruby
+  autocmd bufread,bufnewfile *.cap set filetype=ruby
+  autocmd bufread,bufnewfile *.rake set filetype=ruby
   autocmd BufRead,BufNewFile */db/seeds.rb set filetype=text
   autocmd BufRead,BufNewFile *.ux set filetype=xml
   autocmd BufRead,BufNewFile *.uxl set filetype=xml
