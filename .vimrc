@@ -256,11 +256,11 @@ call Unite_substitute('ux', '\.ux')
 call Unite_substitute('vm', 'vm\/')
 call Unite_substitute('ts', '\.ts')
 
-nnoremap <C-T> :Unite buffer file_rec/git:--cached:--others:--exclude-standard -direction=topleft -auto-resize -toggle -buffer-name=search-buffer<CR>
+nnoremap <C-T> :Unite buffer file_rec/git:--cached:--others:--exclude-standard -direction=topleft -toggle -buffer-name=search-buffer<CR>
 nnoremap <silent> ,/ :<C-u>Unite line -buffer-name=search-buffer -start-insert<CR>
 
 " unite-outline
-nnoremap <silent> ,t :Unite outline -direction=topleft -auto-resize -toggle -buffer-name=search-buffer<CR>
+nnoremap <silent> ,t :Unite outline -direction=topleft -toggle -buffer-name=search-buffer<CR>
 
 " grep
 nnoremap <silent> ,g  :<C-u>Unite grep:. -buffer-name=search-buffer<CR>
@@ -361,15 +361,16 @@ let g:neomake_highlight_lines = 1
 
 
 " context_filetype
-if !exists('g:context_filetype#filetypes')
-  let g:context_filetype#filetypes = {}
-endif
+" vueでしか使わないのでデフォルトのfiletypeは無効にする
+let g:context_filetype#filetypes = {}
 let g:context_filetype#filetypes.vue = [
   \ { 'start' : '<template>', 'end' : '</template>', 'filetype' : 'html' },
   \ { 'start' : '<script>', 'end' : '</script>', 'filetype' : 'javascript' },
+  \ { 'start' : '<style>', 'end' : '</style>', 'filetype' : 'css' },
   \ { 'start' : '<template\%( [^>]*\)\? lang="pug"\%( [^>]*\)\?>', 'end' : '</template>', 'filetype' : 'pug' },
   \ { 'start' : '<script\%( [^>]*\)\? lang="coffee"\%( [^>]*\)\?>', 'end' : '</script>', 'filetype' : 'coffee' },
-  \ { 'start' : '<style\%( [^>]*\)\? lang="stylus"\%( [^>]*\)\?>', 'end' : '</style>', 'filetype' : 'stylus' }
+  \ { 'start' : '<style\%( [^>]*\)\? lang="stylus"\%( [^>]*\)\?>', 'end' : '</style>', 'filetype' : 'stylus' },
+  \ { 'start' : '<style\%( [^>]*\)\? lang="sass"\%( [^>]*\)\?>', 'end' : '</style>', 'filetype' : 'sass' }
 \ ]
 
 
