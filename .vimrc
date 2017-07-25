@@ -74,7 +74,6 @@ if dein#load_state(s:dein_dir)
   call dein#add('Shougo/vimproc', {'build': 'make'})
   call dein#add('Shougo/neomru.vim')
   call dein#add('tsukkee/unite-tag')
-  call dein#add('Shougo/vimshell')
   call dein#add('Shougo/unite-outline')
   call dein#add('LeafCage/yankround.vim')
   call dein#add('vim-scripts/sudo.vim')
@@ -257,11 +256,11 @@ call Unite_substitute('ux', '\.ux')
 call Unite_substitute('vm', 'vm\/')
 call Unite_substitute('ts', '\.ts')
 
-nnoremap <C-T> :Unite buffer file_rec/git:--cached:--others:--exclude-standard -direction=topleft -auto-resize -toggle -buffer-name=search line<CR>
-nnoremap <silent> ,/ :<C-u>Unite -buffer-name=search-buffer -start-insert<CR>
+nnoremap <C-T> :Unite buffer file_rec/git:--cached:--others:--exclude-standard -direction=topleft -auto-resize -toggle -buffer-name=search-buffer<CR>
+nnoremap <silent> ,/ :<C-u>Unite line -buffer-name=search-buffer -start-insert<CR>
 
 " unite-outline
-nnoremap <silent> ,t :Unite outline -direction=topleft -auto-resize -toggle<CR>
+nnoremap <silent> ,t :Unite outline -direction=topleft -auto-resize -toggle -buffer-name=search-buffer<CR>
 
 " grep
 nnoremap <silent> ,g  :<C-u>Unite grep:. -buffer-name=search-buffer<CR>
@@ -351,11 +350,11 @@ let g:tagbar_left = 1
 " neomake
 autocmd! BufWritePost * Neomake " 保存時に実行する
 augroup my_neomake_highlights
-    au!
-    autocmd ColorScheme *
-      \ hi MyErrorMsg cterm=bold ctermfg=234 ctermbg=167 guifg=#1d1f21 guibg=#cc6666 |
-      \ hi link NeoMakeError MyErrorMsg |
-      \ hi link NeoMakeErrorSign MyErrorMsg
+  au!
+  autocmd ColorScheme *
+    \ hi MyErrorMsg cterm=bold ctermfg=234 ctermbg=167 guifg=#1d1f21 guibg=#cc6666 |
+    \ hi link NeoMakeError MyErrorMsg |
+    \ hi link NeoMakeErrorSign MyErrorMsg
 augroup END
 let g:neomake_javascript_enabled_makers = ['eslint']
 let g:neomake_highlight_lines = 1
@@ -616,11 +615,7 @@ augroup MyAutoCmd
   autocmd BufRead,BufNewFile *.phtml set filetype=php
   autocmd BufRead,BufNewFile *.ctp set filetype=php
   " autocmd BufRead,BufNewFile *.tpl set filetype=smarty
-  autocmd bufread,bufnewfile Fastfile set filetype=ruby
-  autocmd bufread,bufnewfile Vagrantfile set filetype=ruby
-  autocmd bufread,bufnewfile *.eye set filetype=ruby
-  autocmd bufread,bufnewfile *.cap set filetype=ruby
-  autocmd bufread,bufnewfile *.rake set filetype=ruby
+  autocmd BufRead,BufNewFile Fastfile,Vagrantfile,*.eye,*.cap set filetype=ruby
   autocmd BufRead,BufNewFile */db/seeds.rb set filetype=text
   autocmd BufRead,BufNewFile *.ux set filetype=xml
   autocmd BufRead,BufNewFile *.uxl set filetype=xml
@@ -630,13 +625,6 @@ augroup MyAutoCmd
   autocmd BufRead,BufNewFile *.vue set filetype=vue
   autocmd BufRead,BufNewFile *.es6 set filetype=javascript
 
-  " make
-  autocmd filetype php setlocal makeprg=php\ -l\ %
-  autocmd filetype php setlocal errorformat=%m\ in\ %f\ on\ line\ %l
-
-  autocmd FileType ruby setlocal makeprg=ruby\ -c\ %
-  autocmd FileType ruby setlocal errorformat=%m\ in\ %f\ on\ line\ %l
-  autocmd FileType perl,cgi :compiler perl
   autocmd filetype coffee,javascript setlocal shiftwidth=2 softtabstop=2 tabstop=2 expandtab
 
   " gq コマンド以外では自動改行しない
