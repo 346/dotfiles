@@ -34,6 +34,9 @@ export PATH="$HOME/bin:$PATH"
 # embulk
 export PATH="$HOME/.embulk/bin:$PATH"
 
+# assume-role
+source $(which assume-role)
+export AWS_PROFILE_ASSUME_ROLE=default
 
 # go
 export GOPATH=$HOME/gopath
@@ -45,8 +48,8 @@ export CCACHE_COMPILERCHECK=content
 export CCACHE_MAXSIZE=3G
 
 # virtualenv
-source /usr/local/bin/virtualenvwrapper.sh
-export WORKON_HOME=~/.virtualenvs
+# source /usr/local/bin/virtualenvwrapper.sh
+# export WORKON_HOME=~/.virtualenvs
 
 
 # environment specific colors
