@@ -123,6 +123,8 @@ if dein#load_state(s:dein_dir)
   call dein#add('wavded/vim-stylus')
   call dein#add('othree/yajs.vim')
 
+  call dein#add('junegunn/vim-easy-align')
+
   call dein#end()
   call dein#save_state()
 endif
@@ -154,7 +156,7 @@ let g:neocomplete#enable_at_startup = 1
 if !exists('g:neocomplete#force_omni_input_patterns')
   let g:neocomplete#force_omni_input_patterns = {}
 endif
-let g:neocomplete#force_omni_input_patterns.typescript = '[^. *\t]\.\w*\|\h\w*::'
+let g:neocomplete#force_omni_input_patterns.typescript = '\h\w*\|[^. \t]\.\w*'
 call neocomplete#custom#source('include', 'disabled_filetypes', {'sql' : 1})
 call neocomplete#custom#source('member', 'disabled_filetypes', {'sql' : 1})
 call neocomplete#custom#source('syntax', 'disabled_filetypes', {'sql' : 1})
@@ -167,6 +169,7 @@ augroup MyNeoComplete
   autocmd FileType xml        setlocal omnifunc=xmlcomplete#CompleteTags
   autocmd FileType ruby       setlocal omnifunc=rubycomplete#Complete
   autocmd FileType javascript setlocal omnifunc=jscomplete#CompleteJS
+  autocmd FileType typescript setlocal omnifunc=tsuquyomi#complete
   autocmd FileType css        setlocal omnifunc=csscomplete#CompleteCSS
 augroup END
 
@@ -178,6 +181,7 @@ augroup MyTsuquyomi
 augroup END
 let g:tsuquyomi_disable_default_mappings = 1
 nnoremap <C-]> <Plug>(TsuquyomiDefinition)
+inoremap <C-n> <C-x><C-o>
 
 " neosnippet
 " imap <C-k>     <Plug>(neosnippet_expand_or_jump)
@@ -356,15 +360,38 @@ augroup my_neomake_highlights
     \ hi link NeoMakeError MyErrorMsg |
     \ hi link NeoMakeErrorSign MyErrorMsg
 augroup END
-let g:neomake_javascript_enabled_makers = ['eslint']
-let g:neomake_highlight_lines = 1
+augroup ft_javascript
+  autocmd!
+  " get eslint path of current environment
+  function! s:GetEslintExe()
+    let l:eslintExe = GetNpmBin('eslint')
+    if empty(l:eslintExe)
+      return 'eslint'
+    else
+      return l:eslintExe
+    endif
+  endfunction
+
+  " set exe of neomake eslint
+  autocmd FileType javascript let g:neomake_javascript_myeslint_maker = {
+        \ 'exe': s:GetEslintExe(),
+        \ 'args': ['-f', 'compact'],
+        \ 'errorformat': '%E%f: line %l\, col %c\, Error - %m,' .
+        \ '%W%f: line %l\, col %c\, Warning - %m'
+        \ }
+augroup END
+
+let g:neomake_javascript_enabled_makers = ['myeslint']
+let g:neomake_error_sign = {'text': '>>', 'texthl': 'Error'}
+let g:neomake_warning_sign = {'text': '>>',  'texthl': 'Todo'}
+call neomake#configure#automake('nrw', 750)
 
 
 " context_filetype
-" vueでしか使わないのでデフォルトのfiletypeは無効にする
 let g:context_filetype#filetypes = {}
 let g:context_filetype#filetypes.vue = [
   \ { 'start' : '<template>', 'end' : '</template>', 'filetype' : 'html' },
+  \ { 'start' : '<template\%( [^>]*\)\? lang="html"\%( [^>]*\)\?>>', 'end' : '</template>', 'filetype' : 'html' },
   \ { 'start' : '<script>', 'end' : '</script>', 'filetype' : 'javascript' },
   \ { 'start' : '<style>', 'end' : '</style>', 'filetype' : 'css' },
   \ { 'start' : '<template\%( [^>]*\)\? lang="pug"\%( [^>]*\)\?>', 'end' : '</template>', 'filetype' : 'pug' },
@@ -373,6 +400,9 @@ let g:context_filetype#filetypes.vue = [
   \ { 'start' : '<style\%( [^>]*\)\? lang="sass"\%( [^>]*\)\?>', 'end' : '</style>', 'filetype' : 'sass' }
 \ ]
 
+let g:precious_enable_switchers = {'*' : {"setfiletype":0}, 'vue' : {"setfiletype":1}}
+let g:precious_enable_switch_CursorMoved = {'*' : 1}
+let g:precious_enable_switch_CursorMoved_i = {'*' : 1}
 
 " }}}
 
@@ -613,16 +643,18 @@ map <kMinus> <C-W>-
 " filetype設定
 augroup MyAutoCmd
   autocmd!
+  autocmd InsertEnter * :PreciousSwitch
+  autocmd InsertLeave * :PreciousReset
   autocmd BufRead,BufNewFile *.phtml set filetype=php
   autocmd BufRead,BufNewFile *.ctp set filetype=php
   " autocmd BufRead,BufNewFile *.tpl set filetype=smarty
-  autocmd BufRead,BufNewFile Fastfile,Vagrantfile,*.eye,*.cap set filetype=ruby
+  autocmd BufRead,BufNewFile Fastfile,Vagrantfile,*.eye,*.cap,*.thor set filetype=ruby
   autocmd BufRead,BufNewFile */db/seeds.rb set filetype=text
   autocmd BufRead,BufNewFile *.ux set filetype=xml
   autocmd BufRead,BufNewFile *.uxl set filetype=xml
   autocmd BufRead,BufNewFile *.uno set filetype=cs
   autocmd BufRead,BufNewFile *.go set filetype=go
-  autocmd BufRead,BufNewFile *.dig set filetype=yaml
+  autocmd BufRead,BufNewFile *.dig,*.yml.liquid set filetype=yaml
   autocmd BufRead,BufNewFile *.vue set filetype=vue
   autocmd BufRead,BufNewFile *.es6 set filetype=javascript
 

@@ -24,5 +24,10 @@ PROMPT_COMMAND='aws_account_info'
 [[ -n "$VIMRUNTIME" ]] && export PS1="(vim)$PS1"
 
 
-### Added by the Heroku Toolbelt
+# Added by the Heroku Toolbelt
 export PATH="/usr/local/heroku/bin:$PATH"
+# pg9.6
+export PATH="/usr/local/opt/postgresql@9.6/bin:$PATH"
+
+# add Pulumi to the PATH
+export PATH=$PATH:$HOME/.pulumi/bin
