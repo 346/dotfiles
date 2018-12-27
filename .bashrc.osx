@@ -7,6 +7,10 @@ alias find=gfind
 alias ll='ls -laFG'
 export unodir='/usr/local/share/uno/Packages'
 
+# kubernetes
+alias kubectl='KUBECONFIG=./kubeconfig.json kubectl'
+alias kubeproxy="TOKEN=$(kubectl describe secret $(kubectl get secrets | grep default | cut -f1 -d ' ') | grep -E '^token' | cut -f2 -d':' | tr -d '\t' | tr -d ' ') kubectl proxy"
+
 # homebrew
 if [ -f $(brew --prefix)/etc/bash_completion ]; then
   . $(brew --prefix)/etc/bash_completion
