@@ -10,11 +10,14 @@ export unodir='/usr/local/share/uno/Packages'
 # homebrew
 if [ -f $(brew --prefix)/etc/bash_completion ]; then
   . $(brew --prefix)/etc/bash_completion
+  eval "$(kubectl completion bash)"
+  eval "$(stern --completion=bash)"
 fi
 
 # kubernetes
 alias kubectl='KUBECONFIG=./kubeconfig.json kubectl'
-alias kubeproxy='TOKEN=$(kubectl describe secret $(kubectl get secrets | grep default | cut -f1 -d " ") | grep -E "^token" | cut -f2 -d":" | tr -d "\t" | tr -d " ") kubectl proxy'
+alias stern='KUBECONFIG=./kubeconfig.json stern'
+alias kubeproxy='TOKEN=$(kubectl -n kube-system describe secret $(kubectl -n kube-system get secrets | grep eks-admin | cut -f1 -d " ") | grep -E "^token" | cut -f2 -d":" | tr -d "\t" | tr -d " ") kubectl proxy'
 
 # rbenv
 export PATH="$HOME/.rbenv/shims:$PATH"
