@@ -45,6 +45,7 @@ export PATH="$HOME/.embulk/bin:$PATH"
 # assume-role
 source $(which assume-role)
 export AWS_PROFILE_ASSUME_ROLE=default
+export AWS_ROLE_SESSION_TIMEOUT=43200
 
 # go
 export GOPATH=$HOME/gopath
