@@ -37,3 +37,20 @@ export PATH="/usr/local/opt/postgresql@9.6/bin:$PATH"
 
 # add Pulumi to the PATH
 export PATH=$PATH:$HOME/.pulumi/bin
+
+
+[ -f /usr/local/etc/profile.d/bash-preexec.sh ] && . /usr/local/etc/profile.d/bash-preexec.sh
+
+preexec() {
+  if [ -d ./kubeconfig ] && [ -n ${AWS_ACCOUNT_ID+x} ]; then
+    KUBECONFIG_PATH="./kubeconfig/${AWS_ACCOUNT_ID}.json"
+    if [ -f $KUBECONFIG_PATH ]; then
+      export KUBECONFIG=$KUBECONFIG_PATH
+    fi
+  fi
+}
+precmd() {
+  true
+}
+
+

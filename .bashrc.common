@@ -1,21 +1,6 @@
-# ゆーてぃーえふえいとだよっ
-# if [ "`hostname -s`" = "Takahiro-no-MacBook-Pro" ]; then
-# . ~/.bashrc.mbp2nd
-# elif [ "`hostname -s`" = "takahiro-no-MacBook-Pro" ]; then
-# fi
-
 export HISTSIZE=2000
 export HISTFILESIZE=2000
 export HISTCONTROL=ignoredups
 
-
- 
 export LESS="-eirMXR"
-eval "$(direnv hook bash)"
 
-### Added by the Heroku Toolbelt
-export PATH="/usr/local/heroku/bin:$PATH"
-
-# platformio
-eval "$(_PLATFORMIO_COMPLETE=source platformio)"
-eval "$(_PIO_COMPLETE=source pio)"
