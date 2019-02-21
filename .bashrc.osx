@@ -50,6 +50,7 @@ export AWS_PROFILE_ASSUME_ROLE=default
 
 # go
 export GOPATH=$HOME/gopath
+export GOROOT=$( go env GOROOT )
 export PATH=$PATH:/usr/local/opt/go/libexec/bin:$GOPATH/bin
 
 # android ccache
