@@ -16,6 +16,10 @@ if [ -f $(brew --prefix)/etc/bash_completion ]; then
   . $(brew --prefix)/etc/bash_completion
   eval "$(kubectl completion bash)"
   eval "$(stern --completion=bash)"
+  export GIT_PS1_SHOWUPSTREAM=1
+  export GIT_PS1_SHOWUNTRACKEDFILES=1
+  export GIT_PS1_SHOWSTASHSTATE=1
+  export GIT_PS1_SHOWDIRTYSTATE=1
 fi
 
 # kubernetes

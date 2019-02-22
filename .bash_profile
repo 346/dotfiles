@@ -9,23 +9,61 @@ if [ `uname` = "Darwin" ]; then
 elif [ `uname` = "Linux" ]; then
 	 . ~/.bashrc.linux
 fi
-function aws_account_info {
-  [ "$AWS_ACCOUNT_NAME" ] && [ "$AWS_ACCOUNT_ROLE" ] && echo -n "aws:($AWS_ACCOUNT_NAME:$AWS_ACCOUNT_ROLE) "
+function env_color {
+  if [[ $1 =~ \-prod$ ]]; then
+    COLOR="\[\e[91m\]"
+  elif [[ $1 =~ \-dev$ ]]; then
+    COLOR="\[\e[92m\]"
+  elif [[ $1 =~ \-stg$ ]]; then
+    COLOR="\[\e[93m\]"
+  else
+    COLOR="\[\e[95m\]"
+  fi
+  echo -ne "${COLOR}"
 }
-if [ ${TERM_PROGRAM} = "vscode" ]; then
-  # tab name
-  echo -ne "\033]0;$(basename $(pwd))\007"
+function prompt_command {
+  local RESET="\[\e[0m\]"
+  # pwd
+  local DIR="\[\e[1;33m\]\w${RESET}"
+  # 現在のユーザー
+  local USER="\[\e[1;32m\]\u${RESET}"
+  # gitのブランチ
+  if [ `type -t __git_ps1` == "function" ]; then
+    local BRANCH="\[\e[01;34m\]$(__git_ps1)${RESET}"
+  fi
 
-  # monorepo
-  MONOREPO_ROOT=`(cd ../ && pwd | xargs basename)`
-  export PS1='\[\033[01;33m\] $MONOREPO_ROOT * \W\[\033[01;34m\]$(__git_ps1) \n\[\033[01;34m\]\$\[\033[00m\] '
-elif type __git_ps1 > /dev/null 2>&1 ; then
-	export PS1='\[\033[01;32m\]\u@\h\[\033[01;33m\] \w\[\033[01;34m\]$(__git_ps1) \n\[\033[01;34m\]\$\[\033[00m\] '
-else
-	export PS1='\[\033[01;32m\]\u@\h\[\033[01;33m\] \w \n\[\033[01;34m\]\$\[\033[00m\] '
-fi
+  # assume-role
+  if [[ "$AWS_ACCOUNT_NAME" && "$AWS_ACCOUNT_ROLE" ]]; then
+    local COLOR="$(env_color "${AWS_ACCOUNT_NAME}")"
+    local AWS="(aws:${COLOR}${AWS_ACCOUNT_NAME}:${AWS_ACCOUNT_ROLE:0:3}${RESET})"
+  fi
+  # pulumi
+  local PULUMI_YML=$(pwd)/Pulumi.yaml
+  if [ -f $PULUMI_YML ]; then
+    local WORKSPACE_HASH=$(echo -n "${PULUMI_YML}" | openssl sha1)
+    local PROJECT_NAME="$(cat ${PULUMI_YML} | grep name: | sed -e 's/name: //g')"
+    local STACK=`cat ~/.pulumi/workspaces/${PROJECT_NAME}-${WORKSPACE_HASH}-workspace.json | grep stack | sed -e 's/.*"stack": ".*\/\(.*\)".*/\1/'`
+    local COLOR="$(env_color "${STACK}")"
 
-PROMPT_COMMAND='aws_account_info'
+    local PULUMI="(stack:${COLOR}${STACK}${RESET})"
+  fi
+  if [ $PULUMI ]; then
+    # pulumiディレクトリはインフラ実行なので環境だけ表示
+    local INFO="${BRANCH}${PULUMI}"
+  elif [ ${TERM_PROGRAM} = "vscode" ]; then
+    # vscodeの場合は画面が狭いので短めに
+    local CURRENT_DIR="$(basename $(pwd))"
+    local MONOREPO_ROOT=`(cd ../ && pwd | xargs basename)`
+    local INFO="\[\e[1;33m\]${MONOREPO_ROOT}/${CURRENT_DIR}${BRANCH}"
+  else
+    # デフォルト
+    local INFO="${USER}${DIR}${BRANCH}"
+  fi
+  export PS1="${INFO}${AWS} \n\[\e[01;34m\]\$${RESET}"
+}
+
+
+PROMPT_COMMAND='prompt_command'
 
 [[ -n "$VIMRUNTIME" ]] && export PS1="(vim)$PS1"
 
@@ -48,8 +86,12 @@ preexec() {
       export KUBECONFIG=$KUBECONFIG_PATH
     fi
   fi
+  if [ $(($(date +%s)-ROLE_SESSION_START>3600)) == 1 ]; then
+    assume-role $AWS_ACCOUNT_NAME $AWS_ACCOUNT_ROLE
+  fi
 }
 precmd() {
+  # echo -n "$(pulumi_stack)"
   true
 }
 
