@@ -86,7 +86,7 @@ preexec() {
       export KUBECONFIG=$KUBECONFIG_PATH
     fi
   fi
-  if [ $(($(date +%s)-ROLE_SESSION_START>3600)) == 1 ]; then
+  if [[ -n ${ROLE_SESSION_START+x} && $(($(date +%s)-ROLE_SESSION_START>3600)) == 1 ]]; then
     assume-role $AWS_ACCOUNT_NAME $AWS_ACCOUNT_ROLE
   fi
 }
