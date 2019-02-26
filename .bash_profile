@@ -80,13 +80,13 @@ export PATH=$PATH:$HOME/.pulumi/bin
 [ -f /usr/local/etc/profile.d/bash-preexec.sh ] && . /usr/local/etc/profile.d/bash-preexec.sh
 
 preexec() {
-  if [ -d ./kubeconfig ] && [ -n ${AWS_ACCOUNT_ID+x} ]; then
+  if [ -d ./kubeconfig ] && [ -n "$AWS_ACCOUNT_ID" ]; then
     KUBECONFIG_PATH="./kubeconfig/${AWS_ACCOUNT_ID}.json"
     if [ -f $KUBECONFIG_PATH ]; then
       export KUBECONFIG=$KUBECONFIG_PATH
     fi
   fi
-  if [[ -n ${ROLE_SESSION_START+x} && $(($(date +%s)-ROLE_SESSION_START>3600)) == 1 ]]; then
+  if [ -n "$ROLE_SESSION_START" ] && [ $(($(date +%s)-ROLE_SESSION_START>3600)) == 1 ]; then
     assume-role $AWS_ACCOUNT_NAME $AWS_ACCOUNT_ROLE
   fi
 }
