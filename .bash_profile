@@ -42,10 +42,13 @@ function prompt_command {
   if [ -f $PULUMI_YML ]; then
     local WORKSPACE_HASH=$(echo -n "${PULUMI_YML}" | openssl sha1)
     local PROJECT_NAME="$(cat ${PULUMI_YML} | grep name: | sed -e 's/name: //g')"
-    local STACK=`cat ~/.pulumi/workspaces/${PROJECT_NAME}-${WORKSPACE_HASH}-workspace.json | grep stack | sed -e 's/.*"stack": ".*\/\(.*\)".*/\1/'`
-    local COLOR="$(env_color "${STACK}")"
+    local WORKSPACE_PATH="~/.pulumi/workspaces/${PROJECT_NAME}-${WORKSPACE_HASH}-workspace.json"
+    if [ -f ${WORKSPACE_PATH} ]; then
+      local STACK=`cat ${WORKSPACE_PATH} | grep stack | sed -e 's/.*"stack": ".*\/\(.*\)".*/\1/'`
+      local COLOR="$(env_color "${STACK}")"
 
-    local PULUMI="(stack:${COLOR}${STACK}${RESET})"
+      local PULUMI="(stack:${COLOR}${STACK}${RESET})"
+    fi
   fi
   if [ $PULUMI ]; then
     # pulumiディレクトリはインフラ実行なので環境だけ表示
