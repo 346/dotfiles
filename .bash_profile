@@ -22,6 +22,11 @@ function env_color {
   echo -ne "${COLOR}"
 }
 function prompt_command {
+  local EMOJI_DEV=""
+  local EMOJI_STG=""
+  local EMOJI_PROD=""
+  local EMOJI_PULUMI=""
+  local EMOJI_AWS=""
   local RESET="\[\e[0m\]"
   # pwd
   local DIR="\[\e[1;33m\]\w${RESET}"
