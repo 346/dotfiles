@@ -49,7 +49,7 @@ function prompt_command {
     local PROJECT_NAME=$(cat ${PULUMI_YML} | grep name: | sed -e 's/name: //g')
     local WORKSPACE_PATH=$(eval echo "~/.pulumi/workspaces/${PROJECT_NAME}-${WORKSPACE_HASH}-workspace.json")
     if [ -f $WORKSPACE_PATH ]; then
-      local STACK=`cat ${WORKSPACE_PATH} | grep stack | sed -e 's/.*"stack": ".*\/\(.*\)".*/\1/'`
+      local STACK=`cat ${WORKSPACE_PATH} | grep stack | sed -e 's/.*"stack": "\(.*\)".*/\1/' | sed -e 's/^.*\///'`
       local COLOR="$(env_color "${STACK}")"
       local PULUMI="(stack:${COLOR}${STACK}${RESET})"
     fi
