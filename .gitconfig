@@ -18,7 +18,7 @@
 	name = 346
   email = flytalez@gmail.com
 [push]
-	default = simple
+	default = current
 ; [merge "gemfilelock"]
   ; name = relocks the gemfile.lock
   ; driver = bundle install
