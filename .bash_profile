@@ -40,7 +40,7 @@ function prompt_command {
   # assume-role
   if [[ "$AWS_ACCOUNT_NAME" && "$AWS_ACCOUNT_ROLE" ]]; then
     local COLOR="$(env_color "${AWS_ACCOUNT_NAME}")"
-    local AWS="(aws:${COLOR}${AWS_ACCOUNT_NAME}:${AWS_ACCOUNT_ROLE:0:3}${RESET})"
+    local AWS="(aws:${COLOR}${AWS_ACCOUNT_ROLE:0:3}@${AWS_ACCOUNT_NAME}${RESET})"
   fi
   # pulumi
   local PULUMI_YML=$(pwd)/Pulumi.yaml
@@ -51,22 +51,22 @@ function prompt_command {
     if [ -f $WORKSPACE_PATH ]; then
       local STACK=`cat ${WORKSPACE_PATH} | grep stack | sed -e 's/.*"stack": "\(.*\)".*/\1/' | sed -e 's/^.*\///'`
       local COLOR="$(env_color "${STACK}")"
-      local PULUMI="(stack:${COLOR}${STACK}${RESET})"
+      local PULUMI="${PROJECT_NAME}:(stack:${COLOR}${STACK}${RESET})"
     fi
   fi
   if [ $PULUMI ]; then
     # pulumiディレクトリはインフラ実行なので環境だけ表示
-    local INFO="${BRANCH}${PULUMI}"
+    local INFO="${PULUMI}"
   elif [ ${TERM_PROGRAM} = "vscode" ]; then
     # vscodeの場合は画面が狭いので短めに
     local CURRENT_DIR="$(basename $(pwd))"
     local MONOREPO_ROOT=`(cd ../ && pwd | xargs basename)`
-    local INFO="\[\e[1;33m\]${MONOREPO_ROOT}/${CURRENT_DIR}${BRANCH}"
+    local INFO="\[\e[1;33m\]${MONOREPO_ROOT}/${CURRENT_DIR}"
   else
     # デフォルト
     local INFO="${USER}${DIR}${BRANCH}"
   fi
-  export PS1="${INFO}${AWS} \n\[\e[01;34m\]\$${RESET}"
+  export PS1="${INFO}${AWS}${BRANCH} \n\[\e[01;34m\]\$${RESET}"
 }
 
 
