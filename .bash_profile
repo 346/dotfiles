@@ -64,7 +64,7 @@ function prompt_command {
     local INFO="\[\e[1;33m\]${MONOREPO_ROOT}/${CURRENT_DIR}"
   else
     # デフォルト
-    local INFO="${USER}${DIR}${BRANCH}"
+    local INFO="${USER}${DIR}"
   fi
   export PS1="${INFO}${AWS}${BRANCH} \n\[\e[01;34m\]\$${RESET}"
 }
