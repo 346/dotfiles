@@ -108,11 +108,11 @@ if dein#load_state(s:dein_dir)
   \ 'autoload' : {
   \   'filetypes' : ['javascript', 'typescript', 'html'],
   \}})
-  call dein#add('fatih/vim-go', {
-  \ 'depends': ['Shougo/vimproc'],
-  \ 'autoload' : {
-  \   'filetypes' : ['go'] }
-  \})
+  " call dein#add('fatih/vim-go', {
+  " \ 'depends': ['Shougo/vimproc'],
+  " \ 'autoload' : {
+  " \   'filetypes' : ['go'] }
+  " \})
   call dein#add('sudar/vim-arduino-syntax')
   call dein#add('majutsushi/tagbar.git')
   call dein#add('bronson/vim-trailing-whitespace')
@@ -144,10 +144,10 @@ let g:go_highlight_operators = 1
 let g:go_highlight_build_constraints = 1
 let g:go_fmt_command = "goimports"
 let g:go_fmt_autosave = 0
-augroup MyVimGo
-  autocmd!
-  autocmd BufWritePre *.go call go#fmt#Format(-1)
-augroup END
+" augroup MyVimGo
+  " autocmd!
+  " autocmd BufWritePre *.go call go#fmt#Format(-1)
+" augroup END
 
 
 " neocomplete
