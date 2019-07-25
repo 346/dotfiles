@@ -103,3 +103,5 @@ precmd() {
 }
 
 
+
+gam() { "/Users/mishirotakahiro/bin/gam/gam" "$@" ; }
