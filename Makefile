@@ -1,5 +1,5 @@
 # .bashrcとか.vimとかがないとno rule~て表示される
-DOT_FILES = .zshrc .vimrc .bash_profile .bashrc.common .bashrc.osx .bashrc.linux .xvimrc .gitignore .gitconfig .gemrc .railsrc .bundle .jshintrc .agignore .unison .ssh .pylintrc
+DOT_FILES = .zshrc .vimrc .bash_profile .bashrc.common .bashrc.osx .bashrc.linux .xvimrc .gitignore .gitconfig .gemrc .railsrc .bundle .jshintrc .agignore .unison .ssh .pylintrc .Brewfile
 
 all: install
 
@@ -28,6 +28,8 @@ javascript : $(foreach f, $(filter .jshintrc%, $(DOT_FILES)), link-dot-file-$(f)
 ag : $(foreach f, $(filter .agignore, $(DOT_FILES)), link-dot-file-$(f))
 
 python : $(foreach f, $(filter .pylintrc, $(DOT_FILES)), link-dot-file-$(f))
+
+homebrew : $(foreach f, $(filter .Brewfile, $(DOT_FILES)), link-dot-file-$(f))
 
 .PHONY: clean
 	
