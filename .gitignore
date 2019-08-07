@@ -6,5 +6,7 @@
 .build
 .bundle/cache
 .cache
+.vscode/
+yarn-error.log
 npm-debug.log
 
