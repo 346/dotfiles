@@ -1,3 +1,4 @@
+tap "fzf"
 tap "coinbase/assume-role"
 tap "gordonbondon/tap"
 tap "homebrew/bundle"
