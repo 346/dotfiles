@@ -64,6 +64,8 @@ export CCACHE_MAXSIZE=3G
 
 export HOMEBREW_BUNDLE_FILE=~/dotfiles/.Brewfile
 
+export BASH_SILENCE_DEPRECATION_WARNING=1
+
 # virtualenv
 # source /usr/local/bin/virtualenvwrapper.sh
 # export WORKON_HOME=~/.virtualenvs
