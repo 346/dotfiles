@@ -10,7 +10,6 @@ eval "$(direnv hook bash)"
 
 ### Added by the Heroku Toolbelt
 export PATH="/usr/local/heroku/bin:$PATH"
-
 # completion
 if [ -f $(brew --prefix)/etc/bash_completion ]; then
   . $(brew --prefix)/etc/bash_completion
@@ -21,6 +20,7 @@ if [ -f $(brew --prefix)/etc/bash_completion ]; then
   export GIT_PS1_SHOWSTASHSTATE=1
   export GIT_PS1_SHOWDIRTYSTATE=1
 fi
+[ -f $(brew --prefix)/opt/fzf/install ] && source ~/.fzf.bash
 
 # kubernetes
 alias kubeproxy='TOKEN=$(kubectl -n kube-system describe secret $(kubectl -n kube-system get secrets | grep eks-admin | cut -f1 -d " ") | grep -E "^token" | cut -f2 -d":" | tr -d "\t" | tr -d " ") kubectl proxy'

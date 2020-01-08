@@ -60,7 +60,7 @@ function prompt_command {
   elif [ ${TERM_PROGRAM} = "vscode" ]; then
     # vscodeの場合は画面が狭いので短めに
     local CURRENT_DIR="$(basename $(pwd))"
-    local MONOREPO_ROOT=`(cd ../ && pwd | xargs basename)`
+    local MONOREPO_ROOT=`(cd ../ && pwd | xargs basename; cd -)`
     local INFO="\[\e[1;33m\]${MONOREPO_ROOT}/${CURRENT_DIR}"
   else
     # デフォルト
@@ -102,6 +102,4 @@ precmd() {
   true
 }
 
-
-
-gam() { "/Users/mishirotakahiro/bin/gam/gam" "$@" ; }
+gam() { "$HOME/bin/gam/gam" "$@" ; }
