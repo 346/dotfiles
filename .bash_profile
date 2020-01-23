@@ -60,7 +60,7 @@ function prompt_command {
   elif [ ${TERM_PROGRAM} = "vscode" ]; then
     # vscodeの場合は画面が狭いので短めに
     local CURRENT_DIR="$(basename $(pwd))"
-    local MONOREPO_ROOT=`(cd ../ && pwd | xargs basename; cd -)`
+    local MONOREPO_ROOT=`(cd ../ && pwd | xargs basename)`
     local INFO="\[\e[1;33m\]${MONOREPO_ROOT}/${CURRENT_DIR}"
   else
     # デフォルト
@@ -83,23 +83,21 @@ export PATH="/usr/local/opt/postgresql@9.6/bin:$PATH"
 # add Pulumi to the PATH
 export PATH=$PATH:$HOME/.pulumi/bin
 
-
-[ -f /usr/local/etc/profile.d/bash-preexec.sh ] && . /usr/local/etc/profile.d/bash-preexec.sh
-
-preexec() {
-  if [ -d ./kubeconfig ] && [ -n "$AWS_ACCOUNT_ID" ]; then
-    KUBECONFIG_PATH="./kubeconfig/${AWS_ACCOUNT_ID}.json"
-    if [ -f $KUBECONFIG_PATH ]; then
-      export KUBECONFIG=$KUBECONFIG_PATH
+if [[ -f /usr/local/etc/profile.d/bash-preexec.sh ]]; then
+  source /usr/local/etc/profile.d/bash-preexec.sh
+  preexec() {
+    if [ -d ./kubeconfig ] && [ -n "$AWS_ACCOUNT_ID" ]; then
+      KUBECONFIG_PATH="./kubeconfig/${AWS_ACCOUNT_ID}.json"
+      if [ -f $KUBECONFIG_PATH ]; then
+        export KUBECONFIG=$KUBECONFIG_PATH
+      fi
     fi
-  fi
-  if [ -n "$ROLE_SESSION_START" ] && [ $(($(date +%s)-ROLE_SESSION_START>3600)) == 1 ]; then
-    assume-role $AWS_ACCOUNT_NAME $AWS_ACCOUNT_ROLE
-  fi
-}
-precmd() {
-  # echo -n "$(pulumi_stack)"
-  true
-}
+    if [ -n "$ROLE_SESSION_START" ] && [ $(($(date +%s)-ROLE_SESSION_START>3600)) == 1 ]; then
+      assume-role $AWS_ACCOUNT_NAME $AWS_ACCOUNT_ROLE
+    fi
+  }
+  # catalinaにしたからなのか、itermをアップデートしたからなのかわからないが、
+  # 一度コマンドを実行しないとitermでのReuse previous session's directoryが動かないので、なんか適当に実行
+  echo ""
+fi
 
-gam() { "$HOME/bin/gam/gam" "$@" ; }
